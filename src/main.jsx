@@ -1,16 +1,46 @@
-import { StrictMode } from 'react'
+import { StrictMode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
+
+// Routing
+import { RouterProvider } from 'react-router' // Standard import for web routing
 import { router } from './routes/Routes.jsx'
-import { RouterProvider } from 'react-router'
-import { Toaster } from 'react-hot-toast'
+
+// State Management (TanStack Query)
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+// Authentication
 import AuthProvider from './Context/AuthProvider.jsx'
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router} />
-      <Toaster position='top-right' reverseOrder={false} />
-    </AuthProvider>
-  </StrictMode>
-)
+// UI Components & Animation
+import { Toaster } from 'react-hot-toast'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
+
+// Initialize Query Client
+const queryClient = new QueryClient()
+
+// Create a wrapper component to handle AOS initialization
+const Main = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: true,
+      offset: 100,
+      easing: 'ease-in-out',
+    })
+  }, [])
+
+  return (
+    <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <RouterProvider router={router} />
+          <Toaster position='top-right' reverseOrder={false} />
+        </AuthProvider>
+      </QueryClientProvider>
+    </StrictMode>
+  )
+}
+
+createRoot(document.getElementById('root')).render(<Main />)

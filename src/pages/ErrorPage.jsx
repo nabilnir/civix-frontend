@@ -1,64 +1,85 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { FiHome, FiAlertTriangle } from 'react-icons/fi';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import videoSrc from ''
 
-import { useNavigate } from 'react-router'
-import Button from '../components/Shared/Button'
-
-const ErrorPage = () => {
-  const navigate = useNavigate()
-
-  return (
-    <section className='bg-white '>
-      <div className='container flex items-center min-h-screen px-6 py-12 mx-auto'>
-        <div className='flex flex-col items-center max-w-sm mx-auto text-center'>
-          <p className='p-3 text-sm font-medium text-lime-500 rounded-full bg-blue-50 '>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth='2'
-              stroke='currentColor'
-              className='w-6 h-6'
+const NotFound = () => {
+    
+    
+   
+    return (
+        <div className="min-h-[70vh] flex items-center justify-center bg-[#f4f6f8] py-20">
+            <div 
+                className="text-center max-w-4xl mx-auto px-4"
+                data-aos="fade-up" 
+                data-aos-duration="1000"
             >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z'
-              />
-            </svg>
-          </p>
-          <h1 className='mt-3 text-2xl font-semibold text-gray-800  md:text-3xl'>
-            Something Went Wrong!
-          </h1>
-          <p className='mt-4 text-gray-500 '>Here are some helpful links:</p>
+                
+                {/* Visual Placeholder */}
+                {videoSrc ? (
+                    <div className="w-full max-w-lg mx-auto mb-8 rounded-2xl overflow-hidden shadow-2xl">
+                        <video 
+                            src={videoSrc} 
+                            autoPlay 
+                            loop 
+                            muted 
+                            className="w-full h-auto object-cover"
+                            aria-describedby="error-message"
+                        />
+                    </div>
+                ) : (
+                    
+                    <div className="w-full max-w-lg mx-auto mb-8 h-64 rounded-2xl flex flex-col items-center justify-center bg-white border-4 border-dashed border-gray-300 shadow-xl">
+                        <FiAlertTriangle className="text-[#238ae9] text-5xl mb-4 animate-pulse" />
+                        <p className="font-['Satoshi'] text-xl font-bold text-gray-500">
+                            Video Placeholder
+                        </p>
+                        <p className="font-['Satoshi'] text-sm text-gray-400">
+                            Add your 404 video illustration here (src="").
+                        </p>
+                    </div>
+                )}
 
-          <div className='flex items-center w-full mt-6 gap-x-3 shrink-0 sm:w-auto'>
-            <button
-              onClick={() => navigate(-1)}
-              className='flex items-center justify-center w-1/2 px-5 py-1 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto   hover:bg-gray-100 '
-            >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                strokeWidth='1.5'
-                stroke='currentColor'
-                className='w-5 h-5 rtl:rotate-180 text-lime-500'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18'
-                />
-              </svg>
 
-              <span>Go back</span>
-            </button>
-
-            <Button label={'Take Me Home'} onClick={() => navigate('/')} />
-          </div>
+                <h1 
+                    id="error-message"
+                    className="font-['Satoshi'] text-7xl md:text-9xl font-extrabold text-[#238ae9] leading-none mb-4"
+                    data-aos="fade-up" 
+                    data-aos-delay="200"
+                >
+                    404
+                </h1>
+                
+                <h2 
+                    className="font-['Satoshi'] text-3xl md:text-4xl font-bold text-[#242424] mb-4"
+                    data-aos="fade-up" 
+                    data-aos-delay="400"
+                >
+                    Page Not Found
+                </h2>
+                
+                <p 
+                    className="font-['Satoshi'] text-lg text-gray-600 mb-8 max-w-xl mx-auto"
+                    data-aos="fade-up" 
+                    data-aos-delay="600"
+                >
+                    Oops! It looks like you've encountered a broken path. The infrastructure you were looking for doesn't exist here.
+                </p>
+                
+                <Link
+                    to="/"
+                    className="inline-flex items-center bg-gradient-to-br from-[#238ae9] to-[#1e7acc] text-white px-8 py-4 rounded-xl font-['Satoshi'] font-bold text-lg hover:shadow-2xl hover:scale-[1.02] transition-all shadow-lg group"
+                    data-aos="fade-up" 
+                    data-aos-delay="800"
+                >
+                    <FiHome className="mr-2 text-xl group-hover:-translate-y-0.5 transition-transform" />
+                    Return to Home Base
+                </Link>
+            </div>
         </div>
-      </div>
-    </section>
-  )
-}
+    );
+};
 
-export default ErrorPage
+export default NotFound;
