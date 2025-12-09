@@ -6,6 +6,9 @@ import DashboardLayout from '../layouts/DashboardLayout'
 import MainLayout from '../layouts/MainLayout'
 import { createBrowserRouter } from 'react-router'
 import Register from '../pages/SignUp/Register'
+import About from '../pages/About'
+import Contact from '../pages/Contact'
+import AllIssues from '../pages/AllIssues'
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +20,18 @@ export const router = createBrowserRouter([
         path: '/',
         element: <Home />,
       },
+      {
+        path:'/aboutUs',
+        Component: About
+      },
+      {
+        path:'/contact',
+        Component: Contact
+      },
+      {
+        path : '/allissues',
+        Component: AllIssues
+      }
       
     ],
   },
@@ -29,9 +44,6 @@ export const router = createBrowserRouter([
         <DashboardLayout />
       </PrivateRoute>
     ),
-    children: [
-      
-      
-    ],
+    
   },
 ])

@@ -1,4 +1,3 @@
-// pages/Register.jsx
 import { Link, useLocation, useNavigate } from 'react-router';
 import { FcGoogle } from 'react-icons/fc';
 

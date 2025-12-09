@@ -13,7 +13,7 @@ export default function Banner() {
       subtitle: "Your Voice Matters",
       description: "Spot a pothole? Broken streetlight? Report it instantly and track the resolution in real-time.",
       image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1200&q=80",
-      gradient: "from-[#238ae9] to-[#1e7acc]",
+      gradient: "from-[#238ae9] to-white-100",
       stats: [
         { icon: <FiCheckCircle />, label: "1000+ Issues Resolved" },
         { icon: <FiUsers />, label: "500+ Active Citizens" },
@@ -26,7 +26,7 @@ export default function Banner() {
       subtitle: "Stay Informed",
       description: "Get real-time notifications and watch your reported issues move from pending to resolved.",
       image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80",
-      gradient: "from-purple-600 to-indigo-600",
+      gradient: "from-blue-600 to-white-50",
       stats: [
         { icon: <FiCheckCircle />, label: "Real-time Tracking" },
         { icon: <FiUsers />, label: "Instant Notifications" },
@@ -39,7 +39,7 @@ export default function Banner() {
       subtitle: "Together We Can",
       description: "Join thousands of citizens making their neighborhoods safer, cleaner, and better every day.",
       image: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=1200&q=80",
-      gradient: "from-emerald-600 to-teal-600",
+      gradient: "from-gray-900 to-white-100",
       stats: [
         { icon: <FiCheckCircle />, label: "Community Powered" },
         { icon: <FiUsers />, label: "Collaborative Action" },
