@@ -1,147 +1,311 @@
-import { Link, Navigate, useLocation, useNavigate } from 'react-router'
-import toast from 'react-hot-toast'
-import LoadingSpinner from '../../components/Shared/LoadingSpinner'
-import useAuth from '../../hooks/useAuth'
-import { FcGoogle } from 'react-icons/fc'
-import { TbFidgetSpinner } from 'react-icons/tb'
+import { Link, Navigate, useLocation, useNavigate } from 'react-router';
+import toast from 'react-hot-toast';
+
+import { FcGoogle } from 'react-icons/fc';
+import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
+import { useState } from 'react';
+import useAuth from '../../hooks/useAuth';
 
 const Login = () => {
-  const { signIn, signInWithGoogle, loading, user, setLoading } = useAuth()
-  const navigate = useNavigate()
-  const location = useLocation()
+  const { signIn, signInWithGoogle, loading, user, setLoading, saveUserToDatabase } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const from = location.state || '/'
+  const from = location.state?.from?.pathname || '/';
 
-  if (loading) return <LoadingSpinner />
-  if (user) return <Navigate to={from} replace={true} />
+  // If user already logged in, redirect
+  if (user) return <Navigate to={from} replace={true} />;
 
-  // form submit handler
-  const handleSubmit = async event => {
-    event.preventDefault()
-    const form = event.target
-    const email = form.email.value
-    const password = form.password.value
+  // Email/Password Login
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    
+    const form = event.target;
+    const email = form.email.value;
+    const password = form.password.value;
 
     try {
-      //User Login
-      await signIn(email, password)
-
-      navigate(from, { replace: true })
-      toast.success('Login Successful')
+      await signIn(email, password);
+      toast.success('Welcome back to Civix!');
+      navigate(from, { replace: true });
     } catch (err) {
-      console.log(err)
-      toast.error(err?.message)
+      console.error('Login error:', err);
+      
+      // User-friendly error messages
+      if (err.code === 'auth/user-not-found') {
+        toast.error('No account found with this email');
+      } else if (err.code === 'auth/wrong-password') {
+        toast.error('Incorrect password');
+      } else if (err.code === 'auth/invalid-email') {
+        toast.error('Invalid email address');
+      } else if (err.code === 'auth/too-many-requests') {
+        toast.error('Too many failed attempts. Try again later');
+      } else {
+        toast.error('Login failed. Please try again');
+      }
+    } finally {
+      setIsSubmitting(false);
     }
-  }
+  };
 
-  // Handle Google Signin
+  // Google Sign In
   const handleGoogleSignIn = async () => {
     try {
-      //User Registration using google
-      await signInWithGoogle()
-      navigate(from, { replace: true })
-      toast.success('Login Successful')
+      setLoading(true);
+      const result = await signInWithGoogle();
+      
+      // Save user to database 
+      await saveUserToDatabase({
+        name: result.user.displayName,
+        email: result.user.email,
+        photoURL: result.user.photoURL,
+        role: 'citizen',
+        isPremium: false,
+        isBlocked: false,
+        issueCount: 0
+      });
+
+      toast.success('Welcome to Civix!');
+      navigate(from, { replace: true });
     } catch (err) {
-      console.log(err)
-      setLoading(false)
-      toast.error(err?.message)
+      console.error('Google login error:', err);
+      setLoading(false);
+      
+      if (err.code === 'auth/popup-closed-by-user') {
+        toast.error('Sign-in cancelled');
+      } else if (err.code === 'auth/popup-blocked') {
+        toast.error('Please allow popups for this site');
+      } else {
+        toast.error('Google sign-in failed');
+      }
     }
+  };
+
+  // Loading State
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-[#f4f6f8]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative">
+            <div className="w-20 h-20 bg-gradient-to-br from-[#238ae9] to-[#1e7acc]
+             rounded-2xl flex items-center justify-center shadow-lg animate-pulse">
+              <span className="text-white text-3xl font-bold font-['Satoshi']">C</span>
+            </div>
+            <div className="absolute -inset-1 border-4 border-[#238ae9] border-t-transparent rounded-2xl animate-spin"></div>
+          </div>
+          <p className="font-['Satoshi'] text-[#242424] font-medium text-lg">Loading...</p>
+        </div>
+      </div>
+    );
   }
+
   return (
-    <div className='flex justify-center items-center min-h-screen bg-white'>
-      <div className='flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900'>
-        <div className='mb-8 text-center'>
-          <h1 className='my-3 text-4xl font-bold'>Log In</h1>
-          <p className='text-sm text-gray-400'>
-            Sign in to access your account
+    <div className="min-h-screen bg-[#f4f6f8] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full">
+        
+        {/* Logo & Header */}
+        <div className="text-center mb-8" data-aos="fade-down" data-aos-duration="600">
+          <Link to="/" className="inline-flex items-center gap-2 mb-6 group">
+            <div className="w-12 h-12 bg-gradient-to-br from-[#238ae9] to-[#1e7acc] 
+            rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all">
+              <span className="text-white text-2xl font-bold font-['Satoshi']">C</span>
+            </div>
+            <span className="text-[#242424] font-['Satoshi'] font-bold text-2xl">Civix</span>
+          </Link>
+          <h2 className="font-['Satoshi'] text-3xl font-bold text-[#242424] mb-2">
+            Welcome Back
+          </h2>
+          <p className="font-['Satoshi'] text-sm text-gray-600">
+            Sign in to access your dashboard
           </p>
         </div>
-        <form
-          onSubmit={handleSubmit}
-          noValidate=''
-          action=''
-          className='space-y-6 ng-untouched ng-pristine ng-valid'
+
+        {/* Login Card */}
+        <div 
+          className="bg-white rounded-2xl shadow-lg p-8" 
+          data-aos="fade-up" 
+          data-aos-duration="600" 
+          data-aos-delay="200"
         >
-          <div className='space-y-4'>
-            <div>
-              <label htmlFor='email' className='block mb-2 text-sm'>
-                Email address
-              </label>
-              <input
-                type='email'
-                name='email'
-                id='email'
-                required
-                placeholder='Enter Your Email Here'
-                className='w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-lime-500 bg-gray-200 text-gray-900'
-                data-temp-mail-org='0'
-              />
-            </div>
-            <div>
-              <div className='flex justify-between'>
-                <label htmlFor='password' className='text-sm mb-2'>
-                  Password
-                </label>
-              </div>
-              <input
-                type='password'
-                name='password'
-                autoComplete='current-password'
-                id='password'
-                required
-                placeholder='*******'
-                className='w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-lime-500 bg-gray-200 text-gray-900'
-              />
-            </div>
+          
+          {/* Google Sign In Button */}
+          <button
+            onClick={handleGoogleSignIn}
+            disabled={loading || isSubmitting}
+            className="w-full flex items-center justify-center gap-3
+             bg-white border-2 border-gray-200 hover:border-[#238ae9] 
+             hover:bg-[#f4f6f8] rounded-xl px-4 py-3.5 font-['Satoshi'] 
+             font-semibold text-[#242424] transition-all mb-6 disabled:opacity-50 disabled:cursor-not-allowed group"
+          >
+            <FcGoogle size={24} />
+            <span>Continue with Google</span>
+          </button>
+
+          {/* Divider */}
+          <div className="flex items-center gap-4 mb-6">
+            <div className="flex-1 h-px bg-gray-200"></div>
+            <span className="font-['Satoshi'] text-sm text-gray-500 font-medium">
+              or continue with email
+            </span>
+            <div className="flex-1 h-px bg-gray-200"></div>
           </div>
 
-          <div>
+          {/* Login Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            
+            {/* Email Field */}
+            <div>
+              <label 
+                htmlFor="email" 
+                className="block font-['Satoshi'] font-semibold text-sm text-[#242424] mb-2"
+              >
+                Email Address
+              </label>
+              <div className="relative">
+                <FiMail 
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" 
+                  size={20} 
+                />
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  required
+                  placeholder="you@example.com"
+                  className="w-full pl-11 pr-4 py-3.5 bg-[#f4f6f8] border-2
+                   border-transparent rounded-xl font-['Satoshi'] text-[#242424] placeholder-gray-400
+                    focus:outline-none focus:border-[#238ae9] focus:bg-white transition-all"
+                />
+              </div>
+            </div>
+
+            {/* Password Field */}
+            <div>
+              <label 
+                htmlFor="password" 
+                className="block font-['Satoshi'] font-semibold text-sm text-[#242424] mb-2"
+              >
+                Password
+              </label>
+              <div className="relative">
+                <FiLock 
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" 
+                  size={20} 
+                />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  id="password"
+                  required
+                  placeholder="Enter your password"
+                  className="w-full pl-11 pr-12 py-3.5 bg-[#f4f6f8] border-2
+                   border-transparent rounded-xl font-['Satoshi'] text-[#242424]
+                    placeholder-gray-400 focus:outline-none focus:border-[#238ae9]
+                     focus:bg-white transition-all"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#238ae9] transition-colors"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+                </button>
+              </div>
+            </div>
+
+            {/* Remember Me & Forgot Password */}
+            <div className="flex items-center justify-between">
+              <label className="flex items-center gap-2 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  className="w-4 h-4 rounded border-gray-300 text-[#238ae9] focus:ring-[#238ae9] cursor-pointer"
+                />
+                <span className="font-['Satoshi'] text-sm text-gray-600 group-hover:text-[#242424] transition-colors">
+                  Remember me
+                </span>
+              </label>
+              <Link
+                to="/forgot-password"
+                className="font-['Satoshi'] text-sm text-[#238ae9] hover:text-[#1e7acc] font-semibold transition-colors"
+              >
+                Forgot password?
+              </Link>
+            </div>
+
+            {/* Submit Button */}
             <button
-              type='submit'
-              className='bg-lime-500 w-full rounded-md py-3 text-white'
+              type="submit"
+              disabled={isSubmitting || loading}
+              className="w-full bg-gradient-to-r from-[#238ae9] to-[#1e7acc] hover:from-[#1e7acc]
+               hover:to-[#238ae9] text-white font-['Satoshi'] font-bold py-3.5 rounded-xl shadow-md 
+               hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              {loading ? (
-                <TbFidgetSpinner className='animate-spin m-auto' />
+              {isSubmitting ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <span>Signing in...</span>
+                </>
               ) : (
-                'Continue'
+                'Sign In'
               )}
             </button>
-          </div>
-        </form>
-        <div className='space-y-1'>
-          <button className='text-xs hover:underline hover:text-lime-500 text-gray-400 cursor-pointer'>
-            Forgot password?
-          </button>
-        </div>
-        <div className='flex items-center pt-4 space-x-1'>
-          <div className='flex-1 h-px sm:w-16 dark:bg-gray-700'></div>
-          <p className='px-3 text-sm dark:text-gray-400'>
-            Login with social accounts
-          </p>
-          <div className='flex-1 h-px sm:w-16 dark:bg-gray-700'></div>
-        </div>
-        <div
-          onClick={handleGoogleSignIn}
-          className='flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer'
-        >
-          <FcGoogle size={32} />
+          </form>
 
-          <p>Continue with Google</p>
+          {/* Sign Up Link */}
+          <div className="mt-6 pt-6 border-t border-gray-100">
+            <p className="text-center font-['Satoshi'] text-sm text-gray-600">
+              Don't have an account?{' '}
+              <Link
+                to="/register"
+                state={{ from: location.state?.from }}
+                className="text-[#238ae9] hover:text-[#1e7acc] font-bold transition-colors"
+              >
+                Sign up for free
+              </Link>
+            </p>
+          </div>
         </div>
-        <p className='px-6 text-sm text-center text-gray-400'>
-          Don&apos;t have an account yet?{' '}
+
+        {/* Back to Home */}
+        <div className="text-center mt-6">
           <Link
-            state={from}
-            to='/signup'
-            className='hover:underline hover:text-lime-500 text-gray-600'
+            to="/"
+            className="font-['Satoshi'] text-sm text-gray-600 hover:text-[#238ae9] 
+            font-medium transition-colors inline-flex items-center gap-2 group"
           >
-            Sign up
+            <span className="group-hover:-translate-x-1 transition-transform">←</span>
+            <span>Back to home</span>
           </Link>
-          .
-        </p>
+        </div>
+
+        {/* Features Preview */}
+        <div className="mt-8 grid grid-cols-3 gap-4 text-center">
+          <div className="bg-white/50 backdrop-blur-sm rounded-xl p-4">
+            <div className="text-2xl mb-2">🎯</div>
+            <p className="font-['Satoshi'] text-xs text-gray-600 font-medium">
+              Report Issues
+            </p>
+          </div>
+          <div className="bg-white/50 backdrop-blur-sm rounded-xl p-4">
+            <div className="text-2xl mb-2">📊</div>
+            <p className="font-['Satoshi'] text-xs text-gray-600 font-medium">
+              Track Progress
+            </p>
+          </div>
+          <div className="bg-white/50 backdrop-blur-sm rounded-xl p-4">
+            <div className="text-2xl mb-2">✅</div>
+            <p className="font-['Satoshi'] text-xs text-gray-600 font-medium">
+              Get Resolved
+            </p>
+          </div>
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

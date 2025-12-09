@@ -1,16 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { FiHome, FiAlertTriangle } from 'react-icons/fi';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import videoSrc from ''
+import Src from '../assets/images/image.png'
 
-const NotFound = () => {
+const ErrorPage = () => {
     
     
    
     return (
-        <div className="min-h-[70vh] flex items-center justify-center bg-[#f4f6f8] py-20">
+        <div className="min-h-[70vh] flex items-center justify-center py-20">
             <div 
                 className="text-center max-w-4xl mx-auto px-4"
                 data-aos="fade-up" 
@@ -18,13 +18,10 @@ const NotFound = () => {
             >
                 
                 {/* Visual Placeholder */}
-                {videoSrc ? (
-                    <div className="w-full max-w-lg mx-auto mb-8 rounded-2xl overflow-hidden shadow-2xl">
-                        <video 
-                            src={videoSrc} 
-                            autoPlay 
-                            loop 
-                            muted 
+                {Src ? (
+                    <div className="w-full max-w-lg mx-auto mb-8 rounded-2xl overflow-hidden ">
+                        <img
+                            src={Src} 
                             className="w-full h-auto object-cover"
                             aria-describedby="error-message"
                         />
@@ -37,7 +34,7 @@ const NotFound = () => {
                             Video Placeholder
                         </p>
                         <p className="font-['Satoshi'] text-sm text-gray-400">
-                            Add your 404 video illustration here (src="").
+                            Add your 404 video illustration here .
                         </p>
                     </div>
                 )}
@@ -49,7 +46,7 @@ const NotFound = () => {
                     data-aos="fade-up" 
                     data-aos-delay="200"
                 >
-                    404
+                    
                 </h1>
                 
                 <h2 
@@ -82,4 +79,4 @@ const NotFound = () => {
     );
 };
 
-export default NotFound;
+export default ErrorPage;

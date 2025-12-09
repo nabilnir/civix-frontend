@@ -1,11 +1,11 @@
 import Home from '../pages/Home/Home'
 import ErrorPage from '../pages/ErrorPage'
 import Login from '../pages/Login/Login'
-import SignUp from '../pages/SignUp/SignUp'
 import PrivateRoute from './PrivateRoute'
 import DashboardLayout from '../layouts/DashboardLayout'
 import MainLayout from '../layouts/MainLayout'
 import { createBrowserRouter } from 'react-router'
+import Register from '../pages/SignUp/Register'
 
 export const router = createBrowserRouter([
   {
@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
     ],
   },
   { path: '/login', element: <Login /> },
-  { path: '/signup', element: <SignUp /> },
+  { path: '/register', element: <Register /> },
   {
     path: '/dashboard',
     element: (

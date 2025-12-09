@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+// context/AuthProvider.jsx
+import { useEffect, useState } from 'react';
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
@@ -8,55 +9,113 @@ import {
   signInWithPopup,
   signOut,
   updateProfile,
-} from 'firebase/auth'
-import { app } from '../firebase/firebase.config'
-import { AuthContext } from './AuthContext'
+} from 'firebase/auth';
+import  app  from '../firebase/firebase.config';
+import { AuthContext } from './AuthContext';
+import axios from 'axios';
 
-const auth = getAuth(app)
-const googleProvider = new GoogleAuthProvider()
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  // Create user with email & password
   const createUser = (email, password) => {
-    setLoading(true)
-    return createUserWithEmailAndPassword(auth, email, password)
-  }
+    setLoading(true);
+    return createUserWithEmailAndPassword(auth, email, password);
+  };
 
+  // Sign in with email & password
   const signIn = (email, password) => {
-    setLoading(true)
-    return signInWithEmailAndPassword(auth, email, password)
-  }
+    setLoading(true);
+    return signInWithEmailAndPassword(auth, email, password);
+  };
 
+  // Sign in with Google
   const signInWithGoogle = () => {
-    setLoading(true)
-    return signInWithPopup(auth, googleProvider)
-  }
+    setLoading(true);
+    return signInWithPopup(auth, googleProvider);
+  };
 
+  // Logout
   const logOut = async () => {
-    setLoading(true)
-    return signOut(auth)
-  }
+    setLoading(true);
+    // Remove JWT token from localStorage
+    localStorage.removeItem('civix-token');
+    return signOut(auth);
+  };
 
+  // Update user profile
   const updateUserProfile = (name, photo) => {
     return updateProfile(auth.currentUser, {
       displayName: name,
       photoURL: photo,
-    })
-  }
+    });
+  };
 
-  // onAuthStateChange
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async currentUser => {
-      console.log('CurrentUser-->', currentUser?.email)
-      setUser(currentUser)
-      setLoading(false)
-    })
-    return () => {
-      return unsubscribe()
+  // Save user to MongoDB database
+  const saveUserToDatabase = async (userData) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/auth/register`,
+        userData
+      );
+      return response.data;
+    } catch (error) {
+      // User might already exist in database (400 error)
+      if (error.response?.status === 400) {
+        console.log('User already exists in database');
+        return null;
+      }
+      console.error('Error saving user to database:', error);
+      throw error;
     }
-  }, [])
+  };
+
+  // Get JWT token from backend
+  const getJWTToken = async (email) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/auth/jwt`,
+        { email }
+      );
+      
+      if (response.data.token) {
+        // Store token in localStorage
+        localStorage.setItem('civix-token', response.data.token);
+        return response.data.token;
+      }
+    } catch (error) {
+      console.error('Error getting JWT token:', error);
+      return null;
+    }
+  };
+
+  // onAuthStateChange - Runs when user logs in/out
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      console.log('CurrentUser-->', currentUser?.email);
+      
+      if (currentUser) {
+        setUser(currentUser);
+        
+        // Get JWT token when user is authenticated
+        await getJWTToken(currentUser.email);
+      } else {
+        setUser(null);
+        // Remove token when logged out
+        localStorage.removeItem('civix-token');
+      }
+      
+      setLoading(false);
+    });
+
+    return () => {
+      return unsubscribe();
+    };
+  }, []);
 
   const authInfo = {
     user,
@@ -68,11 +127,15 @@ const AuthProvider = ({ children }) => {
     signInWithGoogle,
     logOut,
     updateUserProfile,
-  }
+    saveUserToDatabase,
+    getJWTToken,
+  };
 
   return (
-    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
-  )
-}
+    <AuthContext.Provider value={authInfo}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
 export default AuthProvider;
