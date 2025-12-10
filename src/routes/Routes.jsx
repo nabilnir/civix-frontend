@@ -9,6 +9,7 @@ import Register from '../pages/SignUp/Register'
 import About from '../pages/About'
 import Contact from '../pages/Contact'
 import AllIssues from '../pages/AllIssues'
+import CitizenOverview from '../components/Dashboard/Citizen/CitizenOverview'
 
 export const router = createBrowserRouter([
   {
@@ -44,6 +45,13 @@ export const router = createBrowserRouter([
         <DashboardLayout />
       </PrivateRoute>
     ),
-    
+    children:[
+      {
+        path:'/dashboard',
+        element: <PrivateRoute>
+           <CitizenOverview />
+        </PrivateRoute>
+      }
+    ]
   },
 ])

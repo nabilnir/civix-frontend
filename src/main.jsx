@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 
 // Routing
-import { RouterProvider } from 'react-router' // Standard import for web routing
+import { RouterProvider } from 'react-router'
 import { router } from './routes/Routes.jsx'
 
 // State Management (TanStack Query)
@@ -20,7 +20,7 @@ import 'aos/dist/aos.css'
 // Initialize Query Client
 const queryClient = new QueryClient()
 
-// Create a wrapper component to handle AOS initialization
+
 const Main = () => {
   useEffect(() => {
     AOS.init({
