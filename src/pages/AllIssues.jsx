@@ -1,24 +1,23 @@
 // pages/AllIssues.jsx
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router';
-import { FiMapPin, FiClock, FiTag, FiFilter, FiSearch, FiLayers, FiAlertTriangle, FiChevronLeft, FiChevronRight, FiArrowRight, FiArrowUpRight } from 'react-icons/fi';
+import { FiMapPin, FiClock, FiTag, FiFilter, FiSearch, FiLayers, FiAlertTriangle, FiChevronLeft, FiChevronRight, FiArrowRight } from 'react-icons/fi';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-
+// --- MOCK DATA ---
 const categories = ["Roads", "Lighting", "Plumbing", "Garbage", "Footpaths", "Safety"];
 const statuses = ["Pending", "In-Progress", "Resolved", "Closed"];
 const priorities = ["High", "Medium", "Low"];
 
 const mockIssues = [
-   
     { id: 1, title: "Large Pothole on Main Street", category: "Roads", status: "In-Progress", priority: "High", location: "Central Avenue, Sector 3", date: "2 hours ago", image: "https://via.placeholder.com/300x200?text=Road+Pothole", color: 'text-amber-600', bg: 'bg-amber-100' },
     { id: 2, title: "Streetlight Out Near School", category: "Lighting", status: "Pending", priority: "Medium", location: "School District 5, Block B", date: "5 hours ago", image: "https://via.placeholder.com/300x200?text=Broken+Light", color: 'text-gray-600', bg: 'bg-gray-100' },
     { id: 3, title: "Water Main Leakage", category: "Plumbing", status: "Resolved", priority: "Low", location: "Residential Area, Suburb C", date: "1 day ago", image: "https://via.placeholder.com/300x200?text=Water+Leak", color: 'text-green-600', bg: 'bg-green-100' },
     { id: 4, title: "Overflowing Garbage Bins", category: "Garbage", status: "Pending", priority: "High", location: "Market Square, Downtown", date: "1 hour ago", image: "https://via.placeholder.com/300x200?text=Trash+Overflow", color: 'text-gray-600', bg: 'bg-gray-100' },
     { id: 5, title: "Damaged Sidewalk", category: "Footpaths", status: "In-Progress", priority: "Medium", location: "Parkside Path", date: "3 days ago", image: "https://via.placeholder.com/300x200?text=Damaged+Path", color: 'text-amber-600', bg: 'bg-amber-100' },
-    { id: 6, title: "Vandalism at Bus Stop", category: "Safety", status: "Pending", priority: "Medium", location: "Bus Terminal 2", date: "8 hours ago", image: "https://via.placeholder.com/300x200?text=Vandalism", color: 'text-gray-600', bg: 'bg-gray-100' },
-    { id: 7, title: "Missing Manhole Cover", category: "Roads", status: "High", priority: "High", location: "Industrial Zone A", date: "2 days ago", image: "https://via.placeholder.com/300x200?text=Manhole+Cover", color: 'text-amber-600', bg: 'bg-amber-100' },
+    { id: 6, title: "Vandalism at Bus Stop", category: "Safety", status: "Closed", priority: "Low", location: "Bus Terminal 2", date: "8 hours ago", image: "https://via.placeholder.com/300x200?text=Vandalism", color: 'text-green-600', bg: 'bg-green-100' },
+    { id: 7, title: "Missing Manhole Cover", category: "Roads", status: "In-Progress", priority: "High", location: "Industrial Zone A", date: "2 days ago", image: "https://via.placeholder.com/300x200?text=Manhole+Cover", color: 'text-amber-600', bg: 'bg-amber-100' },
     { id: 8, title: "Fallen Tree Branch", category: "Safety", status: "Resolved", priority: "Low", location: "Forest Grove Community", date: "4 days ago", image: "https://via.placeholder.com/300x200?text=Fallen+Branch", color: 'text-green-600', bg: 'bg-green-100' },
     { id: 9, title: "Signal Light Malfunction", category: "Lighting", status: "Pending", priority: "High", location: "Intersection of Kazi & Jinnah", date: "10 mins ago", image: "https://via.placeholder.com/300x200?text=Traffic+Light", color: 'text-gray-600', bg: 'bg-gray-100' },
     { id: 10, title: "Graffiti on Community Wall", category: "Safety", status: "Resolved", priority: "Low", location: "Public Park Gate 4", date: "2 days ago", image: "https://via.placeholder.com/300x200?text=Graffiti+Removal", color: 'text-green-600', bg: 'bg-green-100' },
@@ -40,20 +39,25 @@ const mockIssues = [
     { id: 26, title: "Sidewalk Encroachment", category: "Footpaths", status: "Resolved", priority: "Low", location: "Café Row", date: "1 week ago", image: "https://via.placeholder.com/300x200?text=Sidewalk+Blocked", color: 'text-green-600', bg: 'bg-green-100' },
     { id: 27, title: "Permanent Street Closure", category: "Roads", status: "Closed", priority: "High", location: "Old Town District", date: "3 months ago", image: "https://via.placeholder.com/300x200?text=Street+Closed", color: 'text-green-600', bg: 'bg-green-100' },
     { id: 28, title: "Solar Panel Malfunction", category: "Lighting", status: "In-Progress", priority: "Medium", location: "City Hall Roof", date: "10 days ago", image: "https://via.placeholder.com/300x200?text=Solar+Panel", color: 'text-amber-600', bg: 'bg-amber-100' },
-
 ];
 
 // --- Sub-Components ---
 
-// Component for a single issue card
 const IssueCard = ({ issue, index }) => {
+    // Determine status colors
+    let statusColorClass = 'text-gray-600 bg-gray-100'; // Pending/Default
+    if (issue.status === 'Resolved' || issue.status === 'Closed') {
+        statusColorClass = 'text-green-600 bg-green-100';
+    } else if (issue.status === 'In-Progress') {
+        statusColorClass = 'text-amber-600 bg-amber-100';
+    }
+
     return (
         <div 
             className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group border border-gray-100"
             data-aos="fade-up"
             data-aos-delay={index * 50} 
         >
-            {/* Issue Image */}
             <div className="h-40 overflow-hidden">
                 <img 
                     src={issue.image} 
@@ -63,9 +67,8 @@ const IssueCard = ({ issue, index }) => {
             </div>
             
             <div className="p-5">
-                {/* Status & Priority Tags */}
                 <div className="flex justify-between items-center mb-3">
-                    <span className={`inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full ${issue.bg} ${issue.color}`}>
+                    <span className={`inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full ${statusColorClass}`}>
                         {issue.status}
                     </span>
                     <span className={`inline-flex items-center text-xs font-medium ${issue.priority === 'High' ? 'text-red-500' : 'text-gray-500'}`}>
@@ -78,7 +81,6 @@ const IssueCard = ({ issue, index }) => {
                     <Link to={`/issue/${issue.id}`}>{issue.title}</Link>
                 </h3>
                 
-                {/* Location & Time */}
                 <div className="space-y-1 text-sm text-gray-600">
                     <p className="flex items-center">
                         <FiMapPin className="mr-2 w-4 h-4 text-[#238ae9]" />
@@ -90,12 +92,11 @@ const IssueCard = ({ issue, index }) => {
                     </p>
                 </div>
                 
-                {/* View Details Link */}
                 <Link 
                     to={`/issue/${issue.id}`}
                     className="mt-4 inline-flex items-center font-['Satoshi'] text-[#238ae9] font-semibold text-sm hover:text-[#1e7acc] transition-colors"
                 >
-                    View Report <FiArrowUpRight className="ml-1 group-hover:translate-x-1 transition-transform" />
+                    View Report <FiArrowRight className="ml-1 group-hover:translate-x-1 transition-transform" />
                 </Link>
             </div>
         </div>
@@ -103,9 +104,17 @@ const IssueCard = ({ issue, index }) => {
 };
 
 // Component for the left-hand filter sidebar
-const FilterSidebar = () => {
-    const [searchTerm, setSearchTerm] = useState('');
-    // In a real app, you would manage filter state here
+const FilterSidebar = ({ filterState, handleSearchChange, handleFilterChange, handlePriorityChange }) => {
+    
+    // Function to handle changes for checkbox filters (Status, Category)
+    const onCheckboxChange = (filterName, value) => {
+        const currentValues = filterState[filterName] || [];
+        const newValues = currentValues.includes(value)
+            ? currentValues.filter(v => v !== value)
+            : [...currentValues, value];
+        
+        handleFilterChange(filterName, newValues);
+    };
 
     return (
         <aside className="p-6 bg-white rounded-xl shadow-lg sticky top-20 border border-gray-100" data-aos="fade-right" data-aos-duration="800">
@@ -124,8 +133,8 @@ const FilterSidebar = () => {
                     <input
                         type="text"
                         id="search"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        value={filterState.searchTerm}
+                        onChange={handleSearchChange} // Use the passed handler
                         placeholder="Search by name, location..."
                         className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-[#238ae9] focus:border-[#238ae9] text-sm"
                     />
@@ -145,6 +154,8 @@ const FilterSidebar = () => {
                                 id={`status-${status}`}
                                 name="status"
                                 type="checkbox"
+                                checked={filterState.status.includes(status)}
+                                onChange={() => onCheckboxChange('status', status)} // Use the local handler
                                 className="h-4 w-4 text-[#238ae9] border-gray-300 rounded focus:ring-[#238ae9]"
                             />
                             <label htmlFor={`status-${status}`} className="ml-3 font-['Satoshi'] text-sm text-gray-600">
@@ -168,6 +179,8 @@ const FilterSidebar = () => {
                                 id={`category-${category}`}
                                 name="category"
                                 type="checkbox"
+                                checked={filterState.category.includes(category)}
+                                onChange={() => onCheckboxChange('category', category)} // Use the local handler
                                 className="h-4 w-4 text-[#238ae9] border-gray-300 rounded focus:ring-[#238ae9]"
                             />
                             <label htmlFor={`category-${category}`} className="ml-3 font-['Satoshi'] text-sm text-gray-600">
@@ -178,7 +191,7 @@ const FilterSidebar = () => {
                 </div>
             </div>
             
-            {/* 4. Priority Filter (Example of a radio group) */}
+            {/* 4. Priority Filter (Radio group) */}
             <div className="mb-0">
                 <h4 className="font-['Satoshi'] text-base font-semibold text-[#242424] mb-3 flex items-center gap-1">
                     <FiAlertTriangle className="text-gray-500 w-4 h-4" />
@@ -191,6 +204,8 @@ const FilterSidebar = () => {
                                 id={`priority-${priority}`}
                                 name="priority"
                                 type="radio"
+                                checked={filterState.priority === priority}
+                                onChange={() => handlePriorityChange(priority)} // Use the passed handler
                                 className="h-4 w-4 text-[#238ae9] border-gray-300 focus:ring-[#238ae9]"
                             />
                             <label htmlFor={`priority-${priority}`} className="ml-2 font-['Satoshi'] text-sm text-gray-600">
@@ -200,33 +215,29 @@ const FilterSidebar = () => {
                     ))}
                 </div>
             </div>
-
-            {/* Apply Filters Button */}
+            
+            {/* The "Apply Filters" button is for demonstration only, filtering happens on change */}
             <button className="mt-6 w-full bg-[#238ae9] text-white py-2 rounded-lg font-['Satoshi'] font-medium hover:bg-[#1e7acc] transition-colors">
-                Apply Filters
+                Apply Filters (Live)
             </button>
         </aside>
     );
 };
 
-// Component for pagination controls
+// Pagination component remains the same
 const Pagination = ({ currentPage = 1, totalPages = 5, onPageChange }) => {
-    // Mock page numbers for UI demonstration
-    const pages = [1, 2, 3, 4, 5];
+    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
     return (
         <div className="flex justify-center items-center space-x-2 mt-12" data-aos="fade-up" data-aos-duration="600">
-            {/* Previous Button */}
             <button
                 disabled={currentPage === 1}
                 onClick={() => onPageChange(currentPage - 1)}
-                className={`p-3 rounded-xl transition-colors ${currentPage === 1 ? 'text-gray-400 bg-gray-100' : 'text-[#238ae9] hover:bg-gray-100'}`}
+                className={`p-3 rounded-xl transition-colors ${currentPage === 1 ? 'text-gray-400 bg-gray-100 cursor-not-allowed' : 'text-[#238ae9] hover:bg-gray-100'}`}
                 aria-label="Previous Page"
             >
                 <FiChevronLeft className="w-5 h-5" />
             </button>
-
-            {/* Page Numbers */}
             <div className="flex space-x-1">
                 {pages.map(page => (
                     <button
@@ -243,12 +254,10 @@ const Pagination = ({ currentPage = 1, totalPages = 5, onPageChange }) => {
                     </button>
                 ))}
             </div>
-
-            {/* Next Button */}
             <button
                 disabled={currentPage === totalPages}
                 onClick={() => onPageChange(currentPage + 1)}
-                className={`p-3 rounded-xl transition-colors ${currentPage === totalPages ? 'text-gray-400 bg-gray-100' : 'text-[#238ae9] hover:bg-gray-100'}`}
+                className={`p-3 rounded-xl transition-colors ${currentPage === totalPages ? 'text-gray-400 bg-gray-100 cursor-not-allowed' : 'text-[#238ae9] hover:bg-gray-100'}`}
                 aria-label="Next Page"
             >
                 <FiChevronRight className="w-5 h-5" />
@@ -260,14 +269,66 @@ const Pagination = ({ currentPage = 1, totalPages = 5, onPageChange }) => {
 
 // --- Main Component ---
 const AllIssues = () => {
-   
     const [currentPage, setCurrentPage] = useState(1);
+    const [filterState, setFilterState] = useState({
+        searchTerm: '',
+        status: [],
+        category: [],
+        priority: null, // Radio button: one value or null
+    });
+
+    // --- Filter Handlers ---
+    const handleSearchChange = (e) => {
+        setFilterState(prev => ({ ...prev, searchTerm: e.target.value }));
+        setCurrentPage(1); // Reset to page 1 on new search
+    };
+
+    const handleFilterChange = (filterName, values) => {
+        setFilterState(prev => ({ ...prev, [filterName]: values }));
+        setCurrentPage(1); // Reset to page 1 on new filter
+    };
     
-    // Mock calculation for issues to display
+    const handlePriorityChange = (priority) => {
+        setFilterState(prev => ({ 
+            ...prev, 
+            priority: prev.priority === priority ? null : priority // Toggle functionality
+        }));
+        setCurrentPage(1);
+    };
+
+    // --- Filtering Logic (Memoized for performance) ---
+    const filteredIssues = useMemo(() => {
+        return mockIssues.filter(issue => {
+            const searchLower = filterState.searchTerm.toLowerCase();
+            
+            // 1. Search Filter (Title, Location, Category)
+            const matchesSearch = !searchLower || 
+                issue.title.toLowerCase().includes(searchLower) || 
+                issue.location.toLowerCase().includes(searchLower) ||
+                issue.category.toLowerCase().includes(searchLower);
+
+            // 2. Status Filter
+            const matchesStatus = filterState.status.length === 0 || 
+                                  filterState.status.includes(issue.status);
+
+            // 3. Category Filter
+            const matchesCategory = filterState.category.length === 0 || 
+                                    filterState.category.includes(issue.category);
+            
+            // 4. Priority Filter
+            const matchesPriority = !filterState.priority || 
+                                    issue.priority === filterState.priority;
+
+            return matchesSearch && matchesStatus && matchesCategory && matchesPriority;
+        });
+    }, [filterState]);
+
+    // --- Pagination Logic ---
     const issuesPerPage = 6;
+    const totalPages = Math.ceil(filteredIssues.length / issuesPerPage);
     const startIndex = (currentPage - 1) * issuesPerPage;
     const endIndex = startIndex + issuesPerPage;
-    const issuesToDisplay = mockIssues.slice(startIndex, endIndex);
+    const issuesToDisplay = filteredIssues.slice(startIndex, endIndex);
 
     return (
         <section className="bg-[#f4f6f8] py-20 md:py-32">
@@ -296,32 +357,45 @@ const AllIssues = () => {
                 {/* Main Content Grid: Sidebar + Issues */}
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
                     
-                    {/* Filter Sidebar (Left) - Hidden on small screens */}
+                    {/* Filter Sidebar (Left) */}
                     <div className="hidden lg:block lg:col-span-1">
-                        <FilterSidebar />
+                        <FilterSidebar 
+                            filterState={filterState}
+                            handleSearchChange={handleSearchChange}
+                            handleFilterChange={handleFilterChange}
+                            handlePriorityChange={handlePriorityChange}
+                        />
                     </div>
                     
                     {/* Issues Grid (Right) */}
                     <div className="lg:col-span-3">
-                        {/* Issue Cards */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
-                            {issuesToDisplay.map((issue, index) => (
-                                <IssueCard key={issue.id} issue={issue} index={index} />
-                            ))}
-                            {/* Filler for demonstration if less than issuesPerPage are mocked */}
-                            {issuesToDisplay.length < issuesPerPage && Array.from({ length: issuesPerPage - issuesToDisplay.length }).map((_, i) => (
-                                <div key={`placeholder-${i}`} className="p-8 bg-white/50 rounded-xl border border-dashed border-gray-300 hidden xl:block">
-                                    <p className="text-center text-gray-500 text-sm">More issues coming soon...</p>
-                                </div>
-                            ))}
-                        </div>
                         
-                        {/* Pagination */}
-                        <Pagination 
-                            currentPage={currentPage}
-                            totalPages={Math.ceil(mockIssues.length / issuesPerPage)}
-                            onPageChange={setCurrentPage}
-                        />
+                        <p className="font-['Satoshi'] text-sm text-gray-700 mb-6">
+                            Showing **{issuesToDisplay.length}** of **{filteredIssues.length}** matching reports.
+                        </p>
+                        
+                        {issuesToDisplay.length > 0 ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                                {issuesToDisplay.map((issue, index) => (
+                                    <IssueCard key={issue.id} issue={issue} index={index} />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="p-10 bg-white rounded-xl text-center shadow-lg border-2 border-dashed border-gray-200">
+                                <FiSearch className="w-10 h-10 text-gray-400 mx-auto mb-4" />
+                                <h3 className="font-['Satoshi'] text-xl font-bold text-gray-700">No Reports Found</h3>
+                                <p className="text-gray-500">Try adjusting your filters or search terms.</p>
+                            </div>
+                        )}
+                        
+                        {/* Pagination - only show if there is more than 1 page of filtered results */}
+                        {totalPages > 1 && (
+                            <Pagination 
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                onPageChange={setCurrentPage}
+                            />
+                        )}
                     </div>
                     
                     {/* Mobile Filter Button */}
@@ -331,7 +405,6 @@ const AllIssues = () => {
                             Show Filters (Mobile)
                         </button>
                     </div>
-
                 </div>
             </div>
         </section>
