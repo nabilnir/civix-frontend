@@ -1,412 +1,224 @@
-// pages/AllIssues.jsx
-import React, { useState, useMemo } from 'react';
-import { Link } from 'react-router';
-import { FiMapPin, FiClock, FiTag, FiFilter, FiSearch, FiLayers, FiAlertTriangle, FiChevronLeft, FiChevronRight, FiArrowRight } from 'react-icons/fi';
+import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { FiX } from 'react-icons/fi';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-// --- MOCK DATA ---
-const categories = ["Roads", "Lighting", "Plumbing", "Garbage", "Footpaths", "Safety"];
-const statuses = ["Pending", "In-Progress", "Resolved", "Closed"];
-const priorities = ["High", "Medium", "Low"];
+// --- Hooks ---
+import useAuth from '../hooks/useAuth';
+import useAxiosSecure from '../hooks/useAxiosSecure';
 
-const mockIssues = [
-    { id: 1, title: "Large Pothole on Main Street", category: "Roads", status: "In-Progress", priority: "High", location: "Central Avenue, Sector 3", date: "2 hours ago", image: "https://via.placeholder.com/300x200?text=Road+Pothole", color: 'text-amber-600', bg: 'bg-amber-100' },
-    { id: 2, title: "Streetlight Out Near School", category: "Lighting", status: "Pending", priority: "Medium", location: "School District 5, Block B", date: "5 hours ago", image: "https://via.placeholder.com/300x200?text=Broken+Light", color: 'text-gray-600', bg: 'bg-gray-100' },
-    { id: 3, title: "Water Main Leakage", category: "Plumbing", status: "Resolved", priority: "Low", location: "Residential Area, Suburb C", date: "1 day ago", image: "https://via.placeholder.com/300x200?text=Water+Leak", color: 'text-green-600', bg: 'bg-green-100' },
-    { id: 4, title: "Overflowing Garbage Bins", category: "Garbage", status: "Pending", priority: "High", location: "Market Square, Downtown", date: "1 hour ago", image: "https://via.placeholder.com/300x200?text=Trash+Overflow", color: 'text-gray-600', bg: 'bg-gray-100' },
-    { id: 5, title: "Damaged Sidewalk", category: "Footpaths", status: "In-Progress", priority: "Medium", location: "Parkside Path", date: "3 days ago", image: "https://via.placeholder.com/300x200?text=Damaged+Path", color: 'text-amber-600', bg: 'bg-amber-100' },
-    { id: 6, title: "Vandalism at Bus Stop", category: "Safety", status: "Closed", priority: "Low", location: "Bus Terminal 2", date: "8 hours ago", image: "https://via.placeholder.com/300x200?text=Vandalism", color: 'text-green-600', bg: 'bg-green-100' },
-    { id: 7, title: "Missing Manhole Cover", category: "Roads", status: "In-Progress", priority: "High", location: "Industrial Zone A", date: "2 days ago", image: "https://via.placeholder.com/300x200?text=Manhole+Cover", color: 'text-amber-600', bg: 'bg-amber-100' },
-    { id: 8, title: "Fallen Tree Branch", category: "Safety", status: "Resolved", priority: "Low", location: "Forest Grove Community", date: "4 days ago", image: "https://via.placeholder.com/300x200?text=Fallen+Branch", color: 'text-green-600', bg: 'bg-green-100' },
-    { id: 9, title: "Signal Light Malfunction", category: "Lighting", status: "Pending", priority: "High", location: "Intersection of Kazi & Jinnah", date: "10 mins ago", image: "https://via.placeholder.com/300x200?text=Traffic+Light", color: 'text-gray-600', bg: 'bg-gray-100' },
-    { id: 10, title: "Graffiti on Community Wall", category: "Safety", status: "Resolved", priority: "Low", location: "Public Park Gate 4", date: "2 days ago", image: "https://via.placeholder.com/300x200?text=Graffiti+Removal", color: 'text-green-600', bg: 'bg-green-100' },
-    { id: 11, title: "Water Meter Vandalism", category: "Plumbing", status: "In-Progress", priority: "Medium", location: "Behind Sector 7 Market", date: "1 day ago", image: "https://via.placeholder.com/300x200?text=Meter+Damage", color: 'text-amber-600', bg: 'bg-amber-100' },
-    { id: 12, title: "Excess Construction Debris", category: "Garbage", status: "Pending", priority: "Medium", location: "New Housing Development", date: "7 hours ago", image: "https://via.placeholder.com/300x200?text=Construction+Waste", color: 'text-gray-600', bg: 'bg-gray-100' },
-    { id: 13, title: "Uneven Paver Stones", category: "Footpaths", status: "In-Progress", priority: "Low", location: "Near City Library", date: "4 hours ago", image: "https://via.placeholder.com/300x200?text=Uneven+Ground", color: 'text-amber-600', bg: 'bg-amber-100' },
-    { id: 14, title: "Missing Street Sign", category: "Roads", status: "Resolved", priority: "High", location: "Exit 5 Toll Plaza", date: "5 days ago", image: "https://via.placeholder.com/300x200?text=Missing+Sign", color: 'text-green-600', bg: 'bg-green-100' },
-    { id: 15, title: "Noise Complaint: Factory", category: "Safety", status: "Closed", priority: "Low", location: "Industrial Block 22", date: "1 month ago", image: "https://via.placeholder.com/300x200?text=Noise+Report", color: 'text-green-600', bg: 'bg-green-100' },
-    { id: 16, title: "Drainage Blockage", category: "Plumbing", status: "Pending", priority: "High", location: "Under Bridge 3", date: "3 hours ago", image: "https://via.placeholder.com/300x200?text=Blocked+Drain", color: 'text-gray-600', bg: 'bg-gray-100' },
-    { id: 17, title: "Dead Tree Hazard", category: "Safety", status: "In-Progress", priority: "High", location: "Residential Road 15", date: "1 day ago", image: "https://via.placeholder.com/300x200?text=Tree+Hazard", color: 'text-amber-600', bg: 'bg-amber-100' },
-    { id: 18, title: "Recycling Bin Damage", category: "Garbage", status: "Resolved", priority: "Medium", location: "Apartment Complex 8", date: "9 days ago", image: "https://via.placeholder.com/300x200?text=Bin+Damage", color: 'text-green-600', bg: 'bg-green-100' },
-    { id: 19, title: "Dim Streetlight", category: "Lighting", status: "Pending", priority: "Medium", location: "Alleyway behind Hospital", date: "1 hour ago", image: "https://via.placeholder.com/300x200?text=Dim+Light", color: 'text-gray-600', bg: 'bg-gray-100' },
-    { id: 20, title: "Cracked Bridge Support", category: "Roads", status: "In-Progress", priority: "High", location: "Bridge over River", date: "6 hours ago", image: "https://via.placeholder.com/300x200?text=Bridge+Crack", color: 'text-amber-600', bg: 'bg-amber-100' },
-    { id: 21, title: "Faded Crosswalk", category: "Footpaths", status: "Pending", priority: "Low", location: "School Zone Entrance", date: "1 week ago", image: "https://via.placeholder.com/300x200?text=Faded+Crosswalk", color: 'text-gray-600', bg: 'bg-gray-100' },
-    { id: 22, title: "Sewer Smell/Fumes", category: "Plumbing", status: "Closed", priority: "Medium", location: "Commercial Street 1", date: "2 weeks ago", image: "https://via.placeholder.com/300x200?text=Sewer+Issue", color: 'text-green-600', bg: 'bg-green-100' },
-    { id: 23, title: "Illegal Dumping", category: "Garbage", status: "In-Progress", priority: "High", location: "Service Road 4", date: "12 hours ago", image: "https://via.placeholder.com/300x200?text=Illegal+Dumping", color: 'text-amber-600', bg: 'bg-amber-100' },
-    { id: 24, title: "Playground Equipment Broken", category: "Safety", status: "Pending", priority: "High", location: "East City Playground", date: "1 day ago", image: "https://via.placeholder.com/300x200?text=Broken+Swing", color: 'text-gray-600', bg: 'bg-gray-100' },
-    { id: 25, title: "Fire Hydrant Leak", category: "Plumbing", status: "Pending", priority: "High", location: "Outside Fire Station", date: "30 mins ago", image: "https://via.placeholder.com/300x200?text=Hydrant+Leak", color: 'text-gray-600', bg: 'bg-gray-100' },
-    { id: 26, title: "Sidewalk Encroachment", category: "Footpaths", status: "Resolved", priority: "Low", location: "Café Row", date: "1 week ago", image: "https://via.placeholder.com/300x200?text=Sidewalk+Blocked", color: 'text-green-600', bg: 'bg-green-100' },
-    { id: 27, title: "Permanent Street Closure", category: "Roads", status: "Closed", priority: "High", location: "Old Town District", date: "3 months ago", image: "https://via.placeholder.com/300x200?text=Street+Closed", color: 'text-green-600', bg: 'bg-green-100' },
-    { id: 28, title: "Solar Panel Malfunction", category: "Lighting", status: "In-Progress", priority: "Medium", location: "City Hall Roof", date: "10 days ago", image: "https://via.placeholder.com/300x200?text=Solar+Panel", color: 'text-amber-600', bg: 'bg-amber-100' },
-];
-
-// --- Sub-Components ---
-
-const IssueCard = ({ issue, index }) => {
-    // Determine status colors
-    let statusColorClass = 'text-gray-600 bg-gray-100'; // Pending/Default
-    if (issue.status === 'Resolved' || issue.status === 'Closed') {
-        statusColorClass = 'text-green-600 bg-green-100';
-    } else if (issue.status === 'In-Progress') {
-        statusColorClass = 'text-amber-600 bg-amber-100';
-    }
-
-    return (
-        <div 
-            className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group border border-gray-100"
-            data-aos="fade-up"
-            data-aos-delay={index * 50} 
-        >
-            <div className="h-40 overflow-hidden">
-                <img 
-                    src={issue.image} 
-                    alt={issue.title} 
-                    className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
-                />
-            </div>
-            
-            <div className="p-5">
-                <div className="flex justify-between items-center mb-3">
-                    <span className={`inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full ${statusColorClass}`}>
-                        {issue.status}
-                    </span>
-                    <span className={`inline-flex items-center text-xs font-medium ${issue.priority === 'High' ? 'text-red-500' : 'text-gray-500'}`}>
-                        <FiAlertTriangle className="mr-1 w-3 h-3" />
-                        {issue.priority}
-                    </span>
-                </div>
-
-                <h3 className="font-['Satoshi'] text-lg font-bold text-[#242424] mb-2 line-clamp-2 hover:text-[#238ae9] transition-colors">
-                    <Link to={`/issue/${issue.id}`}>{issue.title}</Link>
-                </h3>
-                
-                <div className="space-y-1 text-sm text-gray-600">
-                    <p className="flex items-center">
-                        <FiMapPin className="mr-2 w-4 h-4 text-[#238ae9]" />
-                        {issue.location}
-                    </p>
-                    <p className="flex items-center">
-                        <FiClock className="mr-2 w-4 h-4 text-[#238ae9]" />
-                        Reported {issue.date}
-                    </p>
-                </div>
-                
-                <Link 
-                    to={`/issue/${issue.id}`}
-                    className="mt-4 inline-flex items-center font-['Satoshi'] text-[#238ae9] font-semibold text-sm hover:text-[#1e7acc] transition-colors"
-                >
-                    View Report <FiArrowRight className="ml-1 group-hover:translate-x-1 transition-transform" />
-                </Link>
-            </div>
-        </div>
-    );
-};
-
-// Component for the left-hand filter sidebar
-const FilterSidebar = ({ filterState, handleSearchChange, handleFilterChange, handlePriorityChange }) => {
-    
-    // Function to handle changes for checkbox filters (Status, Category)
-    const onCheckboxChange = (filterName, value) => {
-        const currentValues = filterState[filterName] || [];
-        const newValues = currentValues.includes(value)
-            ? currentValues.filter(v => v !== value)
-            : [...currentValues, value];
-        
-        handleFilterChange(filterName, newValues);
-    };
-
-    return (
-        <aside className="p-6 bg-white rounded-xl shadow-lg sticky top-20 border border-gray-100" data-aos="fade-right" data-aos-duration="800">
-            <h3 className="font-['Satoshi'] text-xl font-bold text-[#242424] mb-5 flex items-center gap-2 border-b pb-3">
-                <FiFilter className="text-[#238ae9]" />
-                Filter Issues
-            </h3>
-
-            {/* 1. Search Bar */}
-            <div className="mb-6">
-                <label htmlFor="search" className="block font-['Satoshi'] text-sm font-medium text-gray-700 mb-2">
-                    Search Report
-                </label>
-                <div className="relative">
-                    <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                    <input
-                        type="text"
-                        id="search"
-                        value={filterState.searchTerm}
-                        onChange={handleSearchChange} // Use the passed handler
-                        placeholder="Search by name, location..."
-                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-[#238ae9] focus:border-[#238ae9] text-sm"
-                    />
-                </div>
-            </div>
-
-            {/* 2. Status Filter */}
-            <div className="mb-6">
-                <h4 className="font-['Satoshi'] text-base font-semibold text-[#242424] mb-3 flex items-center gap-1">
-                    <FiLayers className="text-gray-500 w-4 h-4" />
-                    Status
-                </h4>
-                <div className="space-y-2">
-                    {statuses.map(status => (
-                        <div key={status} className="flex items-center">
-                            <input
-                                id={`status-${status}`}
-                                name="status"
-                                type="checkbox"
-                                checked={filterState.status.includes(status)}
-                                onChange={() => onCheckboxChange('status', status)} // Use the local handler
-                                className="h-4 w-4 text-[#238ae9] border-gray-300 rounded focus:ring-[#238ae9]"
-                            />
-                            <label htmlFor={`status-${status}`} className="ml-3 font-['Satoshi'] text-sm text-gray-600">
-                                {status}
-                            </label>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* 3. Category Filter */}
-            <div className="mb-6">
-                <h4 className="font-['Satoshi'] text-base font-semibold text-[#242424] mb-3 flex items-center gap-1">
-                    <FiTag className="text-gray-500 w-4 h-4" />
-                    Category
-                </h4>
-                <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
-                    {categories.map(category => (
-                        <div key={category} className="flex items-center">
-                            <input
-                                id={`category-${category}`}
-                                name="category"
-                                type="checkbox"
-                                checked={filterState.category.includes(category)}
-                                onChange={() => onCheckboxChange('category', category)} // Use the local handler
-                                className="h-4 w-4 text-[#238ae9] border-gray-300 rounded focus:ring-[#238ae9]"
-                            />
-                            <label htmlFor={`category-${category}`} className="ml-3 font-['Satoshi'] text-sm text-gray-600">
-                                {category}
-                            </label>
-                        </div>
-                    ))}
-                </div>
-            </div>
-            
-            {/* 4. Priority Filter (Radio group) */}
-            <div className="mb-0">
-                <h4 className="font-['Satoshi'] text-base font-semibold text-[#242424] mb-3 flex items-center gap-1">
-                    <FiAlertTriangle className="text-gray-500 w-4 h-4" />
-                    Priority
-                </h4>
-                <div className="flex gap-4">
-                    {priorities.map(priority => (
-                        <div key={priority} className="flex items-center">
-                            <input
-                                id={`priority-${priority}`}
-                                name="priority"
-                                type="radio"
-                                checked={filterState.priority === priority}
-                                onChange={() => handlePriorityChange(priority)} // Use the passed handler
-                                className="h-4 w-4 text-[#238ae9] border-gray-300 focus:ring-[#238ae9]"
-                            />
-                            <label htmlFor={`priority-${priority}`} className="ml-2 font-['Satoshi'] text-sm text-gray-600">
-                                {priority}
-                            </label>
-                        </div>
-                    ))}
-                </div>
-            </div>
-            
-            {/* The "Apply Filters" button is for demonstration only, filtering happens on change */}
-            <button className="mt-6 w-full bg-[#238ae9] text-white py-2 rounded-lg font-['Satoshi'] font-medium hover:bg-[#1e7acc] transition-colors">
-                Apply Filters (Live)
-            </button>
-        </aside>
-    );
-};
-
-// Pagination component remains the same
-const Pagination = ({ currentPage = 1, totalPages = 5, onPageChange }) => {
-    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-
-    return (
-        <div className="flex justify-center items-center space-x-2 mt-12" data-aos="fade-up" data-aos-duration="600">
-            <button
-                disabled={currentPage === 1}
-                onClick={() => onPageChange(currentPage - 1)}
-                className={`p-3 rounded-xl transition-colors ${currentPage === 1 ? 'text-gray-400 bg-gray-100 cursor-not-allowed' : 'text-[#238ae9] hover:bg-gray-100'}`}
-                aria-label="Previous Page"
-            >
-                <FiChevronLeft className="w-5 h-5" />
-            </button>
-            <div className="flex space-x-1">
-                {pages.map(page => (
-                    <button
-                        key={page}
-                        onClick={() => onPageChange(page)}
-                        className={`px-4 py-2 rounded-xl font-['Satoshi'] font-semibold transition-all ${
-                            page === currentPage 
-                                ? 'bg-[#238ae9] text-white shadow-md' 
-                                : 'text-gray-700 hover:bg-gray-100'
-                        }`}
-                        aria-current={page === currentPage ? 'page' : undefined}
-                    >
-                        {page}
-                    </button>
-                ))}
-            </div>
-            <button
-                disabled={currentPage === totalPages}
-                onClick={() => onPageChange(currentPage + 1)}
-                className={`p-3 rounded-xl transition-colors ${currentPage === totalPages ? 'text-gray-400 bg-gray-100 cursor-not-allowed' : 'text-[#238ae9] hover:bg-gray-100'}`}
-                aria-label="Next Page"
-            >
-                <FiChevronRight className="w-5 h-5" />
-            </button>
-        </div>
-    );
-};
+// --- Custom Components ---
 
 
-// --- Main Component ---
+import IssueCard from '../components/Issues/IssueCard';
+import FilterSidebar from '../components/Issues/FilterSidebar';
+import Pagination from '../components/Shared/Pagination';
+
+// Initialize AOS
+AOS.init();
+
+// Public Axios instance
+const axiosPublic = axios.create({
+    baseURL: import.meta.env.VITE_API_URL,
+});
+
 const AllIssues = () => {
+    const { user } = useAuth();
+    const axiosSecure = useAxiosSecure();
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // --- State ---
     const [currentPage, setCurrentPage] = useState(1);
+    const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
     const [filterState, setFilterState] = useState({
-        searchTerm: '',
-        status: [],
-        category: [],
-        priority: null, // Radio button: one value or null
+        search: '',
+        status: '',
+        category: '',
+        priority: '',
     });
 
-    // --- Filter Handlers ---
+    // --- Data Fetching (TanStack Query) ---
+    const { data: issuesData = {}, isLoading, isError } = useQuery({
+        queryKey: ['issues', currentPage, filterState],
+        queryFn: async () => {
+            const params = {
+                page: currentPage,
+                limit: 6,
+                search: filterState.search,
+                status: filterState.status,
+                category: filterState.category,
+                priority: filterState.priority
+            };
+            const res = await axiosPublic.get('/api/issues', { params });
+            
+            return res.data; 
+        },
+        keepPreviousData: true,
+    });
+
+    const issues = issuesData.issues || [];
+    const totalPages = issuesData.totalPages || 1;
+
+    // --- Handlers ---
     const handleSearchChange = (e) => {
-        setFilterState(prev => ({ ...prev, searchTerm: e.target.value }));
-        setCurrentPage(1); // Reset to page 1 on new search
+        setFilterState(prev => ({ ...prev, search: e.target.value }));
+        setCurrentPage(1);
     };
 
-    const handleFilterChange = (filterName, values) => {
-        setFilterState(prev => ({ ...prev, [filterName]: values }));
-        setCurrentPage(1); // Reset to page 1 on new filter
-    };
-    
-    const handlePriorityChange = (priority) => {
+    const handleFilterChange = (filterName, value) => {
+        
         setFilterState(prev => ({ 
             ...prev, 
-            priority: prev.priority === priority ? null : priority // Toggle functionality
+            [filterName]: prev[filterName] === value ? '' : value 
         }));
         setCurrentPage(1);
     };
 
-    // --- Filtering Logic (Memoized for performance) ---
-    const filteredIssues = useMemo(() => {
-        return mockIssues.filter(issue => {
-            const searchLower = filterState.searchTerm.toLowerCase();
-            
-            // 1. Search Filter (Title, Location, Category)
-            const matchesSearch = !searchLower || 
-                issue.title.toLowerCase().includes(searchLower) || 
-                issue.location.toLowerCase().includes(searchLower) ||
-                issue.category.toLowerCase().includes(searchLower);
+    // --- Upvote Logic ---
+    const upvoteMutation = useMutation({
+        mutationFn: async (issueId) => {
+            const res = await axiosSecure.put(`/api/issues/upvote/${issueId}`);
+            return res.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['issues']);
+            toast.success('Issue upvoted successfully!');
+        },
+        onError: (error) => {
+            toast.error(error.response?.data?.message || 'Failed to upvote');
+        }
+    });
 
-            // 2. Status Filter
-            const matchesStatus = filterState.status.length === 0 || 
-                                  filterState.status.includes(issue.status);
+    const handleUpvote = (issue) => {
+        // 1. Check Login
+        if (!user) {
+            toast.error("Please login to upvote");
+            // Redirect to login, 
+            return navigate('/login', { state: { from: location } });
+        }
+        
+        // 2. Check if Own Issue
+        if (user.email === issue.reporterEmail) {
+            return toast.error("You cannot upvote your own issue.");
+        }
 
-            // 3. Category Filter
-            const matchesCategory = filterState.category.length === 0 || 
-                                    filterState.category.includes(issue.category);
-            
-            // 4. Priority Filter
-            const matchesPriority = !filterState.priority || 
-                                    issue.priority === filterState.priority;
-
-            return matchesSearch && matchesStatus && matchesCategory && matchesPriority;
-        });
-    }, [filterState]);
-
-    // --- Pagination Logic ---
-    const issuesPerPage = 6;
-    const totalPages = Math.ceil(filteredIssues.length / issuesPerPage);
-    const startIndex = (currentPage - 1) * issuesPerPage;
-    const endIndex = startIndex + issuesPerPage;
-    const issuesToDisplay = filteredIssues.slice(startIndex, endIndex);
+        // 3. Execute Upvote
+        upvoteMutation.mutate(issue._id);
+    };
 
     return (
-        <section className="bg-[#f4f6f8] py-20 md:py-32">
+        <section className="bg-[#f4f6f8] py-20 md:py-32 min-h-screen">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 
                 {/* Header */}
-                <div className="text-center mb-16">
-                    <span className="inline-block px-4 py-1 bg-white text-[#238ae9] rounded-full font-['Satoshi'] text-sm font-medium mb-3"
-                    data-aos="fade-up" data-aos-duration="600">
+                <div className="text-center mb-16" data-aos="fade-down">
+                    <span className="inline-block px-4 py-1 bg-white text-[#238ae9] rounded-full font-['Satoshi'] text-sm font-medium mb-3">
                         Public Report Hub
                     </span>
-                    <h1 
-                        className="font-['Satoshi'] text-4xl md:text-5xl font-bold text-[#242424] mb-4 leading-tight"
-                        data-aos="fade-up" data-aos-duration="600" data-aos-delay="200"
-                    >
+                    <h1 className="font-['Satoshi'] text-4xl md:text-5xl font-bold text-[#242424] mb-4 leading-tight">
                         All Citizen Reports
                     </h1>
-                    <p 
-                        className="font-['Satoshi'] text-lg text-gray-600 max-w-3xl mx-auto"
-                        data-aos="fade-up" data-aos-duration="600" data-aos-delay="400"
-                    >
-                        Explore the full list of reported infrastructure issues across the city. Use the filters to track progress on items that matter to you.
-                    </p>
                 </div>
 
-                {/* Main Content Grid: Sidebar + Issues */}
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
-                    
-                    {/* Filter Sidebar (Left) */}
-                    <div className="hidden lg:block lg:col-span-1">
-                        <FilterSidebar 
-                            filterState={filterState}
-                            handleSearchChange={handleSearchChange}
-                            handleFilterChange={handleFilterChange}
-                            handlePriorityChange={handlePriorityChange}
-                        />
-                    </div>
-                    
-                    {/* Issues Grid (Right) */}
-                    <div className="lg:col-span-3">
-                        
-                        <p className="font-['Satoshi'] text-sm text-gray-700 mb-6">
-                            Showing **{issuesToDisplay.length}** of **{filteredIssues.length}** matching reports.
-                        </p>
-                        
-                        {issuesToDisplay.length > 0 ? (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
-                                {issuesToDisplay.map((issue, index) => (
-                                    <IssueCard key={issue.id} issue={issue} index={index} />
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="p-10 bg-white rounded-xl text-center shadow-lg border-2 border-dashed border-gray-200">
-                                <FiSearch className="w-10 h-10 text-gray-400 mx-auto mb-4" />
-                                <h3 className="font-['Satoshi'] text-xl font-bold text-gray-700">No Reports Found</h3>
-                                <p className="text-gray-500">Try adjusting your filters or search terms.</p>
-                            </div>
-                        )}
-                        
-                        {/* Pagination - only show if there is more than 1 page of filtered results */}
-                        {totalPages > 1 && (
-                            <Pagination 
-                                currentPage={currentPage}
-                                totalPages={totalPages}
-                                onPageChange={setCurrentPage}
+                    {/* Sidebar  */}
+                    <div className="hidden lg:block lg:col-span-1 h-fit">
+                        <div className="p-6 bg-white rounded-xl shadow-lg sticky top-24 border border-gray-100">
+                            <h3 className="font-bold text-lg mb-4 border-b pb-2">Filter Options</h3>
+                            <FilterSidebar 
+                                filterState={filterState}
+                                handleSearchChange={handleSearchChange}
+                                handleFilterChange={handleFilterChange}
                             />
+                        </div>
+                    </div>
+
+                    {/* Main Content Area */}
+                    <div className="lg:col-span-3">
+                        {isLoading ? (
+                            <div className="flex justify-center items-center py-20">
+                                <div className="w-10 h-10 border-4 border-[#238ae9] border-t-transparent rounded-full animate-spin"></div>
+                            </div>
+                        ) : isError ? (
+                             <div className="text-center py-20 bg-red-50 rounded-xl text-red-500 border border-red-200">
+                                Error loading issues. Please try again later.
+                             </div>
+                        ) : issues.length > 0 ? (
+                            <>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                                    {issues.map((issue, index) => (
+                                        <IssueCard 
+                                            key={issue._id} 
+                                            issue={issue} 
+                                            index={index} 
+                                            onUpvote={() => handleUpvote(issue)}
+                                        />
+                                    ))}
+                                </div>
+                                
+                                {/* Pagination */}
+                                {totalPages > 1 && (
+                                    <Pagination 
+                                        currentPage={currentPage} 
+                                        totalPages={totalPages} 
+                                        onPageChange={setCurrentPage} 
+                                    />
+                                )}
+                            </>
+                        ) : (
+                            <div className="p-16 bg-white rounded-xl text-center shadow-lg border-2 border-dashed border-gray-200" data-aos="zoom-in">
+                                <h3 className="font-['Satoshi'] text-xl font-bold text-gray-700">No Reports Found</h3>
+                                <p className="text-gray-500 mt-2">Try adjusting your search or filters.</p>
+                            </div>
                         )}
                     </div>
-                    
-                    {/* Mobile Filter Button */}
-                    <div className="lg:hidden text-center">
-                        <button className="w-full py-3 bg-white border border-gray-300 rounded-xl font-['Satoshi'] font-semibold text-[#238ae9] flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors">
-                            <FiFilter className="w-5 h-5" />
-                            Show Filters (Mobile)
-                        </button>
+
+                    {/* Mobile Filter Toggle Button */}
+                    <div className="lg:hidden fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40 w-full max-w-xs px-4">
+                         <button 
+                            onClick={() => setIsMobileFilterOpen(true)} 
+                            className="w-full py-4 bg-[#238ae9] text-white rounded-full font-bold shadow-2xl flex items-center justify-center gap-2"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                            Show Filters
+                         </button>
                     </div>
                 </div>
             </div>
+
+            {/* Mobile Filter Drawer/Modal */}
+             {isMobileFilterOpen && (
+                <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex justify-end transition-opacity">
+                    <div className="w-4/5 max-w-sm bg-white h-full overflow-y-auto p-6 shadow-2xl animate-slideInRight">
+                         <div className="flex justify-between items-center mb-6 border-b pb-4">
+                            <h3 className="font-bold text-xl text-[#242424]">Filters</h3>
+                            <button 
+                                onClick={() => setIsMobileFilterOpen(false)}
+                                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                            >
+                                <FiX size={24}/>
+                            </button>
+                         </div>
+                         <FilterSidebar
+                            filterState={filterState}
+                            handleSearchChange={handleSearchChange}
+                            handleFilterChange={handleFilterChange}
+                        />
+                        <button 
+                            onClick={() => setIsMobileFilterOpen(false)}
+                            className="w-full mt-8 bg-[#238ae9] text-white py-3 rounded-xl font-bold"
+                        >
+                            View Results
+                        </button>
+                    </div>
+                </div>
+            )}
         </section>
     );
 };

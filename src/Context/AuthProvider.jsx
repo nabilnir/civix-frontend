@@ -1,4 +1,4 @@
-// context/AuthProvider.jsx
+
 import { useEffect, useState } from 'react';
 import {
   GoogleAuthProvider,
@@ -99,10 +99,16 @@ const AuthProvider = ({ children }) => {
       console.log('CurrentUser-->', currentUser?.email);
       
       if (currentUser) {
-        setUser(currentUser);
-        
         // Get JWT token when user is authenticated
-        await getJWTToken(currentUser.email);
+        const token = await getJWTToken(currentUser.email);
+        
+        // Add token to user object
+        const userWithToken = {
+          ...currentUser,
+          accessToken: token || localStorage.getItem('civix-token')
+        };
+        
+        setUser(userWithToken);
       } else {
         setUser(null);
         // Remove token when logged out

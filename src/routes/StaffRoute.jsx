@@ -1,11 +1,13 @@
 import { Navigate, useLocation } from 'react-router';
 import useAuth from '../hooks/useAuth';
+import useRole from '../hooks/useRole';
 
-export default function PrivateRoute({ children }) {
+export default function StaffRoute({ children }) {
   const { user, loading } = useAuth();
+  const { role, isLoading: roleLoading } = useRole();
   const location = useLocation();
 
-  if (loading) {
+  if (loading || roleLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-[#f4f6f8]">
         <div className="flex flex-col items-center gap-4">
@@ -16,10 +18,15 @@ export default function PrivateRoute({ children }) {
     );
   }
 
-  if (user) {
-    return children;
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // Redirect to login while saving the location user was trying to access
-  return <Navigate to="/login" state={{ from: location }} replace />;
+  if (role !== 'staff') {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return children;
 }
+
+

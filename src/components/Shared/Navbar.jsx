@@ -1,4 +1,3 @@
-// components/shared/Navbar.jsx
 import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink } from 'react-router';
 import { FiMenu, FiX, FiBell, FiMail, FiUser, FiLogOut, FiGrid } from 'react-icons/fi';

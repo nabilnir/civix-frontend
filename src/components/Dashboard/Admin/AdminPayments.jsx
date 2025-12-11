@@ -1,6 +1,6 @@
 import React from 'react';
 
-const UpVoteButton = () => {
+const AdminPayments = () => {
     return (
         <div>
             
@@ -8,4 +8,4 @@ const UpVoteButton = () => {
     );
 };
 
-export default UpVoteButton;
+export default AdminPayments;

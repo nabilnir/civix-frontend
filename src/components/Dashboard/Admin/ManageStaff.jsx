@@ -1,6 +1,6 @@
 import React from 'react';
 
-const UpVoteButton = () => {
+const ManageStaff = () => {
     return (
         <div>
             
@@ -8,4 +8,4 @@ const UpVoteButton = () => {
     );
 };
 
-export default UpVoteButton;
+export default ManageStaff;
