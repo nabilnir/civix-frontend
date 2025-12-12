@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { FiUser, FiMail, FiCamera, FiAlertTriangle, FiCreditCard } from 'react-icons/fi';
+import { FiUser, FiMail, FiCamera, FiAlertTriangle } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
 import useAuth from '../../../hooks/useAuth';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import useRole from '../../../hooks/useRole';
 import { handlePayment } from '../../../Utils/payment';
-import { Crown } from 'lucide-react';
+import SubscriptionCard from './SubscriptionCard';
 
 const CitizenProfile = () => {
   const { user, updateUserProfile } = useAuth();
@@ -165,9 +166,20 @@ const CitizenProfile = () => {
   };
 
   const handleSubscribe = () => {
-    if (window.confirm('Subscribe to premium for 1000tk? This will allow unlimited issue reports.')) {
-      subscribeMutation.mutate();
-    }
+    Swal.fire({
+      title: 'Subscribe to Premium?',
+      text: 'Pay 1000tk to unlock unlimited issue reports and premium features.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#238ae9',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Yes, Pay 1000tk',
+      cancelButtonText: 'Cancel',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        subscribeMutation.mutate();
+      }
+    });
   };
 
   if (isLoading) {
@@ -239,8 +251,8 @@ const CitizenProfile = () => {
                   {user?.email}
                 </p>
                 {isPremium && (
-                  <span className="inline-flex items-center gap-1 mt-2 px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-white rounded-full text-xs font-bold">
-                    <Crown /> Premium Member
+                  <span className="inline-flex items-center gap-1 mt-2 px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-white rounded-full text-xs font-bold font-['Satoshi']">
+                    👑 Premium Member
                   </span>
                 )}
               </div>
@@ -287,55 +299,13 @@ const CitizenProfile = () => {
 
         {/* Subscription Card */}
         <div className="space-y-6">
-          {/* Premium Status */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <h3 className="text-lg font-bold text-[#242424] font-['Satoshi'] mb-4">
-              Subscription
-            </h3>
-            
-            {isPremium ? (
-              <div className="text-center py-4">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full mb-4 text-3xl">
-                  👑
-                </div>
-                <p className="font-['Satoshi'] font-semibold text-[#242424] mb-2">
-                  Premium Member
-                </p>
-                <p className="text-sm text-gray-600 font-['Satoshi']">
-                  Unlimited issue reports
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div>
-                  <p className="text-sm text-gray-600 font-['Satoshi'] mb-2">
-                    Current Plan: <strong>Free</strong>
-                  </p>
-                  <p className="text-sm text-gray-600 font-['Satoshi']">
-                    Issues Reported: <strong>{profileData?.issueCount || 0}/3</strong>
-                  </p>
-                </div>
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-                  <h4 className="font-bold text-amber-700 font-['Satoshi'] mb-2">
-                    Upgrade to Premium
-                  </h4>
-                  <ul className="text-sm text-amber-600 space-y-1 font-['Satoshi'] mb-4">
-                    <li>• Unlimited issue reports</li>
-                    <li>• Priority support</li>
-                    <li>• Advanced features</li>
-                  </ul>
-                  <button
-                    onClick={handleSubscribe}
-                    disabled={isBlocked || subscribeMutation.isPending}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white rounded-lg font-['Satoshi'] font-semibold hover:shadow-lg transition-all disabled:opacity-50"
-                  >
-                    <FiCreditCard />
-                    {subscribeMutation.isPending ? 'Processing...' : 'Subscribe (1000tk)'}
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
+          <SubscriptionCard
+            isPremium={isPremium}
+            isBlocked={isBlocked}
+            issueCount={profileData?.issueCount || issueCount || 0}
+            onSubscribe={handleSubscribe}
+            isLoading={subscribeMutation.isPending}
+          />
 
           {/* Account Stats */}
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">

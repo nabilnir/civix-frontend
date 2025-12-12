@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import useAuth from '../../../hooks/useAuth';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { FiFileText, FiClock, FiCheckCircle, FiTrendingUp } from 'react-icons/fi';
 import StatCard from '../Shared/StatCard';
+import IssueCharts from './IssueCharts';
 
 const CitizenOverview = () =>{
   const { user } = useAuth();
@@ -53,23 +53,6 @@ const CitizenOverview = () =>{
   const inProgressIssues = issues.filter(i => ['in-progress', 'working'].includes(i.status)).length;
   const resolvedIssues = issues.filter(i => i.status === 'resolved').length;
 
-  // Data for charts
-  const statusData = [
-    { name: 'Pending', value: pendingIssues, color: '#f59e0b' },
-    { name: 'In Progress', value: inProgressIssues, color: '#3b82f6' },
-    { name: 'Resolved', value: resolvedIssues, color: '#10b981' }
-  ];
-
-  const categoryData = {};
-  issues.forEach(issue => {
-    categoryData[issue.category] = (categoryData[issue.category] || 0) + 1;
-  });
-
-  const barChartData = Object.entries(categoryData).map(([category, count]) => ({
-    category,
-    count
-  }));
-
   return (
     <div className="space-y-6">
       {/* Welcome Header */}
@@ -111,49 +94,7 @@ const CitizenOverview = () =>{
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Status Distribution */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <h3 className="text-lg font-bold text-[#242424] font-['Satoshi'] mb-4">
-            Status Distribution
-          </h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie
-                data={statusData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, value }) => `${name}: ${value}`}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {statusData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Issues by Category */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <h3 className="text-lg font-bold text-[#242424] font-['Satoshi'] mb-4">
-            Issues by Category
-          </h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={barChartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="category" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="count" fill="#238ae9" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+      <IssueCharts issues={issues} />
 
       {/* Recent Issues */}
       <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
