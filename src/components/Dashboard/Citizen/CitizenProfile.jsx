@@ -302,7 +302,7 @@ const CitizenProfile = () => {
           <SubscriptionCard
             isPremium={isPremium}
             isBlocked={isBlocked}
-            issueCount={profileData?.issueCount || issueCount || 0}
+            issueCount={profileData?.issueCount || 0}
             onSubscribe={handleSubscribe}
             isLoading={subscribeMutation.isPending}
           />
