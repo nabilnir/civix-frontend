@@ -7,6 +7,8 @@ import Swal from 'sweetalert2';
 import axios from 'axios'; 
 import useAuth from '../../hooks/useAuth';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
+import Timeline from './Timeline';
+import StatusBadge from './StatusBadge';
 
 const IssueDetails = () => {
     const { id } = useParams();
@@ -125,12 +127,10 @@ const IssueDetails = () => {
                                 <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-bold font-['Satoshi']">
                                     {issue.category}
                                 </span>
-                                <span className={`px-3 py-1 rounded-full text-xs font-bold font-['Satoshi'] ${issue.status === 'Resolved' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
-                                    {issue.status}
-                                </span>
+                                <StatusBadge status={issue.status} />
                                 {issue.priority === 'High' && (
-                                    <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
-                                        <FiAlertTriangle/> High Priority
+                                    <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 font-['Satoshi']">
+                                        <FiAlertTriangle size={14}/> High Priority
                                     </span>
                                 )}
                             </div>
@@ -165,34 +165,7 @@ const IssueDetails = () => {
                         </div>
 
                         {/* Timeline Section */}
-                        <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
-                            <h3 className="text-xl font-bold text-[#242424] mb-6 font-['Satoshi']">Issue Lifecycle</h3>
-                            
-                            <div className="relative border-l-2 border-gray-200 ml-3 pl-8 space-y-8">
-                                {timeline.map((entry, idx) => (
-                                    <div key={idx} className="relative">
-                                        {/* Dot on timeline */}
-                                        <span className="absolute -left-[41px] top-1 h-5 w-5 rounded-full bg-[#238ae9] border-4 border-white shadow-sm"></span>
-                                        
-                                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start">
-                                            <div>
-                                                <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
-                                                    {new Date(entry.date).toLocaleString()}
-                                                </span>
-                                                <h4 className="text-base font-bold text-gray-800 mt-1">{entry.status}</h4>
-                                                <p className="text-sm text-gray-600 mt-1">{entry.note || "Status updated"}</p>
-                                            </div>
-                                            <div className="mt-2 sm:mt-0">
-                                                <span className="inline-block bg-gray-100 px-2 py-1 rounded text-xs font-medium text-gray-600">
-                                                    By: {entry.updatedBy}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                                {timeline.length === 0 && <p className="text-gray-500 italic">No updates yet.</p>}
-                            </div>
-                        </div>
+                        <Timeline timeline={timeline} issueStatus={issue.status} />
                     </div>
 
                     {/* Right Column: Staff & Actions  */}
