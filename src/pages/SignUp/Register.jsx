@@ -6,6 +6,7 @@ import { FiMail, FiLock, FiUser, FiEye, FiEyeOff, FiImage } from 'react-icons/fi
 import { useState } from 'react';
 import axios from 'axios';
 import useAuth from '../../hooks/useAuth';
+import Logo from '../../components/Shared/Logo';
 
 const Register = () => {
   const { 
@@ -159,11 +160,8 @@ const Register = () => {
 
         {/* Logo & Header */}
         <div className="text-center mb-8" data-aos="fade-down">
-          <div className="inline-flex items-center gap-2 mb-6">
-            <div className="w-12 h-12 bg-gradient-to-br from-[#238ae9] to-[#1e7acc] rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-white text-2xl font-bold font-['Satoshi']">C</span>
-            </div>
-            <span className="text-[#242424] font-['Satoshi'] font-bold text-2xl">Civix</span>
+          <div className="flex justify-center mb-6">
+            <Logo size="lg" showText={true} />
           </div>
           <h2 className="font-['Satoshi'] text-3xl font-bold text-[#242424] mb-2">
             Create Account

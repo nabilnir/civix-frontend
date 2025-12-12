@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fi';
 import useAuth from '../../../hooks/useAuth';
 import useRole from '../../../hooks/useRole';
+import Logo from '../../Shared/Logo';
 
 export default function Sidebar() {
   const { user } = useAuth();
@@ -65,14 +66,9 @@ export default function Sidebar() {
         `}
       >
         {/* Logo */}
-        <div className="h-16 flex items-center gap-2 px-6 border-b border-gray-200">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#238ae9] to-[#1e7acc] rounded-xl flex items-center justify-center shadow-md">
-            <span className="text-white text-xl font-bold font-['Satoshi']">C</span>
-          </div>
-          <div>
-            <h1 className="text-[#242424] font-['Satoshi'] font-bold text-lg">Civix</h1>
-            <p className="text-xs text-gray-500 font-['Satoshi'] capitalize">{role} Panel</p>
-          </div>
+        <div className="h-16 flex items-center justify-between px-6 border-b border-gray-200">
+          <Logo size="md" showText={true} />
+          <p className="text-xs text-gray-500 font-['Satoshi'] capitalize">{role} Panel</p>
         </div>
 
         {/* User Info */}

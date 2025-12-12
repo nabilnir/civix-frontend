@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router';
 import { FiMenu, FiX, FiBell, FiMail, FiUser, FiLogOut, FiGrid } from 'react-icons/fi';
 import useAuth from '../../hooks/useAuth';
 import toast from 'react-hot-toast';
+import Logo from './Logo';
 
 export default function Navbar() {
   const { user, logOut } = useAuth();
@@ -51,14 +52,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#238ae9] to-[#1e7acc] rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all">
-              <span className="text-white text-xl font-bold font-['Satoshi']">C</span>
-            </div>
-            <span className="text-[#242424] font-['Satoshi'] font-bold text-xl tracking-tight hidden sm:block">
-              Civix
-            </span>
-          </Link>
+          <Logo size="md" />
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">

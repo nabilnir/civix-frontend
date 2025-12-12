@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 import { FiMail, FiPhone, FiMapPin, FiFacebook, FiTwitter, FiLinkedin, FiGithub } from 'react-icons/fi';
+import Logo from './Logo';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -12,14 +13,7 @@ export default function Footer() {
           
           {/* Brand Column */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-[#238ae9] to-[#1e7acc] rounded-xl flex items-center justify-center shadow-md">
-                <span className="text-white text-xl font-bold">C</span>
-              </div>
-              <span className="text-[#242424] font-['Satoshi'] font-bold text-xl tracking-tight">
-                Civix
-              </span>
-            </div>
+            <Logo size="md" showText={true} />
             <p className="font-['Satoshi'] text-sm text-gray-600 leading-relaxed">
               Empowering citizens to report, track, and resolve infrastructure issues. 
               Building better communities together.
