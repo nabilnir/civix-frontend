@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiCrown, FiCheckCircle, FiArrowRight, FiLock } from 'react-icons/fi';
+import { FiCheckCircle, FiArrowRight, FiLock, FiStar } from 'react-icons/fi';
 import { useNavigate } from 'react-router';
 
 const SubscriptionCard = ({
@@ -43,8 +43,8 @@ const SubscriptionCard = ({
       <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl p-6 shadow-lg">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="bg-amber-500 rounded-full p-2">
-              <FiCrown className="text-white" size={24} />
+            <div className="bg-amber-500 rounded-full p-2 flex items-center justify-center">
+              <span className="text-white text-2xl">👑</span>
             </div>
             <div>
               <h3 className="text-xl font-bold text-amber-900 font-['Satoshi']">
@@ -145,7 +145,7 @@ const SubscriptionCard = ({
           </>
         ) : (
           <>
-            <FiCrown size={18} />
+            <span className="text-lg">👑</span>
             Upgrade to Premium
             <FiArrowRight size={18} />
           </>

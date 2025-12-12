@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { FiUserX, FiUserCheck, FiCrown, FiSearch, FiFilter } from 'react-icons/fi';
+import { FiUserX, FiUserCheck, FiSearch, FiFilter } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
@@ -174,7 +174,7 @@ const ManageUsers = () => {
                             {user.name}
                             {user.isPremium && (
                               <span className="text-amber-500" title="Premium User">
-                                <FiCrown size={16} />
+                                👑
                               </span>
                             )}
                           </p>
@@ -190,7 +190,7 @@ const ManageUsers = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       {user.isPremium ? (
                         <span className="inline-flex items-center gap-1 px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-bold font-['Satoshi']">
-                          <FiCrown size={12} /> Premium
+                          <span>👑</span> Premium
                         </span>
                       ) : (
                         <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-semibold font-['Satoshi']">
