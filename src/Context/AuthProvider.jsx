@@ -76,8 +76,15 @@ const AuthProvider = ({ children }) => {
   // Get JWT token from backend
   const getJWTToken = async (email) => {
     try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      
+      if (!apiUrl) {
+        console.warn('API URL is not configured. JWT token generation skipped.');
+        return null;
+      }
+      
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/jwt`,
+        `${apiUrl}/api/auth/jwt`,
         { email }
       );
       
@@ -88,6 +95,7 @@ const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Error getting JWT token:', error);
+      // Don't throw, just return null to allow app to continue
       return null;
     }
   };

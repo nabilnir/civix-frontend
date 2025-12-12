@@ -23,8 +23,14 @@ const CitizenProfile = () => {
   const { data: profileData, isLoading } = useQuery({
     queryKey: ['userProfile', user?.email],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/api/auth/users/${user.email}`);
-      return res.data.data;
+      if (!user?.email) return {};
+      try {
+        const res = await axiosSecure.get(`/api/auth/users/${user.email}`);
+        return res.data.data || {};
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+        return {};
+      }
     },
     enabled: !!user?.email,
   });

@@ -2,7 +2,11 @@ import axios from 'axios';
 
 export const handlePayment = async (amount, type, issueId = null) => {
   try {
-  
+    const apiUrl = import.meta.env.VITE_API_URL;
+    
+    if (!apiUrl) {
+      throw new Error('API URL is not configured. Please check your environment variables.');
+    }
     
     // Simulate payment processing
     const transactionId = `TXN-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -10,7 +14,7 @@ export const handlePayment = async (amount, type, issueId = null) => {
     // Record payment in database
     const token = localStorage.getItem('civix-token');
     const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/payments`,
+      `${apiUrl}/api/payments`,
       {
         amount,
         type,

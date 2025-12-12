@@ -22,8 +22,14 @@ const MyIssues = () => {
   const { data: issues = [], isLoading } = useQuery({
     queryKey: ['userIssues', user?.email],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/api/issues/user/${user.email}`);
-      return res.data.data || [];
+      if (!user?.email) return [];
+      try {
+        const res = await axiosSecure.get(`/api/issues/user/${user.email}`);
+        return res.data.data || [];
+      } catch (error) {
+        console.error('Error fetching user issues:', error);
+        return [];
+      }
     },
     enabled: !!user?.email,
   });

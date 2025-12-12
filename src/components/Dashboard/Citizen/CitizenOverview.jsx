@@ -12,12 +12,18 @@ const CitizenOverview = () =>{
   const { data: issuesData, isLoading } = useQuery({
     queryKey: ['userIssues', user?.email],
     queryFn: async () => {
+      if (!user?.email) return [];
       const token = localStorage.getItem('civix-token');
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/issues/user/${user.email}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      return response.data.data;
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/issues/user/${user.email}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        return response.data.data || [];
+      } catch (error) {
+        console.error('Error fetching user issues:', error);
+        return [];
+      }
     },
     enabled: !!user?.email
   });
@@ -26,12 +32,18 @@ const CitizenOverview = () =>{
   const { data: statsData } = useQuery({
     queryKey: ['userStats', user?.email],
     queryFn: async () => {
+      if (!user?.email) return {};
       const token = localStorage.getItem('civix-token');
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/users/${user.email}/stats`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      return response.data.data;
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/users/${user.email}/stats`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        return response.data.data || {};
+      } catch (error) {
+        console.error('Error fetching user stats:', error);
+        return {};
+      }
     },
     enabled: !!user?.email
   });

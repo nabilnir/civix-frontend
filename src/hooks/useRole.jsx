@@ -9,18 +9,18 @@ const useRole = () => {
   const { data: userData, isLoading } = useQuery({
     queryKey: ['userRole', user?.email],
     queryFn: async () => {
-      if (!user?.email) return null;
+      if (!user?.email) return {};
       
       try {
         const res = await axiosSecure.get(`/api/auth/users/${user.email}`);
-        return res.data.data;
+        return res.data.data || {};
       } catch (error) {
         console.error('Error fetching user role:', error);
-        return null;
+        return {};
       }
     },
     enabled: !!user?.email,
-    staleTime: 5 * 60 * 1000, 
+    staleTime: 5 * 60 * 1000,
   });
 
   return {
