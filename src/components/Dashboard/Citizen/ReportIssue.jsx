@@ -56,17 +56,27 @@ const ReportIssue = () => {
       
       if (imageFile) {
         toast.loading('Uploading image...');
-        imageUrl = await uploadImage(imageFile);
+        try {
+          imageUrl = await uploadImage(imageFile);
+        } catch (error) {
+          console.error('Image upload failed:', error);
+          
+          imageUrl = '';
+        }
         toast.dismiss();
       }
       
+      // Prepare issue data - backend will add userEmail, userName, userPhoto from token
+      
       const issueData = {
-        ...formData,
-        image: imageUrl,
-        reporterEmail: user.email,
-        reporterName: user.displayName,
+        title: formData.title?.trim(),
+        description: formData.description?.trim(),
+        category: formData.category,
+        location: (formData.location || formData.Location)?.trim(), 
+        image: imageUrl || undefined, 
       };
       
+      console.log('Submitting issue:', issueData);
       const res = await axiosSecure.post('/api/issues', issueData);
       return res.data;
     },
@@ -78,11 +88,18 @@ const ReportIssue = () => {
       navigate('/dashboard/my-issues');
     },
     onError: (error) => {
-      if (error.response?.data?.needsPremium) {
+      console.error('Issue creation error:', error);
+      console.error('Error response:', error.response?.data);
+      
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        toast.error('Authentication failed. Please log in again.');
+        navigate('/login');
+      } else if (error.response?.data?.needsPremium) {
         toast.error('Free users can only report 3 issues. Upgrade to premium!');
         navigate('/dashboard/profile');
       } else {
-        toast.error(error.response?.data?.message || 'Failed to report issue');
+        const errorMessage = error.response?.data?.message || error.message || 'Failed to report issue';
+        toast.error(errorMessage);
       }
     },
   });

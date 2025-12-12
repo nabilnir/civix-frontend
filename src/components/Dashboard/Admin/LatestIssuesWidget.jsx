@@ -13,8 +13,9 @@ const LatestIssuesWidget = ({ limit = 5 }) => {
   const { data: latestIssues = [], isLoading } = useQuery({
     queryKey: ['latestIssues', limit],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/api/issues?limit=${limit}&sort=-createdAt`);
-      return res.data.issues || [];
+      const res = await axiosSecure.get('/api/admin/latest');
+      const allIssues = res.data.data?.latestIssues || [];
+      return allIssues.slice(0, limit);
     },
   });
 

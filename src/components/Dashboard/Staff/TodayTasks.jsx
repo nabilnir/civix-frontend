@@ -11,16 +11,28 @@ const TodayTasks = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
 
-  const { data: todayTasks = [], isLoading } = useQuery({
-    queryKey: ['todayTasks', user?.email],
+  // Fetch assigned issues and filter for today's tasks
+  const { data: assignedIssues = [], isLoading } = useQuery({
+    queryKey: ['assignedIssues', user?.email],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/api/staff/today-tasks/${user?.email}`);
-      return res.data;
+      const res = await axiosSecure.get(`/api/staff/${user?.email}/assigned-issues`);
+      return res.data.data || [];
     },
     enabled: !!user?.email,
   });
 
-  if (isLoading) {
+  // Filter issues assigned today or updated today
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const todayTasks = assignedIssues.filter((task) => {
+    const assignedDate = new Date(task.assignedAt || task.updatedAt || task.createdAt);
+    assignedDate.setHours(0, 0, 0, 0);
+    return assignedDate.getTime() === today.getTime();
+  });
+
+  const isLoadingTasks = isLoading;
+
+  if (isLoadingTasks) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#238ae9]"></div>

@@ -83,7 +83,7 @@ const AllIssues = () => {
     // --- Upvote Logic ---
     const upvoteMutation = useMutation({
         mutationFn: async (issueId) => {
-            const res = await axiosSecure.put(`/api/issues/upvote/${issueId}`);
+            const res = await axiosSecure.post(`/api/issues/${issueId}/upvote`);
             return res.data;
         },
         onSuccess: () => {

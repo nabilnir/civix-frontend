@@ -5,7 +5,7 @@ import StatusBadge from './StatusBadge';
 
 const IssueCard = ({ issue, index, onUpvote }) => {
     // Determine if issue is boosted/high priority
-    const isHighPriority = issue.priority === 'High' || issue.isBoosted;
+    const isHighPriority = (issue.priority === 'high' || issue.priority === 'High') || issue.isBoosted;
 
     return (
         <div 

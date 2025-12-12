@@ -87,7 +87,7 @@ const BoostPayment = ({ issue, onSuccess }) => {
     boostMutation.mutate();
   };
 
-  if (issue.priority === 'High') {
+  if (issue.priority === 'high' || issue.priority === 'High') {
     return (
       <div className="flex items-center gap-2 px-4 py-2 bg-amber-100 text-amber-700 rounded-lg">
         <FiCheckCircle size={18} />

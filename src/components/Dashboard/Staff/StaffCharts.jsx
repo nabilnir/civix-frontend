@@ -12,17 +12,16 @@ const StaffCharts = () => {
   const { data: stats = {}, isLoading } = useQuery({
     queryKey: ['staffStats', user?.email],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/api/staff/stats/${user?.email}`);
-      return res.data;
+      const res = await axiosSecure.get(`/api/staff/${user?.email}/stats`);
+      return res.data.data || {};
     },
     enabled: !!user?.email,
   });
 
   const statusData = [
-    { name: 'Pending', value: stats.pendingCount || 0 },
-    { name: 'In Progress', value: stats.inProgressCount || 0 },
-    { name: 'Resolved', value: stats.resolvedCount || 0 },
-    { name: 'Rejected', value: stats.rejectedCount || 0 },
+    { name: 'Pending', value: stats.pendingIssues || 0 },
+    { name: 'In Progress', value: stats.inProgressIssues || 0 },
+    { name: 'Resolved', value: stats.resolvedIssues || 0 },
   ];
 
   const categoryData = stats.categoryBreakdown || [];

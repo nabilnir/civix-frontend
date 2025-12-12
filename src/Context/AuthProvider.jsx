@@ -57,8 +57,11 @@ const AuthProvider = ({ children }) => {
   // Save user to MongoDB database
   const saveUserToDatabase = async (userData) => {
     try {
+      // Get API URL from environment or use Vercel backend as fallback
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://civix-backend-livid.vercel.app';
+      
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/register`,
+        `${apiUrl}/api/auth/register`,
         userData
       );
       return response.data;
@@ -76,12 +79,8 @@ const AuthProvider = ({ children }) => {
   // Get JWT token from backend
   const getJWTToken = async (email) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      
-      if (!apiUrl) {
-        console.warn('API URL is not configured. JWT token generation skipped.');
-        return null;
-      }
+      // Get API URL from environment or use Vercel backend as fallback
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://civix-backend-livid.vercel.app';
       
       const response = await axios.post(
         `${apiUrl}/api/auth/jwt`,

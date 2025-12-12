@@ -35,8 +35,10 @@ const IssueList = ({
   // Sort issues: Boosted/High priority first, then by date
   const sortedIssues = [...issues].sort((a, b) => {
     // Boosted issues first
-    if (a.priority === 'High' && b.priority !== 'High') return -1;
-    if (a.priority !== 'High' && b.priority === 'High') return 1;
+    const aHigh = a.priority === 'high' || a.priority === 'High';
+    const bHigh = b.priority === 'high' || b.priority === 'High';
+    if (aHigh && !bHigh) return -1;
+    if (!aHigh && bHigh) return 1;
     
     // Then by date (newest first)
     const dateA = new Date(a.date || a.createdAt || 0);

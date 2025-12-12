@@ -185,7 +185,7 @@ const AdminAllIssues = () => {
                       <StatusBadge status={issue.status} />
                     </td>
                     <td className="px-6 py-4">
-                      {issue.priority === 'High' ? (
+                      {(issue.priority === 'high' || issue.priority === 'High') ? (
                         <span className="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-bold font-['Satoshi']">
                           High
                         </span>

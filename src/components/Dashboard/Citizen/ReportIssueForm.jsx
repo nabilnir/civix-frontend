@@ -163,6 +163,7 @@ const ReportIssueForm = ({
         <input
           {...register('location', { required: 'Location is required' })}
           type="text"
+          autoComplete="off"
           disabled={!canReport || isBlocked}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9] disabled:bg-gray-100 disabled:cursor-not-allowed"
           placeholder="e.g., Main Street, Sector 5, Block A"

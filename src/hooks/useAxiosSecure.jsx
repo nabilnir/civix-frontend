@@ -3,8 +3,17 @@ import { useNavigate } from 'react-router'
 import axios from 'axios'
 import useAuth from './useAuth'
 
+// Get API URL from environment variable or fallback to Vercel backend
+const getApiUrl = () => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  // Fallback to Vercel backend if env var is not set
+  return 'https://civix-backend-livid.vercel.app';
+};
+
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: getApiUrl(),
   withCredentials: true,
 })
 
@@ -13,11 +22,14 @@ const useAxiosSecure = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!loading && user?.accessToken) {
-
+    if (!loading) {
       const requestInterceptor = axiosInstance.interceptors.request.use(
         config => {
-          config.headers.Authorization = `Bearer ${user.accessToken}`
+          // Get token dynamically from user object or localStorage on each request
+          const token = user?.accessToken || localStorage.getItem('civix-token');
+          if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+          }
           return config
         }
       )

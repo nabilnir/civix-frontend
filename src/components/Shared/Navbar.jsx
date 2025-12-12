@@ -2,14 +2,23 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink } from 'react-router';
 import { FiMenu, FiX, FiBell, FiMail, FiUser, FiLogOut, FiGrid } from 'react-icons/fi';
 import useAuth from '../../hooks/useAuth';
+import useRole from '../../hooks/useRole';
 import toast from 'react-hot-toast';
 import Logo from './Logo';
 
 export default function Navbar() {
   const { user, logOut } = useAuth();
+  const { role } = useRole();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  // Get dashboard path based on role
+  const getDashboardPath = () => {
+    if (role === 'admin') return '/admin-dashboard';
+    if (role === 'staff') return '/staff-dashboard';
+    return '/dashboard';
+  };
 
   const handleLogout = async () => {
     try {
@@ -127,13 +136,13 @@ export default function Navbar() {
                       </div>
 
                       <Link
-                        to="/dashboard"
+                        to={getDashboardPath()}
                         className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#f4f6f8] transition-colors"
                         onClick={() => setIsProfileOpen(false)}
                       >
                         <FiGrid className="text-[#238ae9]" />
                         <span className="font-['Satoshi'] text-sm text-[#242424]">
-                          Dashboard
+                          {role === 'admin' ? 'Admin Dashboard' : role === 'staff' ? 'Staff Dashboard' : 'Dashboard'}
                         </span>
                       </Link>
 

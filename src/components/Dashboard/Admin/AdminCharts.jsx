@@ -25,7 +25,7 @@ const AdminCharts = () => {
     queryKey: ['adminStats'],
     queryFn: async () => {
       const res = await axiosSecure.get('/api/admin/stats');
-      return res.data;
+      return res.data.data || {};
     },
   });
 
@@ -39,11 +39,12 @@ const AdminCharts = () => {
     );
   }
 
+  const issues = stats.issues || {};
   const statusData = [
-    { name: 'Pending', value: stats.pendingIssues || 0 },
-    { name: 'In Progress', value: stats.inProgressIssues || 0 },
-    { name: 'Resolved', value: stats.resolvedIssues || 0 },
-    { name: 'Rejected', value: stats.rejectedIssues || 0 },
+    { name: 'Pending', value: issues.pending || 0 },
+    { name: 'In Progress', value: issues.inProgress || 0 },
+    { name: 'Resolved', value: issues.resolved || 0 },
+    { name: 'Rejected', value: issues.rejected || 0 },
   ];
 
   const categoryData = stats.categoryBreakdown || [];

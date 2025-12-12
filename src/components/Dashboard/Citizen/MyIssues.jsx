@@ -152,7 +152,7 @@ const MyIssues = () => {
                       {issue.title}
                     </h3>
                     <StatusBadge status={issue.status} />
-                    {issue.priority === 'High' && (
+                    {(issue.priority === 'high' || issue.priority === 'High') && (
                       <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-bold">
                         High Priority
                       </span>

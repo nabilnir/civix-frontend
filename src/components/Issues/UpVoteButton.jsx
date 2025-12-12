@@ -18,7 +18,7 @@ const UpVoteButton = ({ issue, size = 'default', showCount = true }) => {
 
   const upvoteMutation = useMutation({
     mutationFn: async (issueId) => {
-      const res = await axiosSecure.put(`/api/issues/${issueId}/upvote`);
+      const res = await axiosSecure.post(`/api/issues/${issueId}/upvote`);
       return res.data;
     },
     onSuccess: () => {
@@ -49,7 +49,7 @@ const UpVoteButton = ({ issue, size = 'default', showCount = true }) => {
     }
 
     // Check if user is trying to upvote their own issue
-    if (user.email === issue.reporterEmail) {
+    if (user.email === issue.userEmail || user.email === issue.reporterEmail) {
       toast.error('You cannot upvote your own issue');
       return;
     }

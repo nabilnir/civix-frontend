@@ -4,9 +4,18 @@ import axios from 'axios';
  * Public axios instance for unauthenticated requests
  * Does not include authentication token
  */
+// Get API URL from environment variable or fallback to Vercel backend
+const getApiUrl = () => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  // Fallback to Vercel backend if env var is not set
+  return 'https://civix-backend-livid.vercel.app';
+};
+
 const useAxiosPublic = () => {
   const axiosPublic = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: getApiUrl(),
     headers: {
       'Content-Type': 'application/json',
     },

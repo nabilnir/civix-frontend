@@ -2,11 +2,8 @@ import axios from 'axios';
 
 export const handlePayment = async (amount, type, issueId = null) => {
   try {
-    const apiUrl = import.meta.env.VITE_API_URL;
-    
-    if (!apiUrl) {
-      throw new Error('API URL is not configured. Please check your environment variables.');
-    }
+    // Get API URL from environment or use Vercel backend as fallback
+    const apiUrl = import.meta.env.VITE_API_URL || 'https://civix-backend-livid.vercel.app';
     
     // Simulate payment processing
     const transactionId = `TXN-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;

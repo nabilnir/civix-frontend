@@ -128,7 +128,7 @@ const IssueDetails = () => {
                                     {issue.category}
                                 </span>
                                 <StatusBadge status={issue.status} />
-                                {issue.priority === 'High' && (
+                                {(issue.priority === 'high' || issue.priority === 'High') && (
                                     <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 font-['Satoshi']">
                                         <FiAlertTriangle size={14}/> High Priority
                                     </span>
@@ -213,7 +213,7 @@ const IssueDetails = () => {
                                     )}
 
                                     {/* Boost Button */}
-                                    {issue.priority !== 'High' && (
+                                    {issue.priority !== 'high' && issue.priority !== 'High' && (
                                         <button 
                                             onClick={handleBoost}
                                             disabled={boostMutation.isPending}
