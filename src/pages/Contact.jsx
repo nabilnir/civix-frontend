@@ -42,8 +42,12 @@ const Contact = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         
+        // Simulate form submission
         console.log("Contact form submitted!");
-        alert("Your message has been sent!");
+        
+        // Use toast instead of browser alert
+        toast.success("Your message has been sent! We'll get back to you soon.");
+        
         e.target.reset();
     };
 

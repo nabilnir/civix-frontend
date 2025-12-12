@@ -1,6 +1,7 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { FiFileText, FiCheckCircle, FiClock, FiList } from 'react-icons/fi';
+import { useNavigate } from 'react-router';
+import { FiFileText, FiCheckCircle, FiClock, FiList, FiEye } from 'react-icons/fi';
 import useAuth from '../../../hooks/useAuth';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import StatCard from '../Shared/StatCard';
@@ -9,6 +10,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 const StaffOverview = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
 
   // get staff stats
   const { data: stats, isLoading } = useQuery({
@@ -121,20 +123,23 @@ const StaffOverview = () => {
           {assignedIssues.length > 0 ? (
             <div className="space-y-3">
               {assignedIssues.slice(0, 5).map((issue) => (
-                <div key={issue._id} className="flex items-center justify-between p-3 bg-[#f4f6f8] rounded-lg">
+                <div key={issue._id} className="flex items-center justify-between p-3 bg-[#f4f6f8] rounded-lg hover:bg-gray-200 transition-colors cursor-pointer group" onClick={() => navigate(`/issue/${issue._id}`)}>
                   <div className="flex-1">
-                    <h4 className="font-['Satoshi'] font-semibold text-sm text-[#242424] truncate">
+                    <h4 className="font-['Satoshi'] font-semibold text-sm text-[#242424] truncate group-hover:text-[#238ae9]">
                       {issue.title}
                     </h4>
                     <p className="font-['Satoshi'] text-xs text-gray-600">{issue.category}</p>
                   </div>
-                  <span className={`px-2 py-1 rounded text-xs font-['Satoshi'] font-semibold ${
-                    issue.status === 'resolved' ? 'bg-green-100 text-green-700' :
-                    issue.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
-                    'bg-blue-100 text-blue-700'
-                  }`}>
-                    {issue.status}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className={`px-2 py-1 rounded text-xs font-['Satoshi'] font-semibold ${
+                      issue.status === 'resolved' ? 'bg-green-100 text-green-700' :
+                      issue.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
+                      'bg-blue-100 text-blue-700'
+                    }`}>
+                      {issue.status}
+                    </span>
+                    <FiEye className="text-gray-400 group-hover:text-[#238ae9]" />
+                  </div>
                 </div>
               ))}
             </div>

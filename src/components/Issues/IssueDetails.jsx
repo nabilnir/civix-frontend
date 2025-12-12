@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { FiCalendar, FiMapPin, FiTag, FiUser, FiCheckCircle, FiAlertTriangle, FiTrash2, FiEdit2, FiTrendingUp } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
 import axios from 'axios'; 
 import useAuth from '../../hooks/useAuth';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
@@ -36,7 +37,7 @@ const IssueDetails = () => {
             toast.success("Issue deleted successfully");
             navigate('/all-issues');
         },
-        onError: (err) => toast.error("Failed to delete issue")
+        onError: () => toast.error("Failed to delete issue")
     });
 
     // 2. Boost Mutation (Payment)
@@ -63,15 +64,37 @@ const IssueDetails = () => {
 
     // --- Handlers ---
     const handleDelete = () => {
-        if (window.confirm("Are you sure you want to delete this report? This cannot be undone.")) {
-            deleteMutation.mutate();
-        }
+        Swal.fire({
+            title: 'Delete Issue?',
+            text: "Are you sure you want to delete this report? This cannot be undone.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Yes, Delete',
+            cancelButtonText: 'Cancel',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteMutation.mutate();
+            }
+        });
     };
 
     const handleBoost = () => {
-        if (window.confirm("Confirm payment of 100tk to boost this issue?")) {
-            boostMutation.mutate();
-        }
+        Swal.fire({
+            title: 'Boost Issue Priority?',
+            text: "Confirm payment of 100tk to boost this issue to High priority?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#238ae9',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Yes, Pay 100tk',
+            cancelButtonText: 'Cancel',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                boostMutation.mutate();
+            }
+        });
     };
 
     if (isLoading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;

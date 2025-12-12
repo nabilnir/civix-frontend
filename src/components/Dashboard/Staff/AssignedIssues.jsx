@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { FiFilter, FiChevronDown } from 'react-icons/fi';
+import { useNavigate } from 'react-router';
+import { FiFilter, FiChevronDown, FiEye } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import useAuth from '../../../hooks/useAuth';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
@@ -10,10 +11,13 @@ const AssignedIssues = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [statusFilter, setStatusFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [showStatusDropdown, setShowStatusDropdown] = useState({});
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState('');
 
   // fetch assigned issues
   const { data: issues = [], isLoading } = useQuery({
@@ -64,11 +68,25 @@ const AssignedIssues = () => {
   };
 
   const handleStatusChange = (issueId, newStatus) => {
+    setSelectedIssue(issues.find(i => i._id === issueId));
+    setSelectedStatus(newStatus);
+    setShowMessageModal(true);
+    setShowStatusDropdown({});
+  };
+
+  const handleStatusSubmit = (e) => {
+    e.preventDefault();
+    const message = e.target.message.value || `Status updated to ${selectedStatus}`;
+    
     updateStatusMutation.mutate({
-      issueId,
-      status: newStatus,
-      message: `Status updated to ${newStatus}`,
+      issueId: selectedIssue._id,
+      status: selectedStatus,
+      message: message,
     });
+    
+    setShowMessageModal(false);
+    setSelectedIssue(null);
+    setSelectedStatus('');
   };
 
   const toggleDropdown = (issueId) => {
@@ -198,29 +216,39 @@ const AssignedIssues = () => {
                         </p>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="relative">
-                          <button
-                            onClick={() => toggleDropdown(issue._id)}
-                            disabled={availableStatuses.length === 0 || updateStatusMutation.isPending}
-                            className="flex items-center gap-1 px-4 py-2 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] text-sm font-medium hover:bg-[#1e7acc] transition-colors disabled:opacity-50"
-                          >
-                            Change Status
-                            <FiChevronDown />
-                          </button>
+                        <div className="flex items-center gap-2">
+                          <div className="relative">
+                            <button
+                              onClick={() => toggleDropdown(issue._id)}
+                              disabled={availableStatuses.length === 0 || updateStatusMutation.isPending}
+                              className="flex items-center gap-1 px-4 py-2 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] text-sm font-medium hover:bg-[#1e7acc] transition-colors disabled:opacity-50"
+                            >
+                              Change Status
+                              <FiChevronDown />
+                            </button>
+                            
+                            {showStatusDropdown[issue._id] && availableStatuses.length > 0 && (
+                              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
+                                {availableStatuses.map((status) => (
+                                  <button
+                                    key={status}
+                                    onClick={() => handleStatusChange(issue._id, status)}
+                                    className="w-full text-left px-4 py-2 hover:bg-gray-100 font-['Satoshi'] text-sm text-[#242424] first:rounded-t-lg last:rounded-b-lg"
+                                  >
+                                    {status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' ')}
+                                  </button>
+                                ))}
+                              </div>
+                            )}
+                          </div>
                           
-                          {showStatusDropdown[issue._id] && availableStatuses.length > 0 && (
-                            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
-                              {availableStatuses.map((status) => (
-                                <button
-                                  key={status}
-                                  onClick={() => handleStatusChange(issue._id, status)}
-                                  className="w-full text-left px-4 py-2 hover:bg-gray-100 font-['Satoshi'] text-sm text-[#242424] first:rounded-t-lg last:rounded-b-lg"
-                                >
-                                  {status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' ')}
-                                </button>
-                              ))}
-                            </div>
-                          )}
+                          {/* view details button */}
+                          <button
+                            onClick={() => navigate(`/issue/${issue._id}`)}
+                            className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg font-['Satoshi'] text-sm font-medium hover:bg-gray-200 transition-colors flex items-center gap-1"
+                          >
+                            <FiEye /> View
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -237,6 +265,65 @@ const AssignedIssues = () => {
               ? "You don't have any assigned issues yet."
               : 'No issues match your filters.'}
           </p>
+        </div>
+      )}
+
+      {/* Status Update Modal with Message */}
+      {showMessageModal && selectedIssue && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md m-4">
+            <div className="p-6">
+              <h2 className="text-2xl font-bold text-[#242424] font-['Satoshi'] mb-4">
+                Update Status
+              </h2>
+              <p className="text-gray-600 font-['Satoshi'] mb-4">
+                Updating status for: <strong>{selectedIssue.title}</strong>
+              </p>
+              <p className="text-sm text-gray-500 mb-4 font-['Satoshi']">
+                New Status: <span className="font-bold text-[#238ae9] capitalize">
+                  {selectedStatus.replace('-', ' ')}
+                </span>
+              </p>
+              
+              <form onSubmit={handleStatusSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+                    Progress Update / Message (Optional)
+                  </label>
+                  <textarea
+                    name="message"
+                    rows="4"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
+                    placeholder="Add a note about the progress or status change..."
+                  />
+                  <p className="text-xs text-gray-500 mt-1 font-['Satoshi']">
+                    This will be added to the issue timeline
+                  </p>
+                </div>
+                
+                <div className="flex gap-4 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowMessageModal(false);
+                      setSelectedIssue(null);
+                      setSelectedStatus('');
+                    }}
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg font-['Satoshi'] font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={updateStatusMutation.isPending}
+                    className="flex-1 px-4 py-2 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] font-semibold hover:bg-[#1e7acc] transition-colors disabled:opacity-50"
+                  >
+                    {updateStatusMutation.isPending ? 'Updating...' : 'Update Status'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       )}
     </div>
