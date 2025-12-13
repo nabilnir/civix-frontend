@@ -2,19 +2,20 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router';
 import { FiMapPin, FiClock, FiTag, FiArrowRight } from 'react-icons/fi';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import useAxiosPublic from '../../hooks/useAxiosPublic';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import StatusBadge from '../Issues/StatusBadge';
 
 const LatestIssue = () => {
     const navigate = useNavigate();
+    const axiosPublic = useAxiosPublic();
 
     // Fetch latest resolved issues (at least 6)
     const { data: issues = [], isLoading } = useQuery({
         queryKey: ['latestResolvedIssues'],
         queryFn: async () => {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/issues`, {
+            const res = await axiosPublic.get('/api/issues', {
                 params: {
                     status: 'resolved',
                     limit: 6,

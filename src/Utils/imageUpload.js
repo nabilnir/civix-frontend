@@ -9,8 +9,16 @@ export const uploadImage = async (file) => {
   const imgbbApiKey = import.meta.env.VITE_IMGBB_API_KEY;
 
   if (!imgbbApiKey || imgbbApiKey === 'your-imgbb-api-key') {
-    toast.error('Image upload service not configured. Please contact administrator.');
-    throw new Error('Image upload service not configured');
+    const errorMsg = 'Image upload service not configured. Please contact administrator.';
+    toast.error(errorMsg);
+    throw new Error(errorMsg);
+  }
+
+  // Validate file before upload
+  const validation = validateImage(file);
+  if (!validation.valid) {
+    toast.error(validation.error);
+    throw new Error(validation.error);
   }
 
   const formData = new FormData();
@@ -22,20 +30,66 @@ export const uploadImage = async (file) => {
       body: formData,
     });
 
-    if (!response.ok) {
-      throw new Error(`Upload failed with status: ${response.status}`);
+    // Try to parse response as JSON
+    let data;
+    try {
+      data = await response.json();
+    } catch (parseError) {
+      console.error('Failed to parse response:', parseError);
+      throw new Error(`Server returned invalid response (status: ${response.status})`);
     }
 
-    const data = await response.json();
+    // Check if response is successful
+    if (!response.ok) {
+      // ImgBB API error structure
+      const errorMessage = data?.error?.message || 
+                          data?.error?.code || 
+                          `Upload failed with status: ${response.status}`;
+      
+      console.error('ImgBB API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: data?.error,
+        fullResponse: data
+      });
 
+      // Provide user-friendly error messages
+      if (response.status === 400) {
+        if (data?.error?.code === 100) {
+          throw new Error('Invalid API key. Please check your ImgBB API key configuration.');
+        } else if (data?.error?.code === 105) {
+          throw new Error('Invalid image format. Please use JPG, PNG, GIF, or WebP format.');
+        } else if (data?.error?.code === 106) {
+          throw new Error('Image file is too large. Maximum size is 32MB.');
+        } else {
+          throw new Error(`Invalid request: ${errorMessage}`);
+        }
+      } else if (response.status === 403) {
+        throw new Error('API key is invalid or expired. Please check your ImgBB API key.');
+      } else if (response.status === 429) {
+        throw new Error('Too many requests. Please try again later.');
+      } else {
+        throw new Error(`Upload failed: ${errorMessage}`);
+      }
+    }
+
+    // Check if upload was successful
     if (data.success && data.data?.url) {
       return data.data.url;
     }
 
-    throw new Error(data.error?.message || 'Image upload failed');
+    // Handle case where response is ok but success is false
+    throw new Error(data.error?.message || data.error?.code || 'Image upload failed - invalid response');
   } catch (error) {
     console.error('Image upload error:', error);
-    toast.error(error.message || 'Failed to upload image. Please try again.');
+    
+    // Don't show toast if error message is already user-friendly
+    if (error.message && !error.message.includes('NetworkError') && !error.message.includes('Failed to fetch')) {
+      toast.error(error.message);
+    } else {
+      toast.error('Failed to upload image. Please check your internet connection and try again.');
+    }
+    
     throw error;
   }
 };

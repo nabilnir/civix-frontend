@@ -6,6 +6,7 @@ import { FiMail, FiLock, FiUser, FiEye, FiEyeOff, FiImage } from 'react-icons/fi
 import { useState } from 'react';
 import axios from 'axios';
 import useAuth from '../../hooks/useAuth';
+import { uploadImage as uploadImageUtil } from '../../Utils/imageUpload';
 import Logo from '../../components/Shared/Logo';
 
 const Register = () => {
@@ -37,17 +38,14 @@ const Register = () => {
     }
   };
 
-  // Upload image to ImgBB
+  // Upload image to ImgBB (returns default avatar on error)
   const uploadImage = async (imageFile) => {
-    const formData = new FormData();
-    formData.append('image', imageFile);
+    if (!imageFile) {
+      return 'https://i.ibb.co/2W8Py4W/default-avatar.png';
+    }
 
     try {
-      const response = await axios.post(
-        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`,
-        formData
-      );
-      return response.data.data.url;
+      return await uploadImageUtil(imageFile);
     } catch (error) {
       console.error('Image upload failed:', error);
       return 'https://i.ibb.co/2W8Py4W/default-avatar.png'; // Default avatar

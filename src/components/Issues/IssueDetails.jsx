@@ -4,9 +4,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { FiCalendar, FiMapPin, FiTag, FiUser, FiCheckCircle, FiAlertTriangle, FiTrash2, FiEdit2, FiTrendingUp } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
-import axios from 'axios'; 
 import useAuth from '../../hooks/useAuth';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
+import useAxiosPublic from '../../hooks/useAxiosPublic';
 import Timeline from './Timeline';
 import StatusBadge from './StatusBadge';
 
@@ -14,6 +14,7 @@ const IssueDetails = () => {
     const { id } = useParams();
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
+    const axiosPublic = useAxiosPublic();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
@@ -21,7 +22,7 @@ const IssueDetails = () => {
     const { data: issueData, isLoading, isError } = useQuery({
         queryKey: ['issue', id],
         queryFn: async () => {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/issues/${id}`);
+            const res = await axiosPublic.get(`/api/issues/${id}`);
             return res.data.data || res.data;
         }
     });

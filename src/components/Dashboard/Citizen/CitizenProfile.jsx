@@ -8,6 +8,7 @@ import useAuth from '../../../hooks/useAuth';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import useRole from '../../../hooks/useRole';
 import { handlePayment } from '../../../Utils/payment';
+import { uploadImage as uploadImageUtil, validateImage } from '../../../Utils/imageUpload';
 import SubscriptionCard from './SubscriptionCard';
 
 const CitizenProfile = () => {
@@ -44,39 +45,14 @@ const CitizenProfile = () => {
     }
   }, [profileData, user, reset]);
 
-  // Upload image
+  // Upload image using centralized utility
   const uploadImage = async (file) => {
-    const formData = new FormData();
-    formData.append('image', file);
-    const imgbbApiKey = import.meta.env.VITE_IMGBB_API_KEY;
-    
-    if (!imgbbApiKey || imgbbApiKey === 'your-imgbb-api-key') {
-      toast.error('Image upload service not configured. Please contact administrator.');
-      throw new Error('Image upload service not configured');
+    // Validate before upload
+    const validation = validateImage(file);
+    if (!validation.valid) {
+      throw new Error(validation.error);
     }
-    
-    try {
-      const response = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbApiKey}`, {
-        method: 'POST',
-        body: formData,
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Upload failed with status: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      
-      if (data.success && data.data?.url) {
-        return data.data.url;
-      }
-      
-      throw new Error(data.error?.message || 'Image upload failed');
-    } catch (error) {
-      console.error('Image upload error:', error);
-      toast.error(error.message || 'Failed to upload image. Please try again.');
-      throw error; // Re-throw to handle in mutation
-    }
+    return await uploadImageUtil(file);
   };
 
   // Update profile mutation

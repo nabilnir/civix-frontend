@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import useRole from '../../../hooks/useRole';
+import { uploadImage as uploadImageUtil, validateImage } from '../../../Utils/imageUpload';
 import ReportIssueForm from './ReportIssueForm';
 
 const ReportIssue = () => {
@@ -16,55 +17,22 @@ const ReportIssue = () => {
   const issueCount = userData?.issueCount || 0;
   const canReport = isPremium || issueCount < 3;
 
-  // Upload image to imgbb
+  // Upload image to imgbb (returns empty string on error to allow issue creation without image)
   const uploadImage = async (file) => {
     if (!file) return '';
     
-    const formData = new FormData();
-    formData.append('image', file);
-    
-    const imgbbApiKey = import.meta.env.VITE_IMGBB_API_KEY;
-    
-    if (!imgbbApiKey || imgbbApiKey === 'your-imgbb-api-key') {
-      console.warn('ImgBB API key not configured. Image upload skipped.');
-      return '';
+    // Validate image before upload
+    const validation = validateImage(file);
+    if (!validation.valid) {
+      console.warn('Image validation failed:', validation.error);
+      return ''; // Continue without image
     }
     
     try {
-      const response = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbApiKey}`, {
-        method: 'POST',
-        body: formData,
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error('ImgBB API Error:', response.status, errorData);
-        
-        if (response.status === 400) {
-          throw new Error('Invalid API key or image format. Please check your ImgBB API key in .env file.');
-        } else if (response.status === 403) {
-          throw new Error('ImgBB API key is invalid or expired.');
-        } else {
-          throw new Error(`Image upload failed: ${errorData.error?.message || 'Unknown error'}`);
-        }
-      }
-      
-      const data = await response.json();
-      
-      if (data.success && data.data?.url) {
-        return data.data.url;
-      }
-      
-      throw new Error(data.error?.message || 'Image upload failed - invalid response');
+      return await uploadImageUtil(file);
     } catch (error) {
       console.error('Image upload error:', error);
-      
       // Don't show error toast here - let the calling code decide
-      // Just log and return empty string to continue without image
-      if (error.message) {
-        console.error('Upload error details:', error.message);
-      }
-      
       // Return empty string - issue will be created without image
       return '';
     }

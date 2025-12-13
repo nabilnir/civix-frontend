@@ -5,6 +5,7 @@ import { FiUser, FiMail, FiCamera, FiShield } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import useAuth from '../../../hooks/useAuth';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import { uploadImage as uploadImageUtil, validateImage } from '../../../Utils/imageUpload';
 
 const AdminProfile = () => {
   const { user, updateUserProfile } = useAuth();
@@ -33,39 +34,14 @@ const AdminProfile = () => {
     }
   }, [profileData, user, reset]);
 
-  // upload image function
+  // upload image function using centralized utility
   const uploadImage = async (file) => {
-    const formData = new FormData();
-    formData.append('image', file);
-    const imgbbApiKey = import.meta.env.VITE_IMGBB_API_KEY;
-    
-    if (!imgbbApiKey || imgbbApiKey === 'your-imgbb-api-key-here') {
-      toast.error('Image upload service not configured');
-      throw new Error('Image upload service not configured');
+    // Validate before upload
+    const validation = validateImage(file);
+    if (!validation.valid) {
+      throw new Error(validation.error);
     }
-    
-    try {
-      const response = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbApiKey}`, {
-        method: 'POST',
-        body: formData,
-      });
-      
-      if (!response.ok) {
-        throw new Error('Upload failed');
-      }
-      
-      const data = await response.json();
-      
-      if (data.success && data.data?.url) {
-        return data.data.url;
-      }
-      
-      throw new Error('Image upload failed');
-    } catch (error) {
-      console.error('Image upload error:', error);
-      toast.error('Failed to upload image');
-      throw error;
-    }
+    return await uploadImageUtil(file);
   };
 
   // update profile mutation

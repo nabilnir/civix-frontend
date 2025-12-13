@@ -1,24 +1,21 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import useAuth from '../../../hooks/useAuth';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { FiFileText, FiClock, FiCheckCircle, FiTrendingUp } from 'react-icons/fi';
 import StatCard from '../Shared/StatCard';
 import IssueCharts from './IssueCharts';
 
 const CitizenOverview = () =>{
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
 
   // Fetch user's issues
   const { data: issuesData, isLoading } = useQuery({
     queryKey: ['userIssues', user?.email],
     queryFn: async () => {
       if (!user?.email) return [];
-      const token = localStorage.getItem('civix-token');
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/issues/user/${user.email}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        const response = await axiosSecure.get(`/api/issues/user/${user.email}`);
         return response.data.data || [];
       } catch (error) {
         console.error('Error fetching user issues:', error);
@@ -33,12 +30,8 @@ const CitizenOverview = () =>{
     queryKey: ['userStats', user?.email],
     queryFn: async () => {
       if (!user?.email) return {};
-      const token = localStorage.getItem('civix-token');
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/users/${user.email}/stats`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        const response = await axiosSecure.get(`/api/users/${user.email}/stats`);
         return response.data.data || {};
       } catch (error) {
         console.error('Error fetching user stats:', error);
