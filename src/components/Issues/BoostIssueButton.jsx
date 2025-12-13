@@ -16,7 +16,7 @@ const BoostIssueButton = ({ issue }) => {
   const isBoosted = issue?.priority === 'High' && issue?.isBoosted;
   
   // Check if user owns the issue
-  const isOwner = issue?.reporterEmail === user?.email;
+  const isOwner = issue?.userEmail === user?.email || issue?.reporterEmail === user?.email;
 
   // Check if user is logged in
   if (!user) {

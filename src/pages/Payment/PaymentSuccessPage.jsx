@@ -33,6 +33,11 @@ const PaymentSuccessPage = () => {
       queryClient.invalidateQueries(['userRole']);
       queryClient.invalidateQueries(['userProfile']);
       queryClient.invalidateQueries(['paymentHistory', user?.email]);
+      // If it's a boost payment, invalidate issue queries
+      if (type === 'boost' && issueId) {
+        queryClient.invalidateQueries(['issue', issueId]);
+        queryClient.invalidateQueries(['issues']);
+      }
       toast.success('Payment verified successfully!');
     },
     onError: (error) => {

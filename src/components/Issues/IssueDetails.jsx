@@ -43,26 +43,28 @@ const IssueDetails = () => {
         onError: () => toast.error("Failed to delete issue")
     });
 
-    // 2. Boost Mutation (Payment)
-    const boostMutation = useMutation({
+    // 2. Create Stripe checkout session for boost
+    const createBoostCheckoutMutation = useMutation({
         mutationFn: async () => {
-            const { handlePayment } = await import('../../Utils/payment');
-            const paymentResult = await handlePayment(100, 'boost', id);
-            
-            if (!paymentResult.success) {
-                throw new Error(paymentResult.error || 'Payment failed');
-            }
-            
-            return paymentResult;
+            const res = await axiosSecure.post('/api/payments/create-checkout-session', {
+                amount: 100,
+                type: 'boost',
+                issueId: id,
+            });
+            return res.data;
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries(['issue', id]);
-            queryClient.invalidateQueries(['issues']);
-            toast.success("Issue Boosted! Priority set to High.");
+        onSuccess: (data) => {
+            // Redirect to Stripe checkout
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                toast.error('Failed to create checkout session');
+            }
         },
         onError: (error) => {
-            toast.error(error.message || "Boost failed");
-        }
+            console.error('Checkout session error:', error);
+            toast.error(error.response?.data?.message || 'Failed to create checkout session. Please try again.');
+        },
     });
 
     // --- Handlers ---
@@ -86,7 +88,7 @@ const IssueDetails = () => {
     const handleBoost = () => {
         Swal.fire({
             title: 'Boost Issue Priority?',
-            text: "Confirm payment of 100tk to boost this issue to High priority?",
+            text: "Confirm payment of 100tk to boost this issue to High priority? You will be redirected to Stripe to complete the payment.",
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#238ae9',
@@ -95,7 +97,7 @@ const IssueDetails = () => {
             cancelButtonText: 'Cancel',
         }).then((result) => {
             if (result.isConfirmed) {
-                boostMutation.mutate();
+                createBoostCheckoutMutation.mutate();
             }
         });
     };
@@ -104,7 +106,7 @@ const IssueDetails = () => {
     if (isError || !issue) return <div className="min-h-screen flex items-center justify-center">Issue not found.</div>;
 
     // Check ownership
-    const isOwner = user?.email === issue.reporterEmail;
+    const isOwner = user?.email === issue.userEmail || user?.email === issue.reporterEmail;
     
     // Timeline Data 
     // Sort timeline: Latest at top
@@ -152,7 +154,7 @@ const IssueDetails = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-500 border-t pt-6">
                                 <div className="flex items-center gap-3">
                                     <FiUser className="text-[#238ae9]" />
-                                    <span>Reported by: <span className="font-semibold text-gray-700">{issue.reporterName}</span></span>
+                                    <span>Reported by: <span className="font-semibold text-gray-700">{issue.userName || issue.reporterName || 'Unknown'}</span></span>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <FiMapPin className="text-[#238ae9]" />
@@ -160,7 +162,25 @@ const IssueDetails = () => {
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <FiCalendar className="text-[#238ae9]" />
-                                    <span>{new Date(issue.date).toLocaleDateString()}</span>
+                                    <span>
+                                        {issue.createdAt 
+                                            ? new Date(issue.createdAt).toLocaleString('en-US', { 
+                                                year: 'numeric', 
+                                                month: 'long', 
+                                                day: 'numeric',
+                                                hour: '2-digit',
+                                                minute: '2-digit'
+                                            }) 
+                                            : issue.date 
+                                            ? new Date(issue.date).toLocaleString('en-US', { 
+                                                year: 'numeric', 
+                                                month: 'long', 
+                                                day: 'numeric',
+                                                hour: '2-digit',
+                                                minute: '2-digit'
+                                            }) 
+                                            : 'Invalid Date'}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -217,10 +237,10 @@ const IssueDetails = () => {
                                     {issue.priority !== 'high' && issue.priority !== 'High' && (
                                         <button 
                                             onClick={handleBoost}
-                                            disabled={boostMutation.isPending}
+                                            disabled={createBoostCheckoutMutation.isPending}
                                             className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold hover:shadow-lg transition-all disabled:opacity-50"
                                         >
-                                            <FiTrendingUp /> {boostMutation.isPending ? 'Processing...' : 'Boost (100tk)'}
+                                            <FiTrendingUp /> {createBoostCheckoutMutation.isPending ? 'Processing...' : 'Boost (100tk)'}
                                         </button>
                                     )}
 

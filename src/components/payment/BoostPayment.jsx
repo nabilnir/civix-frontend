@@ -13,42 +13,27 @@ const BoostPayment = ({ issue, onSuccess, onCancel }) => {
 
   const boostPrice = 100; // BDT
 
-  const boostMutation = useMutation({
+  // Create Stripe checkout session for boost
+  const createBoostCheckoutMutation = useMutation({
     mutationFn: async () => {
-      // Simulate payment
-      const paymentResult = await new Promise((resolve) => {
-        // In real app, integrate with payment gateway
-        setTimeout(() => {
-          resolve({ success: true, transactionId: `TXN-${Date.now()}` });
-        }, 1000);
+      const res = await axiosSecure.post('/api/payments/create-checkout-session', {
+        amount: boostPrice,
+        type: 'boost',
+        issueId: issue._id,
       });
-
-      if (paymentResult.success) {
-        // Record payment
-        await axiosSecure.post('/api/payments', {
-          amount: boostPrice,
-          type: 'boost',
-          issueId: issue._id,
-          status: 'success',
-        });
-
-        // Update issue priority
-        const res = await axiosSecure.patch(`/api/issues/${issue._id}/boost`);
-        return res.data;
-      }
-      throw new Error('Payment failed');
+      return res.data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries(['issues']);
-      queryClient.invalidateQueries(['issue', issue._id]);
-      toast.success('Issue boosted successfully!');
-      if (onSuccess) {
-        onSuccess();
+    onSuccess: (data) => {
+      // Redirect to Stripe checkout
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error('Failed to create checkout session');
       }
-      setIsModalOpen(false);
     },
     onError: (error) => {
-      toast.error(error.message || 'Failed to boost issue');
+      console.error('Checkout session error:', error);
+      toast.error(error.response?.data?.message || 'Failed to create checkout session. Please try again.');
     },
   });
 
@@ -58,6 +43,7 @@ const BoostPayment = ({ issue, onSuccess, onCancel }) => {
       html: `
         <div class="text-left">
           <p class="mb-3">Boost this issue to <strong>High Priority</strong> for <strong>${boostPrice} BDT</strong></p>
+          <p class="mb-3 text-sm text-gray-600">You will be redirected to Stripe to complete the payment.</p>
           <div class="bg-blue-50 p-3 rounded-lg text-sm">
             <p class="font-semibold mb-1">Benefits:</p>
             <ul class="list-disc list-inside space-y-1">
@@ -76,13 +62,9 @@ const BoostPayment = ({ issue, onSuccess, onCancel }) => {
       cancelButtonText: 'Cancel',
     }).then((result) => {
       if (result.isConfirmed) {
-        setIsModalOpen(true);
+        createBoostCheckoutMutation.mutate();
       }
     });
-  };
-
-  const handlePaymentSuccess = () => {
-    boostMutation.mutate();
   };
 
   if (issue.priority === 'high' || issue.priority === 'High') {
@@ -100,25 +82,12 @@ const BoostPayment = ({ issue, onSuccess, onCancel }) => {
     <>
       <button
         onClick={handleBoost}
-        disabled={boostMutation.isPending || issue.status === 'resolved'}
+        disabled={createBoostCheckoutMutation.isPending || issue.status === 'resolved'}
         className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg font-['Satoshi'] font-semibold hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <FiTrendingUp size={18} />
         <span>Boost Priority ({boostPrice} BDT)</span>
       </button>
-
-      <PaymentModal
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          if (onCancel) onCancel();
-        }}
-        amount={boostPrice}
-        type="boost"
-        description={`Boost issue: ${issue.title}`}
-        issueId={issue._id}
-        onSuccess={handlePaymentSuccess}
-      />
     </>
   );
 };

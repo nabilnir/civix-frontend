@@ -49,7 +49,8 @@ const UpVoteButton = ({ issue, size = 'default', showCount = true }) => {
     }
 
     // Check if user is trying to upvote their own issue
-    if (user.email === issue.userEmail || user.email === issue.reporterEmail) {
+    const isOwnIssue = user.email === issue.userEmail || user.email === issue.reporterEmail;
+    if (isOwnIssue) {
       toast.error('You cannot upvote your own issue');
       return;
     }
@@ -79,18 +80,18 @@ const UpVoteButton = ({ issue, size = 'default', showCount = true }) => {
   return (
     <button
       onClick={handleUpvote}
-      disabled={upvoteMutation.isPending || hasUpvoted || !user || user.email === issue.reporterEmail}
+      disabled={upvoteMutation.isPending || hasUpvoted || !user || user.email === issue.userEmail || user.email === issue.reporterEmail}
       className={`flex items-center gap-1.5 transition-all font-['Satoshi'] ${
         hasUpvoted
           ? 'text-[#238ae9] cursor-not-allowed'
-          : user && user.email !== issue.reporterEmail
+          : user && user.email !== issue.userEmail && user.email !== issue.reporterEmail
           ? 'text-gray-500 hover:text-[#238ae9] hover:scale-110'
           : 'text-gray-300 cursor-not-allowed'
       } ${sizeClasses[size]} disabled:opacity-50`}
       title={
         !user
           ? 'Login to upvote'
-          : user.email === issue.reporterEmail
+          : user.email === issue.userEmail || user.email === issue.reporterEmail
           ? "You can't upvote your own issue"
           : hasUpvoted
           ? 'Already upvoted'

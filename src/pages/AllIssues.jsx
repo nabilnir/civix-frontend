@@ -68,7 +68,30 @@ const AllIssues = () => {
         retry: 2,
     });
 
-    const issues = issuesData.issues || [];
+    // Sort issues: Boosted/High priority first, then by boostedAt, then by date (newest first)
+    const rawIssues = issuesData.issues || [];
+    const issues = [...rawIssues].sort((a, b) => {
+        // Boosted/High priority issues first
+        const aHigh = a.priority === 'high' || a.priority === 'High';
+        const bHigh = b.priority === 'high' || b.priority === 'High';
+        if (aHigh && !bHigh) return -1; // a comes first
+        if (!aHigh && bHigh) return 1;  // b comes first
+        
+        // If both are high priority, sort by boostedAt (most recently boosted first)
+        if (aHigh && bHigh) {
+            const boostedA = a.boostedAt ? new Date(a.boostedAt) : new Date(0);
+            const boostedB = b.boostedAt ? new Date(b.boostedAt) : new Date(0);
+            if (boostedA.getTime() !== boostedB.getTime()) {
+                return boostedB - boostedA; // Most recently boosted first
+            }
+        }
+        
+        // Then sort by date (newest first)
+        const dateA = new Date(a.createdAt || a.date || 0);
+        const dateB = new Date(b.createdAt || b.date || 0);
+        return dateB - dateA;
+    });
+    
     const totalPages = issuesData.totalPages || 1;
 
     // --- Handlers ---
@@ -110,7 +133,7 @@ const AllIssues = () => {
         }
         
         // 2. Check if Own Issue
-        if (user.email === issue.reporterEmail) {
+        if (user.email === issue.userEmail || user.email === issue.reporterEmail) {
             return toast.error("You cannot upvote your own issue.");
         }
 

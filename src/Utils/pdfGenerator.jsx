@@ -78,8 +78,8 @@ const InvoiceDocument = ({ payment, user }) => (
 
       <View style={styles.section}>
         <Text style={styles.label}>Customer Information</Text>
-        <Text style={styles.value}>{user?.displayName || payment.userName || 'N/A'}</Text>
-        <Text style={styles.value}>{user?.email || payment.userEmail || 'N/A'}</Text>
+        <Text style={styles.value}>Name: {user?.displayName || payment.userName || 'N/A'}</Text>
+        <Text style={styles.value}>Email: {user?.email || payment.userEmail || 'N/A'}</Text>
       </View>
 
       <View style={styles.section}>
@@ -92,9 +92,11 @@ const InvoiceDocument = ({ payment, user }) => (
           <Text>Amount:</Text>
           <Text style={{ fontWeight: 'bold' }}>{payment.amount} tk</Text>
         </View>
-        <View style={styles.row}>
-          <Text>Transaction ID:</Text>
-          <Text>{payment.transactionId}</Text>
+        <View style={styles.section}>
+          <Text style={styles.label}>Transaction ID</Text>
+          <Text style={[styles.value, { fontSize: 9, wordBreak: 'break-all' }]}>
+            {payment.transactionId || 'N/A'}
+          </Text>
         </View>
         <View style={styles.row}>
           <Text>Status:</Text>

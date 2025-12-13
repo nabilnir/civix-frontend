@@ -1,10 +1,28 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router';
-import { FiCheckCircle, FiHome, FiArrowRight } from 'react-icons/fi';
-import { formatDate } from '../../utils/formatDate';
+import { FiCheckCircle, FiHome, FiArrowRight, FiDownload } from 'react-icons/fi';
+import { formatDate } from '../../Utils/formatDate';
+import { generateInvoicePDF } from '../../Utils/pdfGenerator';
+import useAuth from '../../hooks/useAuth';
+import toast from 'react-hot-toast';
 
 const PaymentSuccess = ({ payment, type }) => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const handleDownloadInvoice = async () => {
+    if (!payment) {
+      toast.error('Payment information not available');
+      return;
+    }
+    try {
+      await generateInvoicePDF(payment, user);
+      toast.success('Invoice downloaded successfully!');
+    } catch (error) {
+      console.error('Failed to generate invoice:', error);
+      toast.error('Failed to download invoice. Please try again.');
+    }
+  };
 
   const getSuccessMessage = () => {
     switch (type) {
@@ -60,9 +78,9 @@ const PaymentSuccess = ({ payment, type }) => {
         {payment && (
           <div className="bg-[#f4f6f8] rounded-lg p-4 mb-6 text-left">
             <div className="space-y-2 text-sm font-['Satoshi']">
-              <div className="flex justify-between">
+              <div className="flex flex-col gap-1">
                 <span className="text-gray-600">Transaction ID:</span>
-                <span className="font-semibold text-[#242424]">
+                <span className="font-semibold text-[#242424] break-all text-xs">
                   {payment.transactionId || payment._id?.slice(-8)}
                 </span>
               </div>
@@ -125,6 +143,17 @@ const PaymentSuccess = ({ payment, type }) => {
               <FiArrowRight size={18} />
             </Link>
           ) : null}
+
+          {/* Download Invoice Button */}
+          {payment && (
+            <button
+              onClick={handleDownloadInvoice}
+              className="w-full px-6 py-3 bg-white border-2 border-[#238ae9] text-[#238ae9] rounded-lg font-['Satoshi'] font-semibold hover:bg-[#238ae9] hover:text-white transition-colors flex items-center justify-center gap-2"
+            >
+              <FiDownload size={18} />
+              Download Invoice
+            </button>
+          )}
 
           <Link
             to="/"
