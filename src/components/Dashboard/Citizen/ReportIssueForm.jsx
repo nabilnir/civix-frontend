@@ -52,7 +52,7 @@ const ReportIssueForm = ({
     <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
       {/* Blocked User Warning */}
       {isBlocked && (
-        <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
+        <div className="bg-red-50 p-4 rounded-lg">
           <div className="flex items-center gap-2">
             <FiAlertCircle className="text-red-600" size={20} />
             <div>

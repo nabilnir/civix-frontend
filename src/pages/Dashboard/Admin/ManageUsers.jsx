@@ -12,14 +12,29 @@ const ManageUsers = () => {
   const [statusFilter, setStatusFilter] = useState('');
 
   // Fetch all citizens
-  const { data: users = [], isLoading } = useQuery({
+  const { data: users = [], isLoading, isError, error } = useQuery({
     queryKey: ['allCitizens', searchTerm, statusFilter],
     queryFn: async () => {
-      const res = await axiosSecure.get('/api/admin/users', {
-        params: { search: searchTerm, status: statusFilter }
-      });
-      return res.data.data || [];
+      try {
+        const params = {};
+        if (searchTerm) params.search = searchTerm;
+        if (statusFilter) params.status = statusFilter;
+        
+        const res = await axiosSecure.get('/api/admin/users', { params });
+        
+        if (!res.data.success) {
+          throw new Error(res.data.message || 'Failed to fetch users');
+        }
+        
+        return res.data.data || [];
+      } catch (err) {
+        toast.error(err.response?.data?.message || 'Failed to fetch users');
+        throw err;
+      }
     },
+    retry: 2,
+    refetchOnWindowFocus: true,
+    staleTime: 0, // Always consider data stale to allow refetch
   });
 
   // Block/Unblock mutation
@@ -45,16 +60,42 @@ const ManageUsers = () => {
 
   const handleBlockToggle = (user) => {
     Swal.fire({
-      title: user.isBlocked ? 'Unblock User?' : 'Block User?',
-      text: user.isBlocked
-        ? `Are you sure you want to unblock ${user.name}? They will be able to use the platform again.`
-        : `Are you sure you want to block ${user.name}? They will not be able to submit, edit, upvote, or boost issues.`,
-      icon: 'warning',
+      title: user.isBlocked ? 'Unblock User?' : '⚠️ Block User?',
+      html: user.isBlocked
+        ? `
+          <div style="text-align: left;">
+            <p style="margin-bottom: 10px;"><strong>User Details:</strong></p>
+            <p style="margin-bottom: 5px;">Name: <strong>${user.name}</strong></p>
+            <p style="margin-bottom: 15px;">Email: <strong>${user.email}</strong></p>
+            <p>Are you sure you want to <strong>unblock</strong> this user? They will be able to use the platform again.</p>
+          </div>
+        `
+        : `
+          <div style="text-align: left;">
+            <p style="margin-bottom: 10px;"><strong>User Details:</strong></p>
+            <p style="margin-bottom: 5px;">Name: <strong>${user.name}</strong></p>
+            <p style="margin-bottom: 15px;">Email: <strong>${user.email}</strong></p>
+            <p style="color: #ef4444; font-weight: bold; margin-bottom: 10px;">⚠️ Warning: This action will:</p>
+            <ul style="text-align: left; margin-left: 20px; color: #ef4444;">
+              <li>Prevent the user from submitting new issues</li>
+              <li>Prevent the user from editing existing issues</li>
+              <li>Prevent the user from upvoting issues</li>
+              <li>Prevent the user from boosting issues</li>
+            </ul>
+            <p style="margin-top: 15px;">Are you sure you want to <strong>block</strong> this user?</p>
+          </div>
+        `,
+      icon: user.isBlocked ? 'question' : 'warning',
+      iconColor: user.isBlocked ? '#10b981' : '#ef4444',
       showCancelButton: true,
       confirmButtonColor: user.isBlocked ? '#10b981' : '#ef4444',
       cancelButtonColor: '#6b7280',
-      confirmButtonText: user.isBlocked ? 'Yes, Unblock' : 'Yes, Block',
+      confirmButtonText: user.isBlocked ? 'Yes, Unblock User' : 'Yes, Block User',
       cancelButtonText: 'Cancel',
+      reverseButtons: true,
+      focusConfirm: false,
+      allowOutsideClick: false,
+      allowEscapeKey: true,
     }).then((result) => {
       if (result.isConfirmed) {
         toggleBlockMutation.mutate({
@@ -65,25 +106,27 @@ const ManageUsers = () => {
     });
   };
 
-  // Filter users
-  const filteredUsers = users.filter((user) => {
-    const matchesSearch = 
-      user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email?.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesStatus = 
-      !statusFilter || 
-      (statusFilter === 'blocked' && user.isBlocked) ||
-      (statusFilter === 'active' && !user.isBlocked) ||
-      (statusFilter === 'premium' && user.isPremium);
-
-    return matchesSearch && matchesStatus;
-  });
+  // Users are already filtered by backend, but we can do additional client-side filtering if needed
+  // For now, use users directly since backend handles filtering
+  const filteredUsers = users;
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#238ae9]"></div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <p className="text-red-600 font-['Satoshi'] mb-2">Error loading users</p>
+          <p className="text-gray-500 font-['Satoshi'] text-sm">
+            {error?.response?.data?.message || error?.message || 'Please try again'}
+          </p>
+        </div>
       </div>
     );
   }
@@ -98,6 +141,34 @@ const ManageUsers = () => {
         <p className="text-gray-600 font-['Satoshi']">
           View and manage all registered citizens. Block or unblock users as needed.
         </p>
+      </div>
+
+      {/* Stats Summary */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+          <p className="text-gray-600 font-['Satoshi'] text-sm mb-1">Total Users</p>
+          <p className="text-2xl font-bold text-[#242424] font-['Satoshi']">
+            {users.length}
+          </p>
+        </div>
+        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+          <p className="text-gray-600 font-['Satoshi'] text-sm mb-1">Premium Users</p>
+          <p className="text-2xl font-bold text-amber-600 font-['Satoshi']">
+            {users.filter(u => u.isPremium).length}
+          </p>
+        </div>
+        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+          <p className="text-gray-600 font-['Satoshi'] text-sm mb-1">Active Users</p>
+          <p className="text-2xl font-bold text-green-600 font-['Satoshi']">
+            {users.filter(u => !u.isBlocked).length}
+          </p>
+        </div>
+        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+          <p className="text-gray-600 font-['Satoshi'] text-sm mb-1">Blocked Users</p>
+          <p className="text-2xl font-bold text-red-600 font-['Satoshi']">
+            {users.filter(u => u.isBlocked).length}
+          </p>
+        </div>
       </div>
 
       {/* Filters */}
@@ -211,7 +282,7 @@ const ManageUsers = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <p className="font-['Satoshi'] text-sm text-gray-600">
-                        {user.issuesCount || 0} reported
+                        {user.issuesCount || user.issueCount || 0} reported
                       </p>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -249,34 +320,6 @@ const ManageUsers = () => {
             </p>
           </div>
         )}
-      </div>
-
-      {/* Stats Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-          <p className="text-gray-600 font-['Satoshi'] text-sm mb-1">Total Users</p>
-          <p className="text-2xl font-bold text-[#242424] font-['Satoshi']">
-            {users.length}
-          </p>
-        </div>
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-          <p className="text-gray-600 font-['Satoshi'] text-sm mb-1">Premium Users</p>
-          <p className="text-2xl font-bold text-amber-600 font-['Satoshi']">
-            {users.filter(u => u.isPremium).length}
-          </p>
-        </div>
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-          <p className="text-gray-600 font-['Satoshi'] text-sm mb-1">Active Users</p>
-          <p className="text-2xl font-bold text-green-600 font-['Satoshi']">
-            {users.filter(u => !u.isBlocked).length}
-          </p>
-        </div>
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-          <p className="text-gray-600 font-['Satoshi'] text-sm mb-1">Blocked Users</p>
-          <p className="text-2xl font-bold text-red-600 font-['Satoshi']">
-            {users.filter(u => u.isBlocked).length}
-          </p>
-        </div>
       </div>
     </div>
   );

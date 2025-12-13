@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router';
 import { 
   FiHome, FiFileText, FiPlusCircle, FiUser, FiCreditCard, 
-  FiUsers, FiSettings, FiBriefcase, FiList, FiMenu, FiX, FiChevronLeft, FiChevronRight
+  FiUsers, FiSettings, FiBriefcase, FiList
 } from 'react-icons/fi';
+import { FaHouseChimney } from "react-icons/fa6";
 import useAuth from '../../../hooks/useAuth';
 import useRole from '../../../hooks/useRole';
 import Logo from '../../Shared/Logo';
@@ -12,15 +13,21 @@ export default function Sidebar() {
   const { user } = useAuth();
   const { role } = useRole();
   const location = useLocation();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true); // Start collapsed by default
+  const [isHovered, setIsHovered] = useState(false);
 
-  // Load collapsed state from localStorage
+  // Auto-expand on hover, collapse when not hovered
   useEffect(() => {
-    const saved = localStorage.getItem('sidebarCollapsed');
-    if (saved !== null) {
-      setIsCollapsed(JSON.parse(saved));
+    if (isHovered) {
+      setIsCollapsed(false);
+    } else {
+      // Small delay before collapsing to prevent flickering
+      const timer = setTimeout(() => {
+        setIsCollapsed(true);
+      }, 200);
+      return () => clearTimeout(timer);
     }
-  }, []);
+  }, [isHovered]);
 
   
   const isPathActive = (path, exact = false) => {
@@ -62,11 +69,6 @@ export default function Sidebar() {
     role === 'staff' ? staffMenu :
     citizenMenu;
 
-  const toggleCollapse = () => {
-    const newState = !isCollapsed;
-    setIsCollapsed(newState);
-    localStorage.setItem('sidebarCollapsed', JSON.stringify(newState));
-  };
 
   // Close mobile drawer when clicking a link
   const handleNavClick = () => {
@@ -79,9 +81,24 @@ export default function Sidebar() {
   };
 
   return (
-    <div className={`flex min-h-full flex-col items-start bg-white border-r border-gray-200 transition-all duration-300 ${
-      isCollapsed ? 'w-16' : 'w-64'
-    }`}>
+    <>
+      {/* Hide scrollbar when collapsed */}
+      <style>{`
+        .sidebar-nav-collapsed::-webkit-scrollbar {
+          display: none;
+        }
+        .sidebar-nav-collapsed {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
+      <div 
+        className={`flex min-h-full flex-col items-start bg-white border-r border-gray-200 transition-all duration-300 ${
+          isCollapsed ? 'w-16' : 'w-64'
+        }`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
       {/* Logo Header */}
       <div className={`h-16 flex items-center ${isCollapsed ? 'justify-center px-2' : 'justify-between px-6'} border-b border-gray-200 relative`}>
         {!isCollapsed && (
@@ -91,19 +108,6 @@ export default function Sidebar() {
           </>
         )}
         {isCollapsed && <Logo size="sm" showText={false} />}
-        
-        {/* Collapse Toggle Button - Desktop Only */}
-        <button
-          onClick={toggleCollapse}
-          className="hidden lg:flex absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-white border-2 border-gray-200 rounded-full items-center justify-center shadow-md hover:bg-[#f4f6f8] hover:border-[#238ae9] transition-colors z-10"
-          aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          {isCollapsed ? (
-            <FiChevronRight className="w-3 h-3 text-gray-600" />
-          ) : (
-            <FiChevronLeft className="w-3 h-3 text-gray-600" />
-          )}
-        </button>
       </div>
 
       {/* User Info */}
@@ -128,7 +132,13 @@ export default function Sidebar() {
       </div>
 
       {/* Navigation Menu */}
-      <nav className={`flex-1 w-full ${isCollapsed ? 'px-2' : 'px-4'} py-4 space-y-1 overflow-y-auto`}>
+      <nav 
+        className={`flex-1 w-full ${isCollapsed ? 'px-2 overflow-hidden sidebar-nav-collapsed' : 'px-4 overflow-y-auto'} py-4 space-y-1`}
+        style={!isCollapsed ? {
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#cbd5e1 transparent'
+        } : {}}
+      >
         {menuItems.map((item) => {
           const isActive = isPathActive(item.path, item.exact);
           return (
@@ -175,7 +185,7 @@ export default function Sidebar() {
           title={isCollapsed ? "Back to Home" : undefined}
         >
           {!isCollapsed && <span>←</span>}
-          <span className={isCollapsed ? 'text-lg' : ''}>{isCollapsed ? '🏠' : 'Back to Home'}</span>
+          <span className={isCollapsed ? 'text-lg' : ''}>{isCollapsed ? <FaHouseChimney /> : 'Back to Home'}</span>
           {/* Tooltip for collapsed state */}
           {isCollapsed && (
             <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 pointer-events-none">
@@ -185,5 +195,6 @@ export default function Sidebar() {
         </Link>
       </div>
     </div>
+    </>
   );
 }
