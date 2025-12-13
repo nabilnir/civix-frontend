@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router';
 import { FiArrowRight, FiCheckCircle, FiTrendingUp, FiUsers } from 'react-icons/fi';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 
 export default function Banner() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const slides = [
     {
@@ -48,26 +49,36 @@ export default function Banner() {
     }
   ];
 
-  // Auto-play slider
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000); 
-
-    return () => clearInterval(timer);
-  }, [slides.length]);
-
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
+    if (isAnimating || slides.length === 0) return;
+    setIsAnimating(true);
     setCurrentSlide((prev) => (prev + 1) % slides.length);
-  };
+    setTimeout(() => setIsAnimating(false), 1000);
+  }, [isAnimating, slides.length]);
 
   const prevSlide = () => {
+    if (isAnimating || slides.length === 0) return;
+    setIsAnimating(true);
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    setTimeout(() => setIsAnimating(false), 1000);
   };
 
   const goToSlide = (index) => {
+    if (isAnimating || index === currentSlide) return;
+    setIsAnimating(true);
     setCurrentSlide(index);
+    setTimeout(() => setIsAnimating(false), 1000);
   };
+
+  // Auto-play slider
+  useEffect(() => {
+    if (slides.length <= 1) return;
+    const timer = setInterval(() => {
+      nextSlide();
+    }, 5000); 
+
+    return () => clearInterval(timer);
+  }, [nextSlide, slides.length]);
 
   return (
     <section className="relative h-screen min-h-[600px] overflow-hidden bg-[#f4f6f8]">
@@ -76,91 +87,111 @@ export default function Banner() {
         {slides.map((slide, index) => (
           <div
             key={slide.id}
-            className={`absolute inset-0 transition-all duration-700 ease-in-out ${
-              index === currentSlide
-                ? 'opacity-100 translate-x-0'
-                : index < currentSlide
-                ? 'opacity-0 -translate-x-full'
-                : 'opacity-0 translate-x-full'
+            className={`absolute inset-0 w-full h-full bg-cover bg-center ${
+              index === currentSlide 
+                ? 'opacity-100 scale-100 z-10' 
+                : 'opacity-0 scale-105 z-0 pointer-events-none'
             }`}
+            style={{ 
+              backgroundImage: `url(${slide.image})`,
+              willChange: 'transform, opacity',
+              transition: 'opacity 1000ms cubic-bezier(0.4, 0, 0.2, 1), transform 1000ms cubic-bezier(0.4, 0, 0.2, 1)'
+            }}
           >
-            {/* Background Image with Overlay */}
-            <div className="absolute inset-0">
-              <img
-                src={slide.image}
-                alt={slide.title}
-                className="w-full h-full object-cover"
-              />
-              <div className={`absolute inset-0 bg-gradient-to-r ${slide.gradient} opacity-90`}></div>
-            </div>
+            {/* Gradient Overlay */}
+            <div 
+              className={`absolute inset-0 bg-gradient-to-r ${slide.gradient} opacity-90 transition-opacity duration-1000`}
+              style={{
+                opacity: index === currentSlide ? 0.9 : 0
+              }}
+            ></div>
 
             {/* Content */}
             <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex flex-col justify-center h-full text-white">
-                <div className="max-w-2xl">
+                <div 
+                  className="max-w-2xl"
+                  style={{
+                    opacity: index === currentSlide ? 1 : 0,
+                    transform: index === currentSlide ? 'translateY(0)' : 'translateY(30px)',
+                    transition: 'opacity 800ms ease-out 200ms, transform 800ms ease-out 200ms',
+                    willChange: 'transform, opacity'
+                  }}
+                >
                   
-                  {/* Subtitle - Fade in from top */}
-                  <div
-                    data-aos="fade-down"
-                    data-aos-duration="800"
-                    data-aos-delay="200"
+                  {/* Subtitle */}
+                  <div 
+                    className="mb-4"
+                    style={{
+                      opacity: index === currentSlide ? 1 : 0,
+                      transform: index === currentSlide ? 'translateY(0)' : 'translateY(-20px)',
+                      transition: 'opacity 600ms ease-out 300ms, transform 600ms ease-out 300ms'
+                    }}
                   >
-                    <span className="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full font-['Satoshi'] text-sm font-medium mb-4">
+                    <span className="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full font-['Satoshi'] text-sm font-medium">
                       {slide.subtitle}
                     </span>
                   </div>
 
-                  {/* Main Title - Fade in from left */}
-                  <h1
-                    className="font-['Satoshi'] w-full text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
-                    data-aos="fade-right"
-                    data-aos-duration="800"
-                    data-aos-delay="400"
+                  {/* Main Title */}
+                  <h1 
+                    className="font-['Satoshi'] w-full text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight drop-shadow-lg"
+                    style={{
+                      opacity: index === currentSlide ? 1 : 0,
+                      transform: index === currentSlide ? 'translateY(0)' : 'translateY(20px)',
+                      transition: 'opacity 700ms ease-out 400ms, transform 700ms ease-out 400ms'
+                    }}
                   >
                     {slide.title}
                   </h1>
 
-                  {/* Description - Fade in from left */}
-                  <p
-                    className="font-['Satoshi'] text-lg md:text-xl text-white/90 mb-8 leading-relaxed"
-                    data-aos="fade-right"
-                    data-aos-duration="800"
-                    data-aos-delay="600"
+                  {/* Description */}
+                  <p 
+                    className="font-['Satoshi'] text-lg md:text-xl text-white/90 mb-8 leading-relaxed drop-shadow-md"
+                    style={{
+                      opacity: index === currentSlide ? 1 : 0,
+                      transform: index === currentSlide ? 'translateY(0)' : 'translateY(20px)',
+                      transition: 'opacity 700ms ease-out 500ms, transform 700ms ease-out 500ms'
+                    }}
                   >
                     {slide.description}
                   </p>
 
                   {/* CTA Buttons  */}
-                  <div
+                  <div 
                     className="flex flex-wrap gap-4 mb-12"
-                    data-aos="zoom-in"
-                    data-aos-duration="800"
-                    data-aos-delay="800"
+                    style={{
+                      opacity: index === currentSlide ? 1 : 0,
+                      transform: index === currentSlide ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.95)',
+                      transition: 'opacity 700ms ease-out 600ms, transform 700ms ease-out 600ms'
+                    }}
                   >
                     <Link
-                      to="/all-issues"
-                      className="bg-white text-[#238ae9] px-8 py-4 rounded-xl font-['Satoshi'] font-bold text-base hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2 group"
+                      to="/allissues"
+                      className="bg-white text-[#238ae9] px-8 py-4 rounded-xl font-['Satoshi'] font-bold text-base hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2 group"
                     >
                       Report an Issue
                       <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
                     </Link>
                     <Link
-                      to="/about"
-                      className="bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-['Satoshi'] font-bold text-base hover:bg-white/30 transition-all border-2 border-white/50"
+                      to="/aboutUs"
+                      className="bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-['Satoshi'] font-bold text-base hover:bg-white/30 transition-all duration-300 border-2 border-white/50"
                     >
                       Learn More
                     </Link>
                   </div>
 
-                  {/* Stats - Fade up with stagger */}
+                  {/* Stats */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                     {slide.stats.map((stat, idx) => (
                       <div
                         key={idx}
                         className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-lg p-4"
-                        data-aos="fade-up"
-                        data-aos-duration="800"
-                        data-aos-delay={1000 + idx * 200}
+                        style={{
+                          opacity: index === currentSlide ? 1 : 0,
+                          transform: index === currentSlide ? 'translateY(0)' : 'translateY(20px)',
+                          transition: `opacity 600ms ease-out ${700 + idx * 100}ms, transform 600ms ease-out ${700 + idx * 100}ms`
+                        }}
                       >
                         <div className="text-3xl">{stat.icon}</div>
                         <span className="font-['Satoshi'] text-sm font-medium">
@@ -176,46 +207,50 @@ export default function Banner() {
         ))}
       </div>
 
-      {/* Navigation Arrows */}
-      <button
-        onClick={prevSlide}
-        className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-full flex items-center justify-center transition-all group border-2 border-white/50 hover:scale-110"
-        aria-label="Previous slide"
-      >
-        <IoChevronBack className="text-white text-2xl group-hover:-translate-x-0.5 transition-transform" />
-      </button>
+      {/* Navigation Arrows - Hidden on mobile */}
+      {slides.length > 1 && (
+        <>
+          <button
+            onClick={prevSlide}
+            disabled={isAnimating}
+            className="hidden md:flex absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-full items-center justify-center transition-all duration-300 group border-2 border-white/50 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Previous slide"
+          >
+            <IoChevronBack className="text-white text-2xl group-hover:-translate-x-0.5 transition-transform" />
+          </button>
 
-      <button
-        onClick={nextSlide}
-        className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-full flex items-center justify-center transition-all group border-2 border-white/50 hover:scale-110"
-        aria-label="Next slide"
-      >
-        <IoChevronForward className="text-white text-2xl group-hover:translate-x-0.5 transition-transform" />
-      </button>
+          <button
+            onClick={nextSlide}
+            disabled={isAnimating}
+            className="hidden md:flex absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-full items-center justify-center transition-all duration-300 group border-2 border-white/50 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Next slide"
+          >
+            <IoChevronForward className="text-white text-2xl group-hover:translate-x-0.5 transition-transform" />
+          </button>
+        </>
+      )}
 
       {/* Dot Indicators */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-3">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => goToSlide(index)}
-            className={`transition-all rounded-full ${
-              index === currentSlide
-                ? 'w-12 h-3 bg-white'
-                : 'w-3 h-3 bg-white/50 hover:bg-white/75'
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
-      </div>
+      {slides.length > 1 && (
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-3">
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              disabled={isAnimating}
+              className={`transition-all duration-300 ease-out rounded-full ${
+                index === currentSlide
+                  ? 'w-12 h-3 bg-white'
+                  : 'w-3 h-3 bg-white/50 hover:bg-white/75'
+              } disabled:cursor-not-allowed`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Scroll Down Indicator */}
-      <div
-        className="absolute bottom-8 right-8 z-20 hidden lg:block"
-        data-aos="fade-up"
-        data-aos-duration="1000"
-        data-aos-delay="1500"
-      >
+      <div className="absolute bottom-8 right-8 z-20 hidden lg:block">
         <div className="flex flex-col items-center gap-2 text-white animate-bounce">
           <span className="font-['Satoshi'] text-sm font-medium">Scroll</span>
           <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center p-1">

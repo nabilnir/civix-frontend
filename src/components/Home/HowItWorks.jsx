@@ -55,58 +55,44 @@ const HowItWorks = () => {
                         How the System Works
                     </h2>
                     <p 
-                        className="font-['Satoshi'] text-lg text-gray-600 mt-4"
+                        className="font-['Satoshi'] text-base md:text-lg text-gray-600 mt-4 px-4 md:px-0"
                         data-aos="fade-up" data-aos-duration="600" data-aos-delay="400"
                     >
                         A simple, transparent, and efficient way to connect citizens and municipal services.
                     </p>
                 </div>
 
-                <div className="relative">
-                   
-                    <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-gray-200 h-full top-0 bottom-0"></div>
-
+                {/* Steps Grid - Card Layout */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                     {steps.map((step, index) => (
-                        <div 
-                            key={index} 
-                            
-                            className={`flex flex-col md:flex-row mb-12 relative ${index % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}
+                        <div
+                            key={index}
+                            className="bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-lg hover:shadow-xl transition-shadow duration-300 text-center"
+                            data-aos="fade-up"
+                            data-aos-duration="800"
+                            data-aos-delay={step.aosDelay}
                         >
-                            {/* --- Block 1:  --- */}
-                            <div 
-                                className={`md:w-5/12 p-4 md:p-0 ${index % 2 === 0 ? 'md:pr-12 md:text-right' : 'md:pl-12 md:text-left'}`}
-                                data-aos={index % 2 === 0 ? 'fade-right' : 'fade-left'} data-aos-duration="800" data-aos-delay={step.aosDelay}
-                            >
-                                <h3 className="font-['Satoshi'] text-xl font-bold text-[#242424] mb-2">{step.title}</h3>
-                                <p className="font-['Satoshi'] text-gray-600">{step.description}</p>
+                            {/* Icon */}
+                            <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-[#238ae9] to-[#1e7acc] rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
+                                <step.icon className="text-white text-2xl md:text-3xl" />
                             </div>
 
-                            {/* --- Block 2: Separator  --- */}
-                            <div className="flex items-center justify-center md:w-2/12">
-                                
-                                {/* The numbered circle */}
-                                <div className="z-10 w-12 h-12 rounded-full flex items-center justify-center bg-white border-4 border-[#238ae9] shadow-lg">
-                                    <step.icon className="text-[#238ae9] text-xl" />
-                                </div>
-                                
-                                {/* Mobile/Tablet Vertical Line Divider */}
-                                {index < steps.length - 1 && (
-                                     <div className="md:hidden absolute w-0.5 h-full bg-gray-200 top-0 left-1/2 transform -translate-x-1/2 z-0"></div>
-                                )}
+                            {/* Step Number */}
+                            <div className="inline-block px-3 py-1 bg-[#f4f6f8] text-[#238ae9] rounded-full font-['Satoshi'] text-xs font-semibold mb-3">
+                                Step {index + 1}
                             </div>
-                            
-                            {/* --- Block 3: Spacer  --- */}
-                            <div className="hidden md:block md:w-5/12"></div>
+
+                            {/* Title */}
+                            <h3 className="font-['Satoshi'] text-xl md:text-2xl font-bold text-[#242424] mb-3">
+                                {step.title}
+                            </h3>
+
+                            {/* Description */}
+                            <p className="font-['Satoshi'] text-sm md:text-base text-gray-600 leading-relaxed">
+                                {step.description}
+                            </p>
                         </div>
                     ))}
-                    
-                    {/* Final step/call to action */}
-                    <div className="text-center pt-8" data-aos="fade-up" data-aos-duration="800" data-aos-delay="1200">
-                        <span className="font-['Satoshi'] font-semibold text-lg text-[#238ae9] flex items-center justify-center gap-2">
-                            Resolution Achieved!
-                            <FiArrowDown className="animate-bounce" />
-                        </span>
-                    </div>
                 </div>
             </div>
         </section>

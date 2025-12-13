@@ -171,12 +171,20 @@ export default function Navbar() {
                 </div>
               </>
             ) : (
-              <Link
-                to="/login"
-                className="bg-[#242424] hover:bg-[#1a1a1a] text-white px-5 py-2 rounded-lg font-['Satoshi'] font-medium text-sm transition-colors shadow-sm hover:shadow-md"
-              >
-                Sign In
-              </Link>
+              <div className="flex items-center gap-3">
+                <Link
+                  to="/login"
+                  className="bg-[#238ae9] hover:bg-[#1e7acc] text-white px-5 py-2 rounded-lg font-['Satoshi'] font-medium text-sm transition-colors shadow-sm hover:shadow-md"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/register"
+                  className="bg-[#242424] hover:bg-[#1a1a1a] text-white px-5 py-2 rounded-lg font-['Satoshi'] font-medium text-sm transition-colors shadow-sm hover:shadow-md"
+                >
+                  Sign Up
+                </Link>
+              </div>
             )}
 
             {/* Mobile Menu Button */}
@@ -213,6 +221,26 @@ export default function Navbar() {
                 {link.name}
               </NavLink>
             ))}
+            
+            {/* Mobile Login and Sign Up Buttons */}
+            {!user && (
+              <div className="px-4 mt-4 flex gap-3">
+                <Link
+                  to="/login"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex-1 bg-[#238ae9] hover:bg-[#1e7acc] text-white px-4 py-3 rounded-lg font-['Satoshi'] font-medium text-sm text-center transition-colors shadow-sm"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/register"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex-1 bg-[#242424] hover:bg-[#1a1a1a] text-white px-4 py-3 rounded-lg font-['Satoshi'] font-medium text-sm text-center transition-colors shadow-sm"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
             
             {/* Mobile Logout Button */}
             {user && (

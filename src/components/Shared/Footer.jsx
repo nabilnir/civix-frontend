@@ -13,7 +13,9 @@ export default function Footer() {
           
           {/* Brand Column */}
           <div className="space-y-4">
-            <Logo size="md" showText={true} />
+            <div className="mb-2">
+              <Logo size="md" showText={true} />
+            </div>
             <p className="font-['Satoshi'] text-sm text-gray-600 leading-relaxed">
               Empowering citizens to report, track, and resolve infrastructure issues. 
               Building better communities together.

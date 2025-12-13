@@ -25,6 +25,8 @@ const LatestIssue = () => {
             });
             return res.data.data || [];
         },
+        staleTime: 0, // Always consider data stale to allow refetch on invalidation
+        refetchOnWindowFocus: true, // Refetch when user returns to the page
     });
 
     if (isLoading) {

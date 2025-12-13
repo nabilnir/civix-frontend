@@ -55,7 +55,7 @@ const Logo = ({
       )}
       {showText && (
         <span
-          className={`text-[#242424] font-['Satoshi'] font-bold tracking-tight hidden sm:block ${sizeConfig.text}`}
+          className={`text-[#242424] font-['Satoshi'] font-bold tracking-tight ${sizeConfig.text}`}
         >
           Civix
         </span>

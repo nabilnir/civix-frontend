@@ -80,11 +80,17 @@ const Statistics = () => {
                         Our Impact
                     </span>
                     <h2
-                        className="font-['Satoshi'] text-3xl md:text-4xl lg:text-5xl font-bold text-[#242424] leading-tight"
+                        className="font-['Satoshi'] text-3xl md:text-4xl lg:text-5xl font-bold text-[#242424] leading-tight mb-4"
                         data-aos="fade-up" data-aos-duration="600" data-aos-delay="200"
                     >
                         Proof of Progress in Your City
                     </h2>
+                    <p 
+                        className="font-['Satoshi'] text-lg md:text-xl text-gray-600 leading-relaxed"
+                        data-aos="fade-up" data-aos-duration="600" data-aos-delay="400"
+                    >
+                        Real numbers that showcase the collective power of citizen engagement and community-driven solutions
+                    </p>
                 </div>
 
                 {/* Statistics Grid */}

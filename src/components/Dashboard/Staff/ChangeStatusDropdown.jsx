@@ -29,9 +29,15 @@ const ChangeStatusDropdown = ({ issue, onStatusChange }) => {
       });
       return res.data;
     },
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
       queryClient.invalidateQueries(['assignedIssues']);
       queryClient.invalidateQueries(['issues']);
+      // Invalidate latest resolved issues if status changed to resolved
+      if (variables.status === 'resolved') {
+        queryClient.invalidateQueries(['latestResolvedIssues']);
+      }
+      // Also invalidate issue detail query
+      queryClient.invalidateQueries(['issue', issue._id]);
       toast.success('Status updated successfully');
       setShowMessageModal(false);
       setMessage('');
