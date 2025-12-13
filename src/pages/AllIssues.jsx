@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { FiX } from 'react-icons/fi';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -10,10 +9,9 @@ import 'aos/dist/aos.css';
 // --- Hooks ---
 import useAuth from '../hooks/useAuth';
 import useAxiosSecure from '../hooks/useAxiosSecure';
+import useAxiosPublic from '../hooks/useAxiosPublic';
 
 // --- Custom Components ---
-
-
 import IssueCard from '../components/Issues/IssueCard';
 import FilterSidebar from '../components/Issues/FilterSidebar';
 import Pagination from '../components/Shared/Pagination';
@@ -21,14 +19,10 @@ import Pagination from '../components/Shared/Pagination';
 // Initialize AOS
 AOS.init();
 
-// Public Axios instance
-const axiosPublic = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
-});
-
 const AllIssues = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
+    const axiosPublic = useAxiosPublic();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const location = useLocation();
@@ -44,22 +38,34 @@ const AllIssues = () => {
     });
 
     // --- Data Fetching (TanStack Query) ---
-    const { data: issuesData = {}, isLoading, isError } = useQuery({
+    const { data: issuesData = {}, isLoading, isError, error } = useQuery({
         queryKey: ['issues', currentPage, filterState],
         queryFn: async () => {
-            const params = {
-                page: currentPage,
-                limit: 6,
-                search: filterState.search,
-                status: filterState.status,
-                category: filterState.category,
-                priority: filterState.priority
-            };
-            const res = await axiosPublic.get('/api/issues', { params });
-            
-            return res.data; 
+            try {
+                const params = {
+                    page: currentPage,
+                    limit: 6,
+                    search: filterState.search || undefined,
+                    status: filterState.status || undefined,
+                    category: filterState.category || undefined,
+                    priority: filterState.priority || undefined
+                };
+                
+                // Remove undefined params
+                Object.keys(params).forEach(key => params[key] === undefined && delete params[key]);
+                
+                const res = await axiosPublic.get('/api/issues', { params });
+                
+                // Backend returns: { success: true, data: { issues, totalPages, ... } }
+                return res.data?.data || { issues: [], totalPages: 1, currentPage: 1, totalIssues: 0 };
+            } catch (err) {
+                console.error('Error fetching issues:', err);
+                // Return empty data on error to prevent crashes
+                return { issues: [], totalPages: 1, currentPage: 1, totalIssues: 0 };
+            }
         },
         keepPreviousData: true,
+        retry: 2,
     });
 
     const issues = issuesData.issues || [];
@@ -147,7 +153,8 @@ const AllIssues = () => {
                             </div>
                         ) : isError ? (
                              <div className="text-center py-20 bg-red-50 rounded-xl text-red-500 border border-red-200">
-                                Error loading issues. Please try again later.
+                                <p className="font-['Satoshi'] font-semibold mb-2">Error loading issues</p>
+                                <p className="text-sm text-red-400">{error?.message || 'Please try again later'}</p>
                              </div>
                         ) : issues.length > 0 ? (
                             <>
