@@ -107,7 +107,9 @@ const LoginForm = ({ onSuccess }) => {
       <button
         type="submit"
         disabled={loading}
-        className="w-full px-6 py-3 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] font-semibold hover:bg-[#1e7acc] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        className="w-full px-6 py-3 bg-[#238ae9] text-white rounded-lg
+         font-['Satoshi'] font-semibold hover:bg-[#1e7acc] transition-colors
+          disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
       >
         {loading ? (
           <>

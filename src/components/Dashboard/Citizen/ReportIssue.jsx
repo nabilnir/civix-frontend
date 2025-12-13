@@ -26,8 +26,8 @@ const ReportIssue = () => {
     const imgbbApiKey = import.meta.env.VITE_IMGBB_API_KEY;
     
     if (!imgbbApiKey || imgbbApiKey === 'your-imgbb-api-key') {
-      toast.error('Image upload service not configured');
-      throw new Error('Image upload service not configured');
+      console.warn('ImgBB API key not configured. Image upload skipped.');
+      return '';
     }
     
     try {
@@ -36,15 +36,37 @@ const ReportIssue = () => {
         body: formData,
       });
       
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('ImgBB API Error:', response.status, errorData);
+        
+        if (response.status === 400) {
+          throw new Error('Invalid API key or image format. Please check your ImgBB API key in .env file.');
+        } else if (response.status === 403) {
+          throw new Error('ImgBB API key is invalid or expired.');
+        } else {
+          throw new Error(`Image upload failed: ${errorData.error?.message || 'Unknown error'}`);
+        }
+      }
+      
       const data = await response.json();
-      if (data.success) {
+      
+      if (data.success && data.data?.url) {
         return data.data.url;
       }
-      throw new Error('Image upload failed');
+      
+      throw new Error(data.error?.message || 'Image upload failed - invalid response');
     } catch (error) {
       console.error('Image upload error:', error);
-      toast.error('Failed to upload image');
-      return 'https://via.placeholder.com/800x600?text=Issue+Image';
+      
+      // Don't show error toast here - let the calling code decide
+      // Just log and return empty string to continue without image
+      if (error.message) {
+        console.error('Upload error details:', error.message);
+      }
+      
+      // Return empty string - issue will be created without image
+      return '';
     }
   };
 
@@ -53,30 +75,47 @@ const ReportIssue = () => {
       let imageUrl = '';
       
       if (imageFile) {
-        toast.loading('Uploading image...');
+        const loadingToast = toast.loading('Uploading image...');
         try {
           imageUrl = await uploadImage(imageFile);
-        } catch (error) {
-          console.error('Image upload failed:', error);
+          toast.dismiss(loadingToast);
           
+          if (imageUrl) {
+            toast.success('Image uploaded successfully');
+          } else {
+            toast.error('Image upload failed. Issue will be created without image.', { duration: 3000 });
+          }
+        } catch (error) {
+          toast.dismiss(loadingToast);
+          console.error('Image upload failed:', error);
+          // Continue without image - don't block issue creation
           imageUrl = '';
+          toast.error('Image upload failed. Continuing without image...', { duration: 3000 });
         }
-        toast.dismiss();
       }
       
       // Prepare issue data - backend will add userEmail, userName, userPhoto from token
-      
       const issueData = {
         title: formData.title?.trim(),
         description: formData.description?.trim(),
         category: formData.category,
         location: (formData.location || formData.Location)?.trim(), 
-        image: imageUrl || undefined, 
+        ...(imageUrl && { image: imageUrl }), // Only include image if URL exists
       };
       
       console.log('Submitting issue:', issueData);
-      const res = await axiosSecure.post('/api/issues', issueData);
-      return res.data;
+      
+      try {
+        const res = await axiosSecure.post('/api/issues', issueData);
+        return res.data;
+      } catch (apiError) {
+        // Log full error details for debugging
+        console.error('API Error:', apiError);
+        console.error('API Error Response:', apiError.response?.data);
+        console.error('API Error Status:', apiError.response?.status);
+        
+        throw apiError;
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['userIssues']);
@@ -88,16 +127,30 @@ const ReportIssue = () => {
     onError: (error) => {
       console.error('Issue creation error:', error);
       console.error('Error response:', error.response?.data);
+      console.error('Error status:', error.response?.status);
+      
+      // Handle CORS errors
+      if (!error.response && error.message?.includes('CORS') || error.code === 'ERR_NETWORK') {
+        toast.error(
+          'Network error: Cannot connect to server. Please check if backend is running and CORS is configured.',
+          { duration: 5000 }
+        );
+        return;
+      }
       
       if (error.response?.status === 401 || error.response?.status === 403) {
         toast.error('Authentication failed. Please log in again.');
         navigate('/login');
+      } else if (error.response?.status === 404) {
+        toast.error('API endpoint not found. Please check backend configuration.');
+      } else if (error.response?.status === 500) {
+        toast.error('Server error. Please try again later.');
       } else if (error.response?.data?.needsPremium) {
         toast.error('Free users can only report 3 issues. Upgrade to premium!');
         navigate('/dashboard/profile');
       } else {
-        const errorMessage = error.response?.data?.message || error.message || 'Failed to report issue';
-        toast.error(errorMessage);
+        const errorMessage = error.response?.data?.message || error.message || 'Failed to report issue. Please try again.';
+        toast.error(errorMessage, { duration: 4000 });
       }
     },
   });

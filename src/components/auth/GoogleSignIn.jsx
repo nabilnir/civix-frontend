@@ -29,7 +29,11 @@ const GoogleSignIn = ({ onSuccess, disabled = false }) => {
     <button
       onClick={handleGoogleSignIn}
       disabled={loading || disabled}
-      className="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-200 hover:border-[#238ae9] hover:bg-[#f4f6f8] rounded-xl px-4 py-3.5 font-['Satoshi'] font-semibold text-[#242424] transition-all disabled:opacity-50 disabled:cursor-not-allowed group shadow-sm hover:shadow-md"
+      className="w-full flex items-center justify-center gap-3
+       bg-white border-2 border-gray-200 hover:border-[#238ae9]
+        hover:bg-[#f4f6f8] rounded-xl px-4 py-3.5 font-['Satoshi']
+         font-semibold text-[#242424] transition-all disabled:opacity-50 
+         disabled:cursor-not-allowed group shadow-sm hover:shadow-md"
     >
       {loading ? (
         <>

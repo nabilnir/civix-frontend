@@ -110,7 +110,7 @@ const RegisterForm = ({ onSuccess }) => {
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-[38px] text-gray-400 hover:text-gray-600 transition-colors"
+          className="absolute right-3 top-10 text-gray-400 hover:text-gray-600 transition-colors"
           aria-label={showPassword ? 'Hide password' : 'Show password'}
         >
           {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
@@ -136,7 +136,7 @@ const RegisterForm = ({ onSuccess }) => {
         <button
           type="button"
           onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-          className="absolute right-3 top-[38px] text-gray-400 hover:text-gray-600 transition-colors"
+          className="absolute right-3 top-10 text-gray-400 hover:text-gray-600 transition-colors"
           aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
         >
           {showConfirmPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
@@ -170,7 +170,9 @@ const RegisterForm = ({ onSuccess }) => {
       <button
         type="submit"
         disabled={loading}
-        className="w-full px-6 py-3 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] font-semibold hover:bg-[#1e7acc] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        className="w-full px-6 py-3 bg-[#238ae9] text-white rounded-lg
+         font-['Satoshi'] font-semibold hover:bg-[#1e7acc] transition-colors
+          disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
       >
         {loading ? (
           <>
