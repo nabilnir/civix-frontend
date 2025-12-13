@@ -7,7 +7,6 @@ import Swal from 'sweetalert2';
 import useAuth from '../../../hooks/useAuth';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import useRole from '../../../hooks/useRole';
-import { handlePayment } from '../../../Utils/payment';
 import { uploadImage as uploadImageUtil, validateImage } from '../../../Utils/imageUpload';
 import SubscriptionCard from './SubscriptionCard';
 
@@ -108,26 +107,26 @@ const CitizenProfile = () => {
     },
   });
 
-  // Premium subscription mutation
-  const subscribeMutation = useMutation({
+  // Create Stripe checkout session mutation
+  const createCheckoutMutation = useMutation({
     mutationFn: async () => {
-      // Handle payment (1000tk)
-      const paymentResult = await handlePayment(1000, 'premium_subscription');
-      
-      if (paymentResult.success) {
-        // Update user to premium
-        await axiosSecure.patch(`/api/users/${user.email}/premium`);
-        return paymentResult;
+      const res = await axiosSecure.post('/api/payments/create-checkout-session', {
+        amount: 1000,
+        type: 'premium_subscription',
+      });
+      return res.data;
+    },
+    onSuccess: (data) => {
+      // Redirect to Stripe checkout
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error('Failed to create checkout session');
       }
-      throw new Error('Payment failed');
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries(['userRole']);
-      queryClient.invalidateQueries(['userProfile']);
-      toast.success('Premium subscription activated!');
-    },
-    onError: () => {
-      toast.error('Payment failed. Please try again.');
+    onError: (error) => {
+      console.error('Checkout session error:', error);
+      toast.error(error.response?.data?.message || 'Failed to create checkout session. Please try again.');
     },
   });
 
@@ -150,7 +149,7 @@ const CitizenProfile = () => {
   const handleSubscribe = () => {
     Swal.fire({
       title: 'Subscribe to Premium?',
-      text: 'Pay 1000tk to unlock unlimited issue reports and premium features.',
+      text: 'Pay 1000tk to unlock unlimited issue reports and premium features. You will be redirected to Stripe to complete the payment.',
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#238ae9',
@@ -159,7 +158,7 @@ const CitizenProfile = () => {
       cancelButtonText: 'Cancel',
     }).then((result) => {
       if (result.isConfirmed) {
-        subscribeMutation.mutate();
+        createCheckoutMutation.mutate();
       }
     });
   };
@@ -286,7 +285,7 @@ const CitizenProfile = () => {
             isBlocked={isBlocked}
             issueCount={profileData?.issueCount || 0}
             onSubscribe={handleSubscribe}
-            isLoading={subscribeMutation.isPending}
+            isLoading={createCheckoutMutation.isPending}
           />
 
           {/* Account Stats */}

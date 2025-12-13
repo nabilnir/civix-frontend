@@ -62,19 +62,19 @@ const HowItWorks = () => {
                     </p>
                 </div>
 
-                {/* Steps Grid - Card Layout */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                {/* Card Layout - Mobile Only */}
+                <div className="md:hidden grid grid-cols-1 gap-6">
                     {steps.map((step, index) => (
                         <div
                             key={index}
-                            className="bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-lg hover:shadow-xl transition-shadow duration-300 text-center"
+                            className="bg-white p-6 rounded-2xl border border-gray-100 shadow-lg hover:shadow-xl transition-shadow duration-300 text-center"
                             data-aos="fade-up"
                             data-aos-duration="800"
                             data-aos-delay={step.aosDelay}
                         >
                             {/* Icon */}
-                            <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-[#238ae9] to-[#1e7acc] rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
-                                <step.icon className="text-white text-2xl md:text-3xl" />
+                            <div className="w-16 h-16 bg-gradient-to-br from-[#238ae9] to-[#1e7acc] rounded-full flex items-center justify-center mx-auto mb-4">
+                                <step.icon className="text-white text-2xl" />
                             </div>
 
                             {/* Step Number */}
@@ -83,14 +83,52 @@ const HowItWorks = () => {
                             </div>
 
                             {/* Title */}
-                            <h3 className="font-['Satoshi'] text-xl md:text-2xl font-bold text-[#242424] mb-3">
+                            <h3 className="font-['Satoshi'] text-xl font-bold text-[#242424] mb-3">
                                 {step.title}
                             </h3>
 
                             {/* Description */}
-                            <p className="font-['Satoshi'] text-sm md:text-base text-gray-600 leading-relaxed">
+                            <p className="font-['Satoshi'] text-sm text-gray-600 leading-relaxed">
                                 {step.description}
                             </p>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Timeline Layout - Desktop/Tablet Only */}
+                <div className="hidden md:block relative">
+                    {/* Vertical Line - Centered */}
+                    <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-gray-200 top-0 bottom-0"></div>
+
+                    {steps.map((step, index) => (
+                        <div 
+                            key={index} 
+                            className={`flex flex-row mb-12 relative ${index % 2 !== 0 ? 'flex-row-reverse' : ''}`}
+                        >
+                            {/* Content Block */}
+                            <div 
+                                className={`w-5/12 p-4 ${index % 2 === 0 ? 'pr-12 text-right' : 'pl-12 text-left'}`}
+                                data-aos={index % 2 === 0 ? 'fade-right' : 'fade-left'} 
+                                data-aos-duration="800" 
+                                data-aos-delay={step.aosDelay}
+                            >
+                                <h3 className="font-['Satoshi'] text-xl font-bold text-[#242424] mb-2">
+                                    {step.title}
+                                </h3>
+                                <p className="font-['Satoshi'] text-gray-600">
+                                    {step.description}
+                                </p>
+                            </div>
+
+                            {/* Icon Circle - Centered on line */}
+                            <div className="flex items-center justify-center w-2/12">
+                                <div className="z-10 w-14 h-14 rounded-full flex items-center justify-center bg-white border-4 border-[#238ae9] shadow-lg">
+                                    <step.icon className="text-[#238ae9] text-xl" />
+                                </div>
+                            </div>
+                            
+                            {/* Spacer */}
+                            <div className="w-5/12"></div>
                         </div>
                     ))}
                 </div>

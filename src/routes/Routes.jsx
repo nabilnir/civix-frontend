@@ -33,6 +33,8 @@ import AssignedIssues from '../components/Dashboard/Staff/AssignedIssues'
 import StaffProfile from '../components/Dashboard/Staff/StaffProfile'
 
 import IssueDetails from '../components/Issues/IssueDetails'
+import PaymentSuccessPage from '../pages/Payment/PaymentSuccessPage'
+import PaymentCancelPage from '../pages/Payment/PaymentCancelPage'
 
 export const router = createBrowserRouter([
   {
@@ -66,6 +68,18 @@ export const router = createBrowserRouter([
             <IssueDetails />
           </PrivateRoute>
         ),
+      },
+      {
+        path: '/payment/success',
+        element: (
+          <PrivateRoute>
+            <PaymentSuccessPage />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: '/payment/cancel',
+        element: <PaymentCancelPage />,
       },
       
     ],
