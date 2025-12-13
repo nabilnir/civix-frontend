@@ -29,8 +29,12 @@ const PaymentHistory = () => {
   // Calculate totals
   const totalAmount = filteredPayments.reduce((sum, p) => sum + p.amount, 0);
 
-  const handleDownloadInvoice = (payment) => {
-    generateInvoicePDF(payment, user);
+  const handleDownloadInvoice = async (payment) => {
+    try {
+      await generateInvoicePDF(payment, user);
+    } catch (error) {
+      console.error('Failed to generate invoice:', error);
+    }
   };
 
   if (isLoading) {

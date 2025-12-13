@@ -2,13 +2,11 @@ import React from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
-import useAuth from '../../../hooks/useAuth';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import useRole from '../../../hooks/useRole';
 import ReportIssueForm from './ReportIssueForm';
 
 const ReportIssue = () => {
-  const { user } = useAuth();
   const { isBlocked, isPremium, userData } = useRole();
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();

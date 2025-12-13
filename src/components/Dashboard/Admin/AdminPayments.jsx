@@ -46,13 +46,17 @@ const AdminPayments = () => {
       }))
     : [];
 
-  const handleDownloadInvoice = (payment) => {
-    // create a mock user object for pdf generator
-    const mockUser = {
-      displayName: payment.userName,
-      email: payment.userEmail,
-    };
-    generateInvoicePDF(payment, mockUser);
+  const handleDownloadInvoice = async (payment) => {
+    try {
+      // create a mock user object for pdf generator
+      const mockUser = {
+        displayName: payment.userName,
+        email: payment.userEmail,
+      };
+      await generateInvoicePDF(payment, mockUser);
+    } catch (error) {
+      console.error('Failed to generate invoice:', error);
+    }
   };
 
   if (isLoading) {

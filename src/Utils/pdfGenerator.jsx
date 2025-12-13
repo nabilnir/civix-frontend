@@ -1,4 +1,5 @@
-import { Document, Page, Text, View, StyleSheet, PDFDownloadLink } from '@react-pdf/renderer';
+import React from 'react';
+import { Document, Page, Text, View, StyleSheet, pdf } from '@react-pdf/renderer';
 
 // Create styles
 const styles = StyleSheet.create({
@@ -28,10 +29,12 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: '#666',
     marginBottom: 5,
+    fontWeight: 'bold',
   },
   value: {
     fontSize: 12,
     marginBottom: 10,
+    color: '#333',
   },
   row: {
     flexDirection: 'row',
@@ -75,8 +78,8 @@ const InvoiceDocument = ({ payment, user }) => (
 
       <View style={styles.section}>
         <Text style={styles.label}>Customer Information</Text>
-        <Text style={styles.value}>{user?.displayName || payment.userName}</Text>
-        <Text style={styles.value}>{user?.email || payment.userEmail}</Text>
+        <Text style={styles.value}>{user?.displayName || payment.userName || 'N/A'}</Text>
+        <Text style={styles.value}>{user?.email || payment.userEmail || 'N/A'}</Text>
       </View>
 
       <View style={styles.section}>
@@ -108,40 +111,34 @@ const InvoiceDocument = ({ payment, user }) => (
 );
 
 // Function to generate and download PDF
-export const generateInvoicePDF = (payment, user) => {
-  // Create a blob URL for the PDF
-  const element = document.createElement('a');
-  element.style.display = 'none';
-  
-  
-  const invoiceContent = `
-    Civix - Invoice
-    ================
+export const generateInvoicePDF = async (payment, user) => {
+  try {
+    // Create the document instance
+    const doc = <InvoiceDocument payment={payment} user={user} />;
     
-    Invoice ID: ${payment.invoiceId || `INV-${payment._id}`}
-    Date: ${new Date(payment.createdAt).toLocaleDateString()}
+    // Generate PDF blob using @react-pdf/renderer
+    const blob = await pdf(doc).toBlob();
     
-    Customer Information:
-    ${user?.displayName || payment.userName}
-    ${user?.email || payment.userEmail}
+    // Create download link
+    const url = URL.createObjectURL(blob);
+    const element = document.createElement('a');
+    element.href = url;
+    element.download = `invoice-${payment.invoiceId || payment._id || 'invoice'}.pdf`;
+    element.style.display = 'none';
     
-    Payment Details:
-    Type: ${payment.type === 'subscription' ? 'Premium Subscription' : 'Issue Boost'}
-    Amount: ${payment.amount} tk
-    Transaction ID: ${payment.transactionId}
-    Status: ${payment.status || 'Completed'}
+    // Trigger download
+    document.body.appendChild(element);
+    element.click();
     
-    Thank you for using Civix!
-  `;
-  
-  const blob = new Blob([invoiceContent], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  element.href = url;
-  element.download = `invoice-${payment.invoiceId || payment._id}.txt`;
-  document.body.appendChild(element);
-  element.click();
-  document.body.removeChild(element);
-  URL.revokeObjectURL(url);
+    // Cleanup
+    document.body.removeChild(element);
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+    // Fallback: Show error message
+    alert('Failed to generate PDF. Please try again.');
+    throw error;
+  }
 };
 
 export default InvoiceDocument;

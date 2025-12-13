@@ -6,9 +6,9 @@ import EmptyState from '../../Shared/EmptyState';
 import { generateInvoicePDF } from '../../../utils/pdfGenerator';
 
 const PaymentTable = ({ payments = [], isLoading = false }) => {
-  const handleDownloadInvoice = (payment, user) => {
+  const handleDownloadInvoice = async (payment, user) => {
     try {
-      generateInvoicePDF(payment, user);
+      await generateInvoicePDF(payment, user);
     } catch (error) {
       console.error('Failed to generate invoice:', error);
     }

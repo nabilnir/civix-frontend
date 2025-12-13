@@ -3,12 +3,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { FiTrendingUp, FiCheckCircle } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
-import useAuth from '../../hooks/useAuth';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import PaymentModal from './PaymentModal';
 
-const BoostPayment = ({ issue, onSuccess }) => {
-  const { user } = useAuth();
+const BoostPayment = ({ issue, onSuccess, onCancel }) => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -111,7 +109,10 @@ const BoostPayment = ({ issue, onSuccess }) => {
 
       <PaymentModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          if (onCancel) onCancel();
+        }}
         amount={boostPrice}
         type="boost"
         description={`Boost issue: ${issue.title}`}
