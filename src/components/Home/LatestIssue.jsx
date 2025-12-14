@@ -15,14 +15,12 @@ const LatestIssue = () => {
     const { data: issues = [], isLoading } = useQuery({
         queryKey: ['latestResolvedIssues'],
         queryFn: async () => {
-            const res = await axiosPublic.get('/api/issues', {
+            const res = await axiosPublic.get('/api/issues/resolved/latest', {
                 params: {
-                    status: 'resolved',
-                    limit: 6,
-                    sort: 'date',
-                    order: 'desc'
+                    limit: 6
                 }
             });
+            // Backend returns: { success: true, data: [...] }
             return res.data.data || [];
         },
         staleTime: 0, // Always consider data stale to allow refetch on invalidation

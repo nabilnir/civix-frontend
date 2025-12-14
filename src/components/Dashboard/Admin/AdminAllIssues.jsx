@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { FiUserPlus, FiX, FiEye } from 'react-icons/fi';
+import { FiUserPlus, FiX, FiEye, FiTrash2 } from 'react-icons/fi';
 import { useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
@@ -71,6 +71,23 @@ const AdminAllIssues = () => {
     },
   });
 
+  // delete issue mutation
+  const deleteIssueMutation = useMutation({
+    mutationFn: async (issueId) => {
+      const res = await axiosSecure.delete(`/api/admin/issues/${issueId}`);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['adminIssues']);
+      queryClient.invalidateQueries(['issues']);
+      queryClient.invalidateQueries(['latestResolvedIssues']);
+      toast.success('Issue deleted successfully');
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || 'Failed to delete issue');
+    },
+  });
+
   const handleAssignClick = (issue) => {
     setSelectedIssue(issue);
     setShowAssignModal(true);
@@ -79,6 +96,28 @@ const AdminAllIssues = () => {
   const handleRejectClick = (issue) => {
     setSelectedIssue(issue);
     setShowRejectModal(true);
+  };
+
+  const handleDeleteClick = (issue) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      html: `
+        <p class="mb-2">You are about to permanently delete this issue:</p>
+        <p class="font-semibold text-gray-800">${issue.title}</p>
+        <p class="mt-4 text-sm text-red-600">This action cannot be undone. The issue will be removed from both the UI and database.</p>
+      `,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+      buttonsStyling: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteIssueMutation.mutate(issue._id);
+      }
+    });
   };
 
   const handleAssignSubmit = (e) => {
@@ -238,6 +277,15 @@ const AdminAllIssues = () => {
                             <FiX /> Reject
                           </button>
                         )}
+                        
+                        <button
+                          onClick={() => handleDeleteClick(issue)}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          title="Remove Issue"
+                          disabled={deleteIssueMutation.isPending}
+                        >
+                          <FiTrash2 />
+                        </button>
                       </div>
                     </td>
                   </tr>
