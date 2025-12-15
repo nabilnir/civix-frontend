@@ -1,5 +1,6 @@
 import React from 'react';
 import { FiUser, FiMail, FiCalendar, FiLock, FiUnlock } from 'react-icons/fi';
+import { FaCrown } from 'react-icons/fa';
 import Avatar from '../../Shared/Avatar';
 import Badge from '../../Shared/Badge';
 import BlockUserButton from './BlockUserButton';
@@ -89,15 +90,15 @@ const UserTable = ({ users = [], isLoading = false, onUserUpdate }) => {
                 )}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                {user.isPremium ? (
-                  <Badge variant="warning" size="sm">
-                    👑 Premium
-                  </Badge>
-                ) : (
-                  <Badge variant="default" size="sm">
-                    Free
-                  </Badge>
-                )}
+              {user.isPremium ? (
+                <Badge variant="warning" size="sm">
+                  <FaCrown className="mr-1" size={12} /> Premium
+                </Badge>
+              ) : (
+                <Badge variant="default" size="sm">
+                  Free
+                </Badge>
+              )}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="flex items-center gap-2">

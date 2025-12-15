@@ -1,7 +1,7 @@
 // pages/Contacts.jsx
-import React from 'react';
-import { FiMail, FiPhone, FiMapPin, FiLinkedin, FiGithub, FiUser, FiArrowRight } from 'react-icons/fi';
-import { Link } from 'react-router';
+import React, { useMemo } from 'react';
+import { FiMail, FiPhone, FiMapPin, FiLinkedin, FiGithub, FiUser, FiArrowRight, FiClock, FiShield } from 'react-icons/fi';
+import toast from 'react-hot-toast';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
@@ -37,17 +37,21 @@ const teamMembers = [
 ];
 
 const Contact = () => {
-    
-   
+    const safeTeamMembers = useMemo(() =>
+        teamMembers.map((member) => ({
+            ...member,
+            fallbackInitials: member.name
+                .split(' ')
+                .map((n) => n[0])
+                .join('')
+                .slice(0, 2)
+                .toUpperCase(),
+        }))
+    , []);
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        
-        // Simulate form submission
-        console.log("Contact form submitted!");
-        
-        // Use toast instead of browser alert
         toast.success("Your message has been sent! We'll get back to you soon.");
-        
         e.target.reset();
     };
 
@@ -76,7 +80,7 @@ const Contact = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-32">
-                    {teamMembers.map((member, index) => (
+                    {safeTeamMembers.map((member, index) => (
                         <div 
                             key={member.id} 
                             className="team-card relative group shadow-xl hover:shadow-2xl transition-all duration-500 rounded-2xl overflow-hidden cursor-pointer"
@@ -84,12 +88,26 @@ const Contact = () => {
                             data-aos-delay={index * 150} 
                         >
                             {/* Profile Image Container */}
-                            <div className="w-full h-80 bg-white border border-gray-100 rounded-2xl flex items-center justify-center p-4">
-                                <img 
-                                    src={member.imgUrl} 
-                                    alt={member.name} 
-                                    className="w-48 h-48 rounded-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                />
+                            <div className="w-full h-80 bg-white border border-gray-100 rounded-2xl flex items-center justify-center p-4 avatar-shell relative">
+                                {member.imgUrl ? (
+                                    <img 
+                                        src={member.imgUrl} 
+                                        alt={member.name} 
+                                        className="w-48 h-48 rounded-full object-cover transition-transform duration-500 group-hover:scale-105 ring-4 ring-[#238ae9]/15"
+                                        onError={(e) => { 
+                                            e.currentTarget.style.display = 'none'; 
+                                            const fallback = e.currentTarget.closest('.avatar-shell')?.querySelector('.avatar-fallback');
+                                            if (fallback) fallback.style.display = 'flex';
+                                        }}
+                                    />
+                                ) : (
+                                    <div className="w-48 h-48 rounded-full bg-gradient-to-br from-[#238ae9] to-[#1e7acc] flex items-center justify-center text-white text-3xl font-bold ring-4 ring-[#238ae9]/15 avatar-fallback">
+                                        {member.fallbackInitials}
+                                    </div>
+                                )}
+                                <div className="w-48 h-48 rounded-full bg-gradient-to-br from-[#238ae9] to-[#1e7acc] flex items-center justify-center text-white text-3xl font-bold ring-4 ring-[#238ae9]/15 avatar-fallback hidden absolute">
+                                    {member.fallbackInitials}
+                                </div>
                             </div>
 
                             
@@ -152,8 +170,25 @@ const Contact = () => {
                                 Have a Question or Suggestion?
                             </h2>
                             <p className="font-['Satoshi'] text-base text-gray-600 mb-8">
-                                We'd love to hear from you. We work with citizens, city staff, and partners to scale the Civix platform for better local governance.
+                                We collaborate with citizens, city staff, and partners to scale Civix. Reach out for support, partnerships, or press.
                             </p>
+
+                            <div className="grid grid-cols-1 gap-4 mb-6">
+                                <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#f4f6f8] text-[#242424]">
+                                    <FiClock className="text-[#238ae9]" />
+                                    <div className="text-sm">
+                                        <p className="font-semibold">Response time</p>
+                                        <p className="text-gray-600">Typically replies within 24 hours</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#f4f6f8] text-[#242424]">
+                                    <FiShield className="text-[#238ae9]" />
+                                    <div className="text-sm">
+                                        <p className="font-semibold">Priority support</p>
+                                        <p className="text-gray-600">Available for city staff & premium citizens</p>
+                                    </div>
+                                </div>
+                            </div>
 
                             <ul className="space-y-4">
                                 <li className="flex items-start gap-3">

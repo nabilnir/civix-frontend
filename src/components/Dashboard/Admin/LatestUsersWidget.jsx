@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router';
 import { FiUser, FiMail, FiCalendar, FiArrowRight, FiLock, FiUnlock } from 'react-icons/fi';
+import { FaCrown } from 'react-icons/fa';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Avatar from '../../Shared/Avatar';
 import Badge from '../../Shared/Badge';
@@ -78,7 +79,7 @@ const LatestUsersWidget = ({ limit = 5 }) => {
                     )}
                     {user.isPremium && (
                       <Badge variant="warning" size="sm">
-                        👑
+                        <FaCrown size={10} />
                       </Badge>
                     )}
                   </div>

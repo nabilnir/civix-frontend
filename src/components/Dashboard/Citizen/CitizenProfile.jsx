@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { FiUser, FiMail, FiCamera, FiAlertTriangle } from 'react-icons/fi';
+import { FaCrown } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import useAuth from '../../../hooks/useAuth';
@@ -233,7 +234,7 @@ const CitizenProfile = () => {
                 </p>
                 {isPremium && (
                   <span className="inline-flex items-center gap-1 mt-2 px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-white rounded-full text-xs font-bold font-['Satoshi']">
-                    👑 Premium Member
+                    <FaCrown size={12} /> Premium Member
                   </span>
                 )}
               </div>

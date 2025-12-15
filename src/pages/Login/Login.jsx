@@ -279,27 +279,6 @@ const Login = () => {
           </Link>
         </div>
 
-        {/* Features Preview */}
-        <div className="mt-8 grid grid-cols-3 gap-4 text-center">
-          <div className="bg-white/50 backdrop-blur-sm rounded-xl p-4">
-            <div className="text-2xl mb-2">🎯</div>
-            <p className="font-['Satoshi'] text-xs text-gray-600 font-medium">
-              Report Issues
-            </p>
-          </div>
-          <div className="bg-white/50 backdrop-blur-sm rounded-xl p-4">
-            <div className="text-2xl mb-2">📊</div>
-            <p className="font-['Satoshi'] text-xs text-gray-600 font-medium">
-              Track Progress
-            </p>
-          </div>
-          <div className="bg-white/50 backdrop-blur-sm rounded-xl p-4">
-            <div className="text-2xl mb-2">✅</div>
-            <p className="font-['Satoshi'] text-xs text-gray-600 font-medium">
-              Get Resolved
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   );

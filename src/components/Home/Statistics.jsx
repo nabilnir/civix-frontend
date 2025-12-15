@@ -85,7 +85,15 @@ const Statistics = () => {
                     >
                         Proof of Progress in Your City
                     </h2>
-                    <p></p>
+                    <p
+                        className="font-['Satoshi'] text-lg text-gray-600 mt-4"
+                        data-aos="fade-up"
+                        data-aos-duration="600"
+                        data-aos-delay="350"
+                    >
+                        Real numbers from real citizens—see how community action is
+                        improving neighborhoods every day.
+                    </p>
                 </div>
 
                 {/* Statistics Grid */}

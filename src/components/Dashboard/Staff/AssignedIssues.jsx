@@ -184,17 +184,22 @@ const AssignedIssues = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {filteredIssues.map((issue) => {
-                  const availableStatuses = getAvailableStatuses(issue.status);
-                  return (
+              {filteredIssues.map((issue) => {
+              const availableStatuses = getAvailableStatuses(issue.status);
+              const fullDescription = issue.description || '';
+              const shortDescription =
+                fullDescription.length > 160
+                  ? `${fullDescription.slice(0, 160)}...`
+                  : fullDescription;
+              return (
                     <tr key={issue._id} className="hover:bg-gray-50">
                       <td className="px-6 py-4">
                         <div>
-                          <h4 className="font-['Satoshi'] font-semibold text-sm text-[#242424]">
+                          <h4 className="font-['Satoshi'] font-semibold text-sm text-[#242424] mb-1">
                             {issue.title}
                           </h4>
-                          <p className="font-['Satoshi'] text-xs text-gray-500 line-clamp-1">
-                            {issue.description}
+                          <p className="font-['Satoshi'] text-xs text-gray-500">
+                            {shortDescription}
                           </p>
                         </div>
                       </td>
