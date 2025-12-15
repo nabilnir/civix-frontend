@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
-import { FiEdit2, FiTrash2, FiEye, FiFilter } from 'react-icons/fi';
+import { FiEdit2, FiTrash2, FiEye, FiFilter, FiPlus, FiCheckSquare } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import useAuth from '../../../hooks/useAuth';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
@@ -17,6 +17,8 @@ const MyIssues = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
+  const [isSelectMode, setIsSelectMode] = useState(false);
+  const [selectedIssueIds, setSelectedIssueIds] = useState([]);
 
   // Fetch user's issues
   const { data: issues = [], isLoading } = useQuery({
@@ -36,8 +38,9 @@ const MyIssues = () => {
 
   // Delete mutation
   const deleteMutation = useMutation({
-    mutationFn: async (issueId) => {
-      await axiosSecure.delete(`/api/issues/${issueId}`);
+    mutationFn: async (issueIds) => {
+      const idsArray = Array.isArray(issueIds) ? issueIds : [issueIds];
+      await Promise.all(idsArray.map((id) => axiosSecure.delete(`/api/issues/${id}`)));
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['userIssues']);
@@ -66,6 +69,38 @@ const MyIssues = () => {
     }
   };
 
+  const handleAddNew = () => {
+    navigate('/report-issue');
+  };
+
+  const toggleSelectMode = () => {
+    setIsSelectMode((prev) => !prev);
+    setSelectedIssueIds([]);
+  };
+
+  const toggleIssueSelection = (issueId) => {
+    setSelectedIssueIds((prev) =>
+      prev.includes(issueId) ? prev.filter((id) => id !== issueId) : [...prev, issueId]
+    );
+  };
+
+  const handleSelectAll = () => {
+    if (selectedIssueIds.length === filteredIssues.length) {
+      setSelectedIssueIds([]);
+    } else {
+      setSelectedIssueIds(filteredIssues.map((issue) => issue._id));
+    }
+  };
+
+  const handleBulkDelete = () => {
+    if (selectedIssueIds.length === 0) return;
+    if (window.confirm(`Delete ${selectedIssueIds.length} selected issue(s)?`)) {
+      deleteMutation.mutate(selectedIssueIds);
+      setSelectedIssueIds([]);
+      setIsSelectMode(false);
+    }
+  };
+
   const handleViewDetails = (issueId) => {
     navigate(`/issue/${issueId}`);
   };
@@ -90,11 +125,31 @@ const MyIssues = () => {
             Manage and track all your reported issues
           </p>
         </div>
+
+        <div className="flex flex-wrap gap-3">
+          <button
+            onClick={handleAddNew}
+            className="flex items-center gap-2 px-4 py-2 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] font-medium hover:bg-[#1e7acc] transition-colors"
+          >
+            <FiPlus /> Add New
+          </button>
+          <button
+            onClick={toggleSelectMode}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-['Satoshi'] font-medium transition-colors ${
+              isSelectMode
+                ? 'bg-red-100 text-red-700 hover:bg-red-200'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            <FiCheckSquare /> {isSelectMode ? 'Cancel Selection' : 'Select Issues'}
+          </button>
+        </div>
       </div>
 
-      {/* Filters */}
+      {/* Filters & bulk actions */}
       <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-        <div className="flex flex-wrap gap-4 items-center">
+        <div className="flex flex-wrap gap-4 items-center justify-between">
+          <div className="flex flex-wrap gap-4 items-center">
           <div className="flex items-center gap-2">
             <FiFilter className="text-[#238ae9]" />
             <span className="font-['Satoshi'] font-semibold text-sm">Filters:</span>
@@ -111,6 +166,7 @@ const MyIssues = () => {
             <option value="working">Working</option>
             <option value="resolved">Resolved</option>
             <option value="closed">Closed</option>
+            <option value="boosted">Boosted</option>
           </select>
 
           <select
@@ -126,18 +182,49 @@ const MyIssues = () => {
             <option value="footpath">Footpath</option>
             <option value="other">Other</option>
           </select>
+          </div>
+
+          {isSelectMode && filteredIssues.length > 0 && (
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleSelectAll}
+                className="px-3 py-2 text-sm rounded-lg border border-gray-300 font-['Satoshi'] hover:bg-gray-50"
+              >
+                {selectedIssueIds.length === filteredIssues.length ? 'Clear All' : 'Select All'}
+              </button>
+              <button
+                onClick={handleBulkDelete}
+                disabled={selectedIssueIds.length === 0}
+                className="px-4 py-2 text-sm rounded-lg bg-red-100 text-red-700 font-['Satoshi'] font-medium hover:bg-red-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Delete Selected ({selectedIssueIds.length})
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Issues List */}
       {filteredIssues.length > 0 ? (
         <div className="grid grid-cols-1 gap-4">
-          {filteredIssues.map((issue) => (
+          {filteredIssues.map((issue) => {
+            const isChecked = selectedIssueIds.includes(issue._id);
+            return (
             <div
               key={issue._id}
               className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
             >
               <div className="flex flex-col md:flex-row md:items-center gap-4">
+                {isSelectMode && (
+                  <div className="self-start md:self-center">
+                    <input
+                      type="checkbox"
+                      className="w-5 h-5 text-[#238ae9] border-gray-300 rounded focus:ring-[#238ae9]"
+                      checked={isChecked}
+                      onChange={() => toggleIssueSelection(issue._id)}
+                    />
+                  </div>
+                )}
                 {/* Issue Image */}
                 <img
                   src={issue.image}
@@ -177,7 +264,7 @@ const MyIssues = () => {
                     <FiEye /> View Details
                   </button>
                   
-                  {issue.status === 'pending' && (
+                  {issue.status === 'pending' && !isSelectMode && (
                     <button
                       onClick={() => handleEdit(issue)}
                       className="flex items-center gap-2 px-4 py-2 bg-amber-100 text-amber-700 rounded-lg font-['Satoshi'] font-medium hover:bg-amber-200 transition-colors"
@@ -186,16 +273,18 @@ const MyIssues = () => {
                     </button>
                   )}
                   
-                  <button
-                    onClick={() => handleDelete(issue._id)}
-                    className="flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-lg font-['Satoshi'] font-medium hover:bg-red-200 transition-colors"
-                  >
-                    <FiTrash2 /> Delete
-                  </button>
+                  {!isSelectMode && (
+                    <button
+                      onClick={() => handleDelete(issue._id)}
+                      className="flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-lg font-['Satoshi'] font-medium hover:bg-red-200 transition-colors"
+                    >
+                      <FiTrash2 /> Delete
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
-          ))}
+          )})}
         </div>
       ) : (
         <div className="bg-white rounded-xl p-12 text-center shadow-sm border border-gray-100">

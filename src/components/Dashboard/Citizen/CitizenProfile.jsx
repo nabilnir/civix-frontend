@@ -12,7 +12,7 @@ import { uploadImage as uploadImageUtil, validateImage } from '../../../Utils/im
 import SubscriptionCard from './SubscriptionCard';
 
 const CitizenProfile = () => {
-  const { user, updateUserProfile } = useAuth();
+  const { user, updateUserProfile, logOut } = useAuth();
   const { role, isPremium, isBlocked, userData } = useRole();
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
@@ -107,6 +107,16 @@ const CitizenProfile = () => {
       toast.error(error.message || 'Failed to update profile. Please try again.');
     },
   });
+
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      toast.success('Logged out successfully');
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast.error('Failed to log out. Please try again.');
+    }
+  };
 
   // Create Stripe checkout session mutation
   const createCheckoutMutation = useMutation({
@@ -275,6 +285,15 @@ const CitizenProfile = () => {
               className="w-full px-6 py-3 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] font-semibold hover:bg-[#1e7acc] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {updateMutation.isPending ? 'Updating...' : 'Update Profile'}
+            </button>
+
+            {/* Logout button */}
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="w-full px-6 py-3 mt-3 border border-red-200 text-red-600 rounded-lg font-['Satoshi'] font-semibold hover:bg-red-50 transition-colors"
+            >
+              Log Out
             </button>
           </form>
         </div>

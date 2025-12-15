@@ -67,7 +67,7 @@ const ReportIssueForm = ({
 
       {/* Issue Limit Warning */}
       {!isPremium && issueCount >= 3 && (
-        <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-lg">
+        <div className="bg-amber-50 p-4 rounded-lg">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <FiAlertCircle className="text-amber-600" size={20} />
