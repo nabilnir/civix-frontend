@@ -7,6 +7,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import useAuth from '../../hooks/useAuth';
 import { uploadImage as uploadImageUtil } from '../../Utils/imageUpload';
+import { validatePassword } from '../../Utils/passwordValidation';
 import Logo from '../../components/Shared/Logo';
 
 const Register = () => {
@@ -63,9 +64,10 @@ const Register = () => {
     const password = form.password.value;
     const imageFile = form.image.files[0];
 
-    // Basic validation
-    if (password.length < 6) {
-      toast.error('Password must be at least 6 characters');
+    // Password validation
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.isValid) {
+      toast.error(passwordValidation.message);
       setIsSubmitting(false);
       return;
     }
@@ -276,7 +278,8 @@ const Register = () => {
                   name="password"
                   id="password"
                   required
-                  placeholder="Minimum 6 characters"
+                  placeholder="Enter a strong password"
+                  minLength={8}
                   className="w-full pl-11 pr-12 py-3 bg-[#f4f6f8] border-2 border-transparent rounded-xl font-['Satoshi'] text-[#242424] placeholder-gray-400 focus:outline-none focus:border-[#238ae9] focus:bg-white transition-all"
                 />
                 <button
@@ -287,6 +290,9 @@ const Register = () => {
                   {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
                 </button>
               </div>
+              <p className="font-['Satoshi'] text-xs text-gray-500 mt-1">
+                Must be 8+ characters with uppercase, lowercase, number, and special character
+              </p>
             </div>
 
             {/* Submit Button */}

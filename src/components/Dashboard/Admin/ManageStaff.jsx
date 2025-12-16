@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { getAuth } from 'firebase/auth';
 import app from '../../../firebase/firebase.config';
+import { validatePassword } from '../../../Utils/passwordValidation';
 
 const ManageStaff = () => {
   const axiosSecure = useAxiosSecure();
@@ -86,11 +87,20 @@ const ManageStaff = () => {
 
   const handleAddSubmit = (e) => {
     e.preventDefault();
+    const password = e.target.password.value;
+    
+    // Validate password
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.isValid) {
+      toast.error(passwordValidation.message);
+      return;
+    }
+    
     const formData = {
       name: e.target.name.value,
       email: e.target.email.value,
       phone: e.target.phone.value,
-      password: e.target.password.value,
+      password: password,
       photoURL: e.target.photoURL.value || 'https://i.ibb.co/2W8Py4W/default-avatar.png',
     };
     addStaffMutation.mutate(formData);
@@ -311,9 +321,13 @@ const ManageStaff = () => {
                     type="password"
                     name="password"
                     required
-                    minLength={6}
+                    minLength={8}
+                    placeholder="Enter a strong password"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
                   />
+                  <p className="text-xs text-gray-500 mt-1 font-['Satoshi']">
+                    Must be 8+ characters with uppercase, lowercase, number, and special character
+                  </p>
                 </div>
                 
                 <div>

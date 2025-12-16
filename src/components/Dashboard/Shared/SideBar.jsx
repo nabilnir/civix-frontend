@@ -5,16 +5,35 @@ import {
   FiUsers, FiSettings, FiBriefcase, FiList
 } from 'react-icons/fi';
 import { FaHouseChimney } from "react-icons/fa6";
+import { useQuery } from '@tanstack/react-query';
 import useAuth from '../../../hooks/useAuth';
 import useRole from '../../../hooks/useRole';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Logo from '../../Shared/Logo';
 
 export default function Sidebar() {
   const { user } = useAuth();
   const { role } = useRole();
+  const axiosSecure = useAxiosSecure();
   const location = useLocation();
   const [isCollapsed, setIsCollapsed] = useState(true); // Start collapsed by default
   const [isHovered, setIsHovered] = useState(false);
+
+  // Fetch user profile data from database to get the correct photoURL
+  const { data: profileData } = useQuery({
+    queryKey: ['userProfile', user?.email],
+    queryFn: async () => {
+      if (!user?.email) return null;
+      try {
+        const res = await axiosSecure.get(`/api/auth/users/${user.email}`);
+        return res.data.data;
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+        return null;
+      }
+    },
+    enabled: !!user?.email,
+  });
 
   // Auto-expand on hover, collapse when not hovered
   useEffect(() => {
@@ -114,14 +133,17 @@ export default function Sidebar() {
       <div className={`p-4 border-b border-gray-100 w-full ${isCollapsed ? 'flex justify-center' : ''}`}>
         <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-3'}`}>
           <img
-            src={user?.photoURL || 'https://i.ibb.co/2W8Py4W/default-avatar.png'}
-            alt={user?.displayName}
+            src={profileData?.photoURL || user?.photoURL || 'https://i.ibb.co/2W8Py4W/default-avatar.png'}
+            alt={profileData?.name || user?.displayName}
             className={`${isCollapsed ? 'w-10 h-10' : 'w-12 h-12'} rounded-lg object-cover border-2 border-[#238ae9] flex-shrink-0`}
+            onError={(e) => {
+              e.target.src = 'https://i.ibb.co/2W8Py4W/default-avatar.png';
+            }}
           />
           {!isCollapsed && (
             <div className="flex-1 min-w-0">
               <p className="font-['Satoshi'] font-semibold text-sm text-[#242424] truncate">
-                {user?.displayName}
+                {profileData?.name || user?.displayName}
               </p>
               <p className="font-['Satoshi'] text-xs text-gray-500 truncate">
                 {user?.email}

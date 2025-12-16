@@ -5,6 +5,7 @@ import { FiMail, FiLock, FiUser, FiEye, FiEyeOff } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import useAuth from '../../hooks/useAuth';
 import FormInput from '../Shared/FormInput';
+import { passwordValidation } from '../../Utils/passwordValidation';
 
 const RegisterForm = ({ onSuccess }) => {
   const { createUser, updateUserProfile, loading } = useAuth();
@@ -96,13 +97,7 @@ const RegisterForm = ({ onSuccess }) => {
           type={showPassword ? 'text' : 'password'}
           placeholder="Enter your password"
           register={register}
-          validation={{
-            required: 'Password is required',
-            minLength: {
-              value: 6,
-              message: 'Password must be at least 6 characters',
-            },
-          }}
+          validation={passwordValidation}
           error={errors.password?.message}
           icon={FiLock}
           required
@@ -115,6 +110,16 @@ const RegisterForm = ({ onSuccess }) => {
         >
           {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
         </button>
+      </div>
+      <div className="text-xs text-gray-500 font-['Satoshi'] space-y-1">
+        <p className="font-semibold">Password must contain:</p>
+        <ul className="list-disc list-inside space-y-0.5 ml-2">
+          <li>At least 8 characters</li>
+          <li>One uppercase letter (A-Z)</li>
+          <li>One lowercase letter (a-z)</li>
+          <li>One number (0-9)</li>
+          <li>One special character (!@#$%^&*...)</li>
+        </ul>
       </div>
 
       <div className="relative">

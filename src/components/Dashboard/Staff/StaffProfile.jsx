@@ -8,7 +8,7 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { uploadImage as uploadImageUtil, validateImage } from '../../../Utils/imageUpload';
 
 const StaffProfile = () => {
-  const { user, updateUserProfile } = useAuth();
+  const { user, updateUserProfile, logOut } = useAuth();
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
   const [imageFile, setImageFile] = useState(null);
@@ -101,6 +101,16 @@ const StaffProfile = () => {
 
   const onSubmit = (data) => {
     updateMutation.mutate(data);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      toast.success('Logged out successfully');
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast.error('Failed to log out. Please try again.');
+    }
   };
 
   const handleImageChange = (e) => {
@@ -219,6 +229,15 @@ const StaffProfile = () => {
             className="w-full px-6 py-3 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] font-semibold hover:bg-[#1e7acc] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {updateMutation.isPending ? 'Updating...' : 'Update Profile'}
+          </button>
+
+          {/* logout button */}
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="w-full px-6 py-3 mt-3 border border-red-200 text-red-600 rounded-lg font-['Satoshi'] font-semibold hover:bg-red-50 transition-colors"
+          >
+            Log Out
           </button>
         </form>
       </div>

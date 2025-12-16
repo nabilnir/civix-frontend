@@ -9,6 +9,7 @@ import Select from '../../Shared/Select';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { getAuth } from 'firebase/auth';
 import app from '../../../firebase/firebase.config';
+import { validatePassword } from '../../../Utils/passwordValidation';
 
 const AddStaffModal = ({ isOpen, onClose }) => {
   const axiosSecure = useAxiosSecure();
@@ -81,6 +82,14 @@ const AddStaffModal = ({ isOpen, onClose }) => {
       toast.error('Please fill in all required fields');
       return;
     }
+    
+    // Validate password
+    const passwordValidation = validatePassword(formData.password);
+    if (!passwordValidation.isValid) {
+      toast.error(passwordValidation.message);
+      return;
+    }
+    
     addStaffMutation.mutate(formData);
   };
 
@@ -145,10 +154,20 @@ const AddStaffModal = ({ isOpen, onClose }) => {
           type="password"
           value={formData.password}
           onChange={handleChange}
-          placeholder="Enter password (min 6 characters)"
+          placeholder="Enter a strong password"
           required
-          minLength={6}
+          minLength={8}
         />
+        <div className="text-xs text-gray-500 font-['Satoshi'] space-y-1 -mt-2">
+          <p className="font-semibold">Password must contain:</p>
+          <ul className="list-disc list-inside space-y-0.5 ml-2">
+            <li>At least 8 characters</li>
+            <li>One uppercase letter (A-Z)</li>
+            <li>One lowercase letter (a-z)</li>
+            <li>One number (0-9)</li>
+            <li>One special character (!@#$%^&*...)</li>
+          </ul>
+        </div>
 
         <div className="flex gap-3 justify-end pt-4 border-t border-gray-200">
           <button

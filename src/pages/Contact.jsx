@@ -9,7 +9,7 @@ import 'aos/dist/aos.css';
 const teamMembers = [
     {
         id: 1,
-        name: 'Ayresa Khan',
+        name: 'Arman Khan',
         role: 'Chief Technology Officer (CTO)',
         bio: 'Visionary architect behind Civix. Specializing in scalable cloud infrastructure and user-centric design.',
         linkedin: 'https://linkedin.com/in/ayresakhan',
@@ -23,7 +23,7 @@ const teamMembers = [
         bio: 'Passionate about React and modern UI/UX principles. Ensures the platform is fast, accessible, and enjoyable.',
         linkedin: 'https://linkedin.com/in/jamaluddin',
         github: 'https://github.com/jamaldev',
-        imgUrl: 'https://via.placeholder.com/200?text=Jamal+Uddin' 
+        imgUrl: 'https://i.pinimg.com/736x/e1/4a/83/e14a8371f954ca9c153ba39cb4af9b87.jpg' 
     },
     {
         id: 3,
@@ -32,10 +32,63 @@ const teamMembers = [
         bio: 'Dedicated to data integrity and user privacy. Manages the API endpoints and ensures secure communication.',
         linkedin: 'https://linkedin.com/in/saraahmed',
         github: 'https://github.com/saracodes',
-        imgUrl: 'https://via.placeholder.com/200?text=Sara+Ahmed' 
+        imgUrl: 'https://i.pinimg.com/1200x/1c/85/2e/1c852ea928150dfcf54c5457dbca0a35.jpg' 
     },
+    {
+        id: 4,
+        name: 'Rafiq Hassan',
+        role: 'Backend Developer',
+        bio: 'Expert in Node.js and MongoDB. Builds robust APIs and handles server-side logic to keep Civix running smoothly.',
+        linkedin: 'https://linkedin.com/in/rafiqhassan',
+        github: 'https://github.com/rafiqdev',
+        imgUrl: 'https://i.pinimg.com/1200x/78/fa/ea/78faeaa15ce3f0b1b30795dc7f1144c4.jpg'
+    },
+    {
+        id: 5,
+        name: 'Nadia Rahman',
+        role: 'UX/UI Designer',
+        bio: 'Creates intuitive and beautiful interfaces. Focuses on user research and accessibility to make Civix inclusive for all.',
+        linkedin: 'https://linkedin.com/in/nadiarahman',
+        github: 'https://github.com/nadiadesigns',
+        imgUrl: 'https://i.pinimg.com/1200x/31/ee/c1/31eec18bf540c69ed65409cfbf6bb263.jpg'
+    },
+    {
+        id: 6,
+        name: 'Imran Chowdhury',
+        role: 'DevOps Engineer',
+        bio: 'Manages CI/CD pipelines and cloud infrastructure. Ensures seamless deployments and optimal server performance.',
+        linkedin: 'https://linkedin.com/in/imranchowdhury',
+        github: 'https://github.com/imranops',
+        imgUrl: 'https://i.pinimg.com/736x/02/00/4e/02004ec122887b94030c45a5658a4a18.jpg'
+    },
+    {
+        id: 7,
+        name: 'Fatima Islam',
+        role: 'Product Manager',
+        bio: 'Bridges the gap between users and developers. Defines product roadmap and prioritizes features based on community needs.',
+        linkedin: 'https://linkedin.com/in/fatimaislam',
+        github: 'https://github.com/fatimapm',
+        imgUrl: 'https://i.pinimg.com/736x/b4/f5/2d/b4f52d9e78a99c69c5afe081804e0022.jpg'
+    },
+    {
+        id: 8,
+        name: 'Karim Malik',
+        role: 'Quality Assurance Lead',
+        bio: 'Ensures every feature works flawlessly. Conducts rigorous testing and maintains high code quality standards.',
+        linkedin: 'https://linkedin.com/in/karimmalik',
+        github: 'https://github.com/karimqa',
+        imgUrl: 'https://i.pinimg.com/736x/dc/e1/a8/dce1a8c3ada0a91ff6ed24f06a6ce82a.jpg'
+    },
+    {
+        id: 9,
+        name: 'Ayesha Begum',
+        role: 'Community Manager',
+        bio: 'Connects with citizens and stakeholders. Gathers feedback and ensures Civix truly serves the community\'s needs.',
+        linkedin: 'https://linkedin.com/in/ayeshabegum',
+        github: 'https://github.com/ayeshacommunity',
+        imgUrl: 'https://i.pinimg.com/736x/73/a7/20/73a7209f5e656ff1d6e0af662b6f8904.jpg'
+    }
 ];
-
 const Contact = () => {
     const safeTeamMembers = useMemo(() =>
         teamMembers.map((member) => ({

@@ -74,7 +74,7 @@ const About = () => {
                         </p>
 
                         <Link
-                            to="/all-issues"
+                            to="/allissues"
                             className="inline-flex bg-gradient-to-br from-[#238ae9]
                              to-[#1e7acc] text-white px-8 py-4 rounded-xl font-['Satoshi']
                               font-bold text-base hover:shadow-xl hover:scale-[1.02]
