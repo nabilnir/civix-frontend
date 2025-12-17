@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import logoImage from '../../assets/images/logo.png';
+import { SITE_INFO } from '../../Utils/constants';
 
 const Logo = ({
   showText = true,
@@ -40,7 +41,7 @@ const Logo = ({
       {!imageError ? (
         <img
           src={logoImage}
-          alt="Civix Logo"
+          alt={`${SITE_INFO.NAME} Logo`}
           className={`${sizeConfig.image} object-contain transition-transform group-hover:scale-105`}
           onError={() => setImageError(true)}
         />
@@ -49,7 +50,7 @@ const Logo = ({
           className={`${sizeConfig.image} bg-gradient-to-br from-[#238ae9] to-[#1e7acc] rounded-xl flex items-center justify-center shadow-md`}
         >
           <span className={`text-white font-bold font-['Satoshi'] ${sizeConfig.text}`}>
-            C
+            {SITE_INFO.NAME.charAt(0)}
           </span>
         </div>
       )}
@@ -57,7 +58,7 @@ const Logo = ({
         <span
           className={`text-[#242424] font-['Satoshi'] font-bold tracking-tight ${sizeConfig.text}`}
         >
-          Civix
+          {SITE_INFO.NAME}
         </span>
       )}
     </div>

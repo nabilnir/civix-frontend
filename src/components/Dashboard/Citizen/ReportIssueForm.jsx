@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FiUpload, FiX, FiAlertCircle } from 'react-icons/fi';
+import Swal from 'sweetalert2';
 
 const ReportIssueForm = ({
   onSubmit,
@@ -20,13 +21,23 @@ const ReportIssueForm = ({
     if (file) {
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        alert('Image size should be less than 5MB');
+        Swal.fire({
+          title: 'File Too Large',
+          text: 'Image size should be less than 5MB',
+          icon: 'error',
+          confirmButtonColor: '#238ae9',
+        });
         return;
       }
       
       // Validate file type
       if (!file.type.startsWith('image/')) {
-        alert('Please select an image file');
+        Swal.fire({
+          title: 'Invalid File Type',
+          text: 'Please select an image file',
+          icon: 'error',
+          confirmButtonColor: '#238ae9',
+        });
         return;
       }
 

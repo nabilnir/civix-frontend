@@ -37,15 +37,23 @@ export default function Sidebar() {
 
   // Auto-expand on hover, collapse when not hovered
   useEffect(() => {
+    let timer;
+    
     if (isHovered) {
-      setIsCollapsed(false);
+      // Use setTimeout to avoid synchronous setState in effect
+      timer = setTimeout(() => {
+        setIsCollapsed(false);
+      }, 0);
     } else {
       // Small delay before collapsing to prevent flickering
-      const timer = setTimeout(() => {
+      timer = setTimeout(() => {
         setIsCollapsed(true);
       }, 200);
-      return () => clearTimeout(timer);
     }
+    
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [isHovered]);
 
   
@@ -135,7 +143,7 @@ export default function Sidebar() {
           <img
             src={profileData?.photoURL || user?.photoURL || 'https://i.ibb.co/2W8Py4W/default-avatar.png'}
             alt={profileData?.name || user?.displayName}
-            className={`${isCollapsed ? 'w-10 h-10' : 'w-12 h-12'} rounded-lg object-cover border-2 border-[#238ae9] flex-shrink-0`}
+            className={`${isCollapsed ? 'w-10 h-10' : 'w-12 h-12'} rounded-lg object-cover border-2 border-[#238ae9] shrink-0`}
             onError={(e) => {
               e.target.src = 'https://i.ibb.co/2W8Py4W/default-avatar.png';
             }}
@@ -180,7 +188,7 @@ export default function Sidebar() {
               }}
               title={isCollapsed ? item.name : undefined}
             >
-              <span className="text-lg flex-shrink-0">{item.icon}</span>
+              <span className="text-lg shrink-0">{item.icon}</span>
               {!isCollapsed && <span>{item.name}</span>}
               {isCollapsed && isActive && (
                 <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-white rounded-r-full"></div>

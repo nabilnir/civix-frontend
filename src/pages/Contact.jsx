@@ -1,6 +1,6 @@
 // pages/Contacts.jsx
-import React, { useMemo } from 'react';
-import { FiMail, FiPhone, FiMapPin, FiLinkedin, FiGithub, FiUser, FiArrowRight, FiClock, FiShield } from 'react-icons/fi';
+import React, { useMemo, useState } from 'react';
+import { FiMail, FiPhone, FiMapPin, FiLinkedin, FiGithub, FiUser, FiArrowRight, FiClock, FiShield, FiX } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -90,6 +90,8 @@ const teamMembers = [
     }
 ];
 const Contact = () => {
+    const [activeCard, setActiveCard] = useState(null);
+
     const safeTeamMembers = useMemo(() =>
         teamMembers.map((member) => ({
             ...member,
@@ -101,6 +103,10 @@ const Contact = () => {
                 .toUpperCase(),
         }))
     , []);
+
+    const handleCardClick = (memberId) => {
+        setActiveCard(activeCard === memberId ? null : memberId);
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -133,12 +139,15 @@ const Contact = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-32">
-                    {safeTeamMembers.map((member, index) => (
+                    {safeTeamMembers.map((member, index) => {
+                        const isActive = activeCard === member.id;
+                        return (
                         <div 
                             key={member.id} 
                             className="team-card relative group shadow-xl hover:shadow-2xl transition-all duration-500 rounded-2xl overflow-hidden cursor-pointer"
                             data-aos="fade-up" 
-                            data-aos-delay={index * 150} 
+                            data-aos-delay={index * 150}
+                            onClick={() => handleCardClick(member.id)}
                         >
                             {/* Profile Image Container */}
                             <div className="w-full h-80 bg-white border border-gray-100 rounded-2xl flex items-center justify-center p-4 avatar-shell relative">
@@ -165,7 +174,20 @@ const Contact = () => {
                             </div>
 
                             
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#238ae9]/95 to-[#238ae9]/80 flex flex-col justify-end p-6 md:p-8 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out">
+                            <div className={`absolute inset-0 bg-gradient-to-t from-[#238ae9]/95 to-[#238ae9]/80 flex flex-col justify-end p-6 md:p-8 transform transition-transform duration-500 ease-in-out ${
+                                isActive ? 'translate-y-0' : 'translate-y-full md:group-hover:translate-y-0'
+                            }`}>
+                                {/* Close button for mobile */}
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setActiveCard(null);
+                                    }}
+                                    className="md:hidden absolute top-4 right-4 text-white hover:text-gray-200 transition-colors p-2"
+                                    aria-label="Close details"
+                                >
+                                    <FiX size={20} />
+                                </button>
                                 
                                 <h3 className="font-['Satoshi'] text-2xl font-bold text-white mb-1">
                                     {member.name}
@@ -185,6 +207,7 @@ const Contact = () => {
                                         href={member.linkedin} 
                                         target="_blank" 
                                         rel="noopener noreferrer" 
+                                        onClick={(e) => e.stopPropagation()}
                                         className="text-white hover:text-gray-200 transition-colors"
                                         aria-label={`LinkedIn profile for ${member.name}`}
                                     >
@@ -194,6 +217,7 @@ const Contact = () => {
                                         href={member.github} 
                                         target="_blank" 
                                         rel="noopener noreferrer" 
+                                        onClick={(e) => e.stopPropagation()}
                                         className="text-white hover:text-gray-200 transition-colors"
                                         aria-label={`GitHub profile for ${member.name}`}
                                     >
@@ -203,12 +227,15 @@ const Contact = () => {
                             </div>
 
                             {/* Base Text  */}
-                            <div className="absolute bottom-0 left-0 right-0 p-4 bg-white/95 backdrop-blur-sm group-hover:opacity-0 transition-opacity duration-300">
+                            <div className={`absolute bottom-0 left-0 right-0 p-4 bg-white/95 backdrop-blur-sm transition-opacity duration-300 ${
+                                isActive ? 'opacity-0' : 'md:group-hover:opacity-0'
+                            }`}>
                                 <h3 className="font-['Satoshi'] text-lg font-bold text-[#242424]">{member.name}</h3>
                                 <p className="font-['Satoshi'] text-sm text-gray-600">{member.role}</p>
                             </div>
                         </div>
-                    ))}
+                        );
+                    })}
                 </div>
 
                 {/* -------------------- 2. Contact Form & Info -------------------- */}

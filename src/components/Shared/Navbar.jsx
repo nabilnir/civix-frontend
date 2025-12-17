@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink } from 'react-router';
-import { FiMenu, FiX, FiBell, FiMail, FiUser, FiLogOut, FiGrid } from 'react-icons/fi';
+import { FiMenu, FiX, FiUser, FiLogOut, FiGrid } from 'react-icons/fi';
 import useAuth from '../../hooks/useAuth';
 import useRole from '../../hooks/useRole';
 import toast from 'react-hot-toast';
 import Logo from './Logo';
+import NotificationDropdown from './NotificationDropdown';
+import MessageCenter from './MessageCenter';
 
 export default function Navbar() {
   const { user, logOut } = useAuth();
@@ -87,21 +89,15 @@ export default function Navbar() {
             
             {user ? (
               <>
-                {/* Notification Icon */}
-                <button 
-                  className="w-9 h-9 rounded-lg bg-[#f4f6f8] hover:bg-gray-200 flex items-center justify-center transition-colors hidden sm:flex"
-                  aria-label="Notifications"
-                >
-                  <FiBell className="text-[#242424] text-lg" />
-                </button>
+                {/* Notification Dropdown */}
+                <div className="hidden sm:block">
+                  <NotificationDropdown />
+                </div>
 
-                {/* Messages Icon */}
-                <button 
-                  className="w-9 h-9 rounded-lg bg-[#f4f6f8] hover:bg-gray-200 flex items-center justify-center transition-colors hidden sm:flex"
-                  aria-label="Messages"
-                >
-                  <FiMail className="text-[#242424] text-lg" />
-                </button>
+                {/* Message Center */}
+                <div className="hidden sm:block">
+                  <MessageCenter />
+                </div>
 
                 {/* Profile Dropdown */}
                 <div className="relative" ref={dropdownRef}>

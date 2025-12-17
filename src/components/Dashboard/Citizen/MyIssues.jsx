@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
-import { FiEdit2, FiTrash2, FiEye, FiFilter, FiPlus, FiCheckSquare } from 'react-icons/fi';
+import { FiEdit2, FiTrash2, FiEye, FiFilter, FiPlus, FiCheckSquare, FiTrendingUp } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
 import useAuth from '../../../hooks/useAuth';
+import useRole from '../../../hooks/useRole';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import EditIssueModal from '../../Issues/EditIssueModal';
 import StatusBadge from '../../Issues/StatusBadge';
 
 const MyIssues = () => {
   const { user } = useAuth();
+  const { isPremium } = useRole();
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -51,6 +54,28 @@ const MyIssues = () => {
     },
   });
 
+  // Boost mutation
+  const createBoostCheckoutMutation = useMutation({
+    mutationFn: async (issueId) => {
+      const res = await axiosSecure.post('/api/payments/create-checkout-session', {
+        amount: 100,
+        type: 'boost',
+        issueId: issueId,
+      });
+      return res.data;
+    },
+    onSuccess: (data) => {
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error('Failed to create checkout session');
+      }
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || 'Failed to create checkout session. Please try again.');
+    },
+  });
+
   // Filter issues
   const filteredIssues = issues.filter((issue) => {
     const statusMatch = !statusFilter || issue.status.toLowerCase() === statusFilter.toLowerCase();
@@ -64,9 +89,21 @@ const MyIssues = () => {
   };
 
   const handleDelete = (issueId) => {
-    if (window.confirm('Are you sure you want to delete this issue?')) {
-      deleteMutation.mutate(issueId);
-    }
+    Swal.fire({
+      title: 'Delete Issue?',
+      text: 'Are you sure you want to delete this issue? This action cannot be undone.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Yes, Delete',
+      cancelButtonText: 'Cancel',
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteMutation.mutate(issueId);
+      }
+    });
   };
 
   const handleAddNew = () => {
@@ -94,15 +131,44 @@ const MyIssues = () => {
 
   const handleBulkDelete = () => {
     if (selectedIssueIds.length === 0) return;
-    if (window.confirm(`Delete ${selectedIssueIds.length} selected issue(s)?`)) {
-      deleteMutation.mutate(selectedIssueIds);
-      setSelectedIssueIds([]);
-      setIsSelectMode(false);
-    }
+    Swal.fire({
+      title: 'Delete Selected Issues?',
+      text: `Are you sure you want to delete ${selectedIssueIds.length} selected issue(s)? This action cannot be undone.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Yes, Delete',
+      cancelButtonText: 'Cancel',
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteMutation.mutate(selectedIssueIds);
+        setSelectedIssueIds([]);
+        setIsSelectMode(false);
+      }
+    });
   };
 
   const handleViewDetails = (issueId) => {
     navigate(`/issue/${issueId}`);
+  };
+
+  const handleBoost = (issue) => {
+    Swal.fire({
+      title: 'Boost Issue Priority?',
+      text: "Confirm payment of 100tk to boost this issue to High priority? You will be redirected to Stripe to complete the payment.",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#238ae9',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Yes, Pay 100tk',
+      cancelButtonText: 'Cancel',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        createBoostCheckoutMutation.mutate(issue._id);
+      }
+    });
   };
 
   if (isLoading) {
@@ -246,7 +312,7 @@ const MyIssues = () => {
                       </span>
                     )}
                   </div>
-                  <p className="text-gray-600 text-sm font-['Satoshi'] mb-2 line-clamp-2">
+                  <p className="text-gray-600 text-sm font-['Satoshi'] mb-2 line-clamp-1 max-w-md">
                     {issue.description}
                   </p>
                   <div className="flex flex-wrap gap-4 text-sm text-gray-500">
@@ -271,6 +337,17 @@ const MyIssues = () => {
                       className="flex items-center gap-2 px-4 py-2 bg-amber-100 text-amber-700 rounded-lg font-['Satoshi'] font-medium hover:bg-amber-200 transition-colors"
                     >
                       <FiEdit2 /> Edit
+                    </button>
+                  )}
+
+                  {/* Boost Button - Only for Premium Users */}
+                  {isPremium && issue.priority !== 'high' && issue.priority !== 'High' && !isSelectMode && (
+                    <button
+                      onClick={() => handleBoost(issue)}
+                      disabled={createBoostCheckoutMutation.isPending}
+                      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-400 to-orange-500 text-white rounded-lg font-['Satoshi'] font-medium hover:shadow-lg transition-all disabled:opacity-50"
+                    >
+                      <FiTrendingUp /> {createBoostCheckoutMutation.isPending ? 'Processing...' : 'Boost (100tk)'}
                     </button>
                   )}
                   

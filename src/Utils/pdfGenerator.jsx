@@ -1,5 +1,6 @@
 import React from 'react';
 import { Document, Page, Text, View, StyleSheet, pdf } from '@react-pdf/renderer';
+import Swal from 'sweetalert2';
 
 // Create styles
 const styles = StyleSheet.create({
@@ -138,7 +139,12 @@ export const generateInvoicePDF = async (payment, user) => {
   } catch (error) {
     console.error('Error generating PDF:', error);
     // Fallback: Show error message
-    alert('Failed to generate PDF. Please try again.');
+    Swal.fire({
+      title: 'PDF Generation Failed',
+      text: 'Failed to generate PDF. Please try again.',
+      icon: 'error',
+      confirmButtonColor: '#238ae9',
+    });
     throw error;
   }
 };

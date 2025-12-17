@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import useAuth from '../../../hooks/useAuth';
+import useRole from '../../../hooks/useRole';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { FiFileText, FiClock, FiCheckCircle, FiTrendingUp } from 'react-icons/fi';
 import StatCard from '../Shared/StatCard';
@@ -7,6 +8,7 @@ import IssueCharts from './IssueCharts';
 
 const CitizenOverview = () =>{
   const { user } = useAuth();
+  const { isPremium } = useRole();
   const axiosSecure = useAxiosSecure();
 
   // Fetch user's issues
@@ -98,8 +100,29 @@ const CitizenOverview = () =>{
         />
       </div>
 
-      {/* Charts */}
-      <IssueCharts issues={issues} />
+      {/* Charts - Only for Premium Users */}
+      {isPremium ? (
+        <IssueCharts issues={issues} />
+      ) : (
+        <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 text-center">
+          <div className="max-w-md mx-auto">
+            <div className="mb-4">
+              <svg className="w-16 h-16 mx-auto text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-[#242424] font-['Satoshi'] mb-2">
+              Premium Analytics
+            </h3>
+            <p className="text-gray-600 font-['Satoshi'] mb-4">
+              Upgrade to premium to unlock detailed analytics and insights about your reported issues.
+            </p>
+            <p className="text-sm text-gray-500 font-['Satoshi']">
+              Get access to status distribution charts, category breakdowns, monthly trends, and more!
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Recent Issues */}
       <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">

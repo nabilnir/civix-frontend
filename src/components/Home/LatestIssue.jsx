@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router';
-import { FiMapPin, FiClock, FiTag, FiArrowRight } from 'react-icons/fi';
+import { FiMapPin, FiClock, FiTag, FiArrowRight, FiThumbsUp } from 'react-icons/fi';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosPublic from '../../hooks/useAxiosPublic';
 import AOS from 'aos';
@@ -108,6 +108,24 @@ const LatestIssue = () => {
                                             </span>
                                         </div>
                                     </div>
+                                    
+                                    {/* Upvote Count */}
+                                    {(issue.upvotes > 0 || issue.upvotedBy?.length > 0) && (
+                                        <div className="mt-3">
+                                            <button
+                                                className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#238ae9]/10 hover:bg-[#238ae9]/20 text-[#238ae9] rounded-lg font-['Satoshi'] text-sm font-medium transition-colors"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    navigate(`/issue/${issue._id}`);
+                                                }}
+                                            >
+                                                <FiThumbsUp className="fill-[#238ae9]" size={16} />
+                                                <span>
+                                                    Upvoted by {issue.upvotes || issue.upvotedBy?.length || 0} {issue.upvotes === 1 || issue.upvotedBy?.length === 1 ? 'person' : 'people'}
+                                                </span>
+                                            </button>
+                                        </div>
+                                    )}
                                     
                                     <div 
                                         className="mt-4 inline-flex items-center font-['Satoshi'] text-[#238ae9] font-semibold text-sm hover:text-[#1e7acc] transition-colors"

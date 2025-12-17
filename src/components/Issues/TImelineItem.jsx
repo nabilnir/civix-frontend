@@ -1,30 +1,49 @@
 import React from 'react';
-import { FiCheckCircle, FiClock, FiUser, FiAlertCircle } from 'react-icons/fi';
+import { FiUser } from 'react-icons/fi';
+import { Clock, CheckCircle2, UserCheck, Loader2, Wrench, XCircle, AlertCircle } from 'lucide-react';
 
 const TimelineItem = ({ entry }) => {
   if (!entry) return null;
 
   const getStatusIcon = (status) => {
     const statusLower = status?.toLowerCase() || '';
-    if (statusLower.includes('resolved') || statusLower.includes('closed')) {
-      return <FiCheckCircle className="text-green-500" size={12} />;
+    const iconSize = 20;
+    const iconClass = 'text-white';
+    
+    if (statusLower.includes('resolved')) {
+      return <CheckCircle2 className={iconClass} size={iconSize} />;
     }
-    if (statusLower.includes('progress') || statusLower.includes('working')) {
-      return <FiClock className="text-blue-500" size={12} />;
+    if (statusLower.includes('closed')) {
+      return <XCircle className={iconClass} size={iconSize} />;
+    }
+    if (statusLower.includes('in-progress') || statusLower.includes('in progress')) {
+      return <Loader2 className={`${iconClass} animate-spin`} size={iconSize} />;
+    }
+    if (statusLower.includes('working')) {
+      return <Wrench className={iconClass} size={iconSize} />;
+    }
+    if (statusLower.includes('assigned')) {
+      return <UserCheck className={iconClass} size={iconSize} />;
     }
     if (statusLower.includes('pending')) {
-      return <FiAlertCircle className="text-yellow-500" size={12} />;
+      return <Clock className={iconClass} size={iconSize} />;
     }
-    return <FiClock className="text-gray-500" size={12} />;
+    return <AlertCircle className={iconClass} size={iconSize} />;
   };
 
   const getStatusColor = (status) => {
     const statusLower = status?.toLowerCase() || '';
-    if (statusLower.includes('resolved') || statusLower.includes('closed')) {
+    if (statusLower.includes('resolved')) {
       return 'bg-green-500';
+    }
+    if (statusLower.includes('closed')) {
+      return 'bg-gray-600';
     }
     if (statusLower.includes('progress') || statusLower.includes('working')) {
       return 'bg-blue-500';
+    }
+    if (statusLower.includes('assigned')) {
+      return 'bg-purple-500';
     }
     if (statusLower.includes('pending')) {
       return 'bg-yellow-500';
@@ -58,16 +77,14 @@ const TimelineItem = ({ entry }) => {
 
   return (
     <div className="relative">
-      {/* Timeline Dot */}
-      <span
-        className={`absolute -left-[41px] top-1 h-5 w-5 rounded-full ${getStatusColor(
+      {/* Timeline Icon */}
+      <div
+        className={`absolute -left-[45px] top-0 h-10 w-10 rounded-full ${getStatusColor(
           entry.status
-        )} border-4 border-white shadow-sm flex items-center justify-center`}
+        )} border-4 border-white shadow-lg flex items-center justify-center`}
       >
-        <div className="text-white">
-          {getStatusIcon(entry.status)}
-        </div>
-      </span>
+        {getStatusIcon(entry.status)}
+      </div>
 
       {/* Timeline Content */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">

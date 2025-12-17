@@ -1,9 +1,11 @@
 import { Outlet } from 'react-router'
 import Sidebar from '../components/Dashboard/Shared/SideBar'
 import { useState } from 'react'
+import useTitle from '../hooks/useTitle'
 
 const DashboardLayout = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  useTitle(); // Automatically updates title based on current route
 
   return (
     <div className={`drawer ${isDrawerOpen ? 'drawer-open' : ''} lg:drawer-open`}>

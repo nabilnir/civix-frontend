@@ -1,10 +1,12 @@
 import React  from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { FiCalendar, FiMapPin, FiTag, FiUser, FiCheckCircle, FiAlertTriangle, FiTrash2, FiEdit2, FiTrendingUp } from 'react-icons/fi';
+import { FiCalendar, FiMapPin, FiTag, FiUser, FiCheckCircle, FiAlertTriangle, FiTrash2, FiEdit2, FiTrendingUp, FiThumbsUp } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import useAuth from '../../hooks/useAuth';
+import useRole from '../../hooks/useRole';
+import useTitle from '../../hooks/useTitle';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import useAxiosPublic from '../../hooks/useAxiosPublic';
 import Timeline from './Timeline';
@@ -13,6 +15,7 @@ import StatusBadge from './StatusBadge';
 const IssueDetails = () => {
     const { id } = useParams();
     const { user } = useAuth();
+    const { isPremium } = useRole();
     const axiosSecure = useAxiosSecure();
     const axiosPublic = useAxiosPublic();
     const navigate = useNavigate();
@@ -28,6 +31,9 @@ const IssueDetails = () => {
     });
 
     const issue = issueData;
+
+    // Set dynamic page title based on issue title
+    useTitle(issue?.title ? `Issue: ${issue.title}` : 'Issue Details');
 
     // --- Mutations ---
 
@@ -156,9 +162,19 @@ const IssueDetails = () => {
                                     <FiUser className="text-[#238ae9]" />
                                     <span>Reported by: <span className="font-semibold text-gray-700">{issue.userName || issue.reporterName || 'Unknown'}</span></span>
                                 </div>
-                                <div className="flex items-center gap-3">
-                                    <FiMapPin className="text-[#238ae9]" />
-                                    <span>{issue.location}</span>
+                                <div className="flex flex-col gap-2">
+                                    <div className="flex items-start gap-3">
+                                        <FiMapPin className="text-[#238ae9] shrink-0 mt-0.5" size={16} />
+                                        <span className="flex-1">{issue.location}</span>
+                                    </div>
+                                    {(issue.upvotes > 0 || issue.upvotedBy?.length > 0) && (
+                                        <div className="flex items-center gap-2 pl-7">
+                                            <FiThumbsUp className="fill-[#238ae9] text-[#238ae9] shrink-0" size={14} />
+                                            <span className="text-sm text-gray-600 font-['Satoshi']">
+                                                Upvoted by {issue.upvotes || issue.upvotedBy?.length || 0} {issue.upvotes === 1 || issue.upvotedBy?.length === 1 ? 'person' : 'people'}
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <FiCalendar className="text-[#238ae9]" />
@@ -233,8 +249,8 @@ const IssueDetails = () => {
                                         </button>
                                     )}
 
-                                    {/* Boost Button */}
-                                    {issue.priority !== 'high' && issue.priority !== 'High' && (
+                                    {/* Boost Button - Only for Premium Users */}
+                                    {isPremium && issue.priority !== 'high' && issue.priority !== 'High' && (
                                         <button 
                                             onClick={handleBoost}
                                             disabled={createBoostCheckoutMutation.isPending}

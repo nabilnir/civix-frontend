@@ -164,6 +164,14 @@ export const COLORS = {
   GRAY: '#6b7280',
 };
 
+// Site Information
+export const SITE_INFO = {
+  NAME: 'Civix',
+  FULL_NAME: 'Civix - Citizen Issue Reporting Platform',
+  TAGLINE: 'Empowering citizens to report, track, and resolve infrastructure issues',
+  DESCRIPTION: 'Building better communities together',
+};
+
 export default {
   ISSUE_STATUS,
   ISSUE_PRIORITY,
@@ -181,5 +189,6 @@ export default {
   TOAST_MESSAGES,
   VALIDATION,
   COLORS,
+  SITE_INFO,
 };
 
