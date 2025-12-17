@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import useAuth from '../../../hooks/useAuth';
 import useRole from '../../../hooks/useRole';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
-import { FiFileText, FiClock, FiCheckCircle, FiTrendingUp } from 'react-icons/fi';
+import { FiFileText, FiClock, FiCheckCircle, FiTrendingUp, FiDollarSign } from 'react-icons/fi';
 import StatCard from '../Shared/StatCard';
 import IssueCharts from './IssueCharts';
 
@@ -73,7 +73,7 @@ const CitizenOverview = () =>{
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         <StatCard
           title="Total Issues"
           value={totalIssues}
@@ -97,6 +97,12 @@ const CitizenOverview = () =>{
           value={resolvedIssues}
           icon={<FiCheckCircle />}
           color="green"
+        />
+        <StatCard
+          title="Total Payments"
+          value={Stats.totalPayments || 0}
+          icon={<FiDollarSign />}
+          color="indigo"
         />
       </div>
 
