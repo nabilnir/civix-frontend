@@ -11,19 +11,19 @@ A comprehensive digital platform that enables citizens to report real-world publ
 
 ## Admin Credentials
 
-- **Email:** `admin@civix.com`
-- **Password:** `Admin@123`
+- **Email:** `arman@khan.com`
+- **Password:** `Uptod0Wn`
 
 ## Test Credentials
 
 ### Staff Account
-- **Email:** `staff@civix.com`
-- **Password:** `Staff@123`
+- **Email:** `rafat@gmail.com`
+- **Password:** `civix@123`
 - *Note: This staff account has assigned issues and is actively working on them.*
 
 ### Citizen Account (Non-Premium)
-- **Email:** `citizen@civix.com`
-- **Password:** `Citizen@123`
+- **Email:** `user@demon.com`
+- **Password:** `Civix@123`
 - *Note: This citizen account has already posted 2 issues and is not a premium user.*
 
 ## Key Features
