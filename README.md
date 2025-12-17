@@ -4,9 +4,9 @@ A comprehensive digital platform that enables citizens to report real-world publ
 
 ## Live Site
 
-**Client:** [https://civix-auth-system.web.app](https://civix-auth-system.web.app)
+**URL:** [https://civix-auth-system.web.app](https://civix-auth-system.web.app)
 
-**Server:** [https://civix-backend-livid.vercel.app](https://civix-backend-livid.vercel.app)
+
 
 
 ## Admin Credentials
@@ -14,17 +14,6 @@ A comprehensive digital platform that enables citizens to report real-world publ
 - **Email:** `arman@khan.com`
 - **Password:** `Uptod0Wn`
 
-## Test Credentials
-
-### Staff Account
-- **Email:** `rafat@gmail.com`
-- **Password:** `civix@123`
-- *Note: This staff account has assigned issues and is actively working on them.*
-
-### Citizen Account (Non-Premium)
-- **Email:** `user@demo.com`
-- **Password:** `Civix@123`
-- *Note: This citizen account has already posted 2 issues and is not a premium user.*
 
 ## Key Features
 
