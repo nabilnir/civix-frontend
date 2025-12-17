@@ -22,7 +22,7 @@ A comprehensive digital platform that enables citizens to report real-world publ
 - *Note: This staff account has assigned issues and is actively working on them.*
 
 ### Citizen Account (Non-Premium)
-- **Email:** `user@demon.com`
+- **Email:** `user@demo.com`
 - **Password:** `Civix@123`
 - *Note: This citizen account has already posted 2 issues and is not a premium user.*
 
