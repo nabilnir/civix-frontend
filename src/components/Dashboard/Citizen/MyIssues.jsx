@@ -70,7 +70,7 @@ const MyIssues = () => {
   };
 
   const handleAddNew = () => {
-    navigate('/report-issue');
+    navigate('/dashboard/report-issue');
   };
 
   const toggleSelectMode = () => {
@@ -178,6 +178,7 @@ const MyIssues = () => {
             <option value="streetlight">Streetlight</option>
             <option value="pothole">Pothole</option>
             <option value="water">Water Leakage</option>
+            <option value="sewerage">Sewerage</option>
             <option value="garbage">Garbage</option>
             <option value="footpath">Footpath</option>
             <option value="other">Other</option>

@@ -183,50 +183,51 @@ const CitizenProfile = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6 px-2 md:px-0">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-[#242424] font-['Satoshi'] mb-2">
+        <h1 className="text-2xl md:text-3xl font-bold text-[#242424] font-['Satoshi'] mb-2">
           My Profile
         </h1>
-        <p className="text-gray-600 font-['Satoshi']">
+        <p className="text-sm md:text-base text-gray-600 font-['Satoshi']">
           Manage your account information and subscription
         </p>
       </div>
 
       {/* Blocked Warning */}
       {isBlocked && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-3">
-          <FiAlertTriangle className="text-red-500 text-xl flex-shrink-0 mt-0.5" />
-          <div>
-            <h3 className="font-bold text-red-700 font-['Satoshi'] mb-1">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-3 md:p-4 flex items-start gap-2 md:gap-3">
+          <FiAlertTriangle className="text-red-500 text-lg md:text-xl flex-shrink-0 mt-0.5" />
+          <div className="min-w-0">
+            <h3 className="font-bold text-red-700 font-['Satoshi'] mb-1 text-sm md:text-base">
               Account Blocked
             </h3>
-            <p className="text-red-600 text-sm font-['Satoshi']">
+            <p className="text-red-600 text-xs md:text-sm font-['Satoshi']">
               Your account has been blocked by the administrator. Please contact the authorities for assistance.
             </p>
           </div>
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
         {/* Profile Form */}
-        <div className="lg:col-span-2 bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <h2 className="text-xl font-bold text-[#242424] font-['Satoshi'] mb-6">
+        <div className="lg:col-span-2 bg-white rounded-xl p-4 md:p-6 shadow-sm border border-gray-100">
+          <h2 className="text-lg md:text-xl font-bold text-[#242424] font-['Satoshi'] mb-4 md:mb-6">
             Personal Information
           </h2>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
             {/* Profile Picture */}
-            <div className="flex items-center gap-6">
-              <div className="relative">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 md:gap-6">
+              <div className="relative flex-shrink-0">
                 <img
                   src={imagePreview || profileData?.photoURL || user?.photoURL || 'https://i.ibb.co/2W8Py4W/default-avatar.png'}
                   alt="Profile"
-                  className="w-24 h-24 rounded-full object-cover border-4 border-[#238ae9]"
+                  className="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover object-top border-4 border-[#238ae9]"
+                  style={{ objectPosition: 'center top' }}
                 />
-                <label className="absolute bottom-0 right-0 p-2 bg-[#238ae9] text-white rounded-full cursor-pointer hover:bg-[#1e7acc] transition-colors">
-                  <FiCamera size={16} />
+                <label className="absolute bottom-0 right-0 p-1.5 md:p-2 bg-[#238ae9] text-white rounded-full cursor-pointer hover:bg-[#1e7acc] transition-colors">
+                  <FiCamera size={14} className="md:w-4 md:h-4" />
                   <input
                     type="file"
                     accept="image/*"
@@ -235,16 +236,16 @@ const CitizenProfile = () => {
                   />
                 </label>
               </div>
-              <div>
-                <p className="font-['Satoshi'] font-semibold text-[#242424]">
+              <div className="flex-1 text-center sm:text-left min-w-0">
+                <p className="font-['Satoshi'] font-semibold text-[#242424] text-base md:text-lg truncate">
                   {profileData?.name || user?.displayName || 'User'}
                 </p>
-                <p className="font-['Satoshi'] text-sm text-gray-500">
+                <p className="font-['Satoshi'] text-xs md:text-sm text-gray-500 break-all">
                   {user?.email}
                 </p>
                 {isPremium && (
-                  <span className="inline-flex items-center gap-1 mt-2 px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-white rounded-full text-xs font-bold font-['Satoshi']">
-                    <FaCrown size={12} /> Premium Member
+                  <span className="inline-flex items-center gap-1 mt-2 px-2 md:px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-white rounded-full text-xs font-bold font-['Satoshi']">
+                    <FaCrown size={10} className="md:w-3 md:h-3" /> Premium Member
                   </span>
                 )}
               </div>
@@ -258,11 +259,11 @@ const CitizenProfile = () => {
               <input
                 {...register('name', { required: 'Name is required' })}
                 type="text"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
+                className="w-full px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
                 disabled={isBlocked}
               />
               {errors.name && (
-                <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+                <p className="text-red-500 text-xs md:text-sm mt-1">{errors.name.message}</p>
               )}
             </div>
 
@@ -271,9 +272,9 @@ const CitizenProfile = () => {
               <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
                 Email
               </label>
-              <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg">
-                <FiMail className="text-gray-400" />
-                <span className="font-['Satoshi'] text-gray-700">{user?.email}</span>
+              <div className="flex items-center gap-2 px-3 md:px-4 py-2.5 md:py-3 bg-gray-50 border border-gray-300 rounded-lg min-w-0">
+                <FiMail className="text-gray-400 flex-shrink-0" size={18} />
+                <span className="font-['Satoshi'] text-gray-700 text-xs md:text-sm break-all">{user?.email}</span>
               </div>
               <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
             </div>
@@ -282,7 +283,7 @@ const CitizenProfile = () => {
             <button
               type="submit"
               disabled={isBlocked || updateMutation.isPending}
-              className="w-full px-6 py-3 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] font-semibold hover:bg-[#1e7acc] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full px-4 md:px-6 py-2.5 md:py-3 text-sm md:text-base bg-[#238ae9] text-white rounded-lg font-['Satoshi'] font-semibold hover:bg-[#1e7acc] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {updateMutation.isPending ? 'Updating...' : 'Update Profile'}
             </button>
@@ -291,7 +292,7 @@ const CitizenProfile = () => {
             <button
               type="button"
               onClick={handleLogout}
-              className="w-full px-6 py-3 mt-3 border border-red-200 text-red-600 rounded-lg font-['Satoshi'] font-semibold hover:bg-red-50 transition-colors"
+              className="w-full px-4 md:px-6 py-2.5 md:py-3 text-sm md:text-base border border-red-200 text-red-600 rounded-lg font-['Satoshi'] font-semibold hover:bg-red-50 transition-colors"
             >
               Log Out
             </button>
@@ -299,7 +300,7 @@ const CitizenProfile = () => {
         </div>
 
         {/* Subscription Card */}
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
           <SubscriptionCard
             isPremium={isPremium}
             isBlocked={isBlocked}
@@ -309,26 +310,26 @@ const CitizenProfile = () => {
           />
 
           {/* Account Stats */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <h3 className="text-lg font-bold text-[#242424] font-['Satoshi'] mb-4">
+          <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm border border-gray-100">
+            <h3 className="text-base md:text-lg font-bold text-[#242424] font-['Satoshi'] mb-3 md:mb-4">
               Account Statistics
             </h3>
-            <div className="space-y-3">
+            <div className="space-y-2 md:space-y-3">
               <div className="flex justify-between items-center">
-                <span className="font-['Satoshi'] text-gray-600">Total Issues</span>
-                <span className="font-['Satoshi'] font-bold text-[#242424]">
+                <span className="font-['Satoshi'] text-sm md:text-base text-gray-600">Total Issues</span>
+                <span className="font-['Satoshi'] text-sm md:text-base font-bold text-[#242424]">
                   {profileData?.issueCount || 0}
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="font-['Satoshi'] text-gray-600">Role</span>
-                <span className="font-['Satoshi'] font-bold text-[#242424] capitalize">
+                <span className="font-['Satoshi'] text-sm md:text-base text-gray-600">Role</span>
+                <span className="font-['Satoshi'] text-sm md:text-base font-bold text-[#242424] capitalize">
                   {role}
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="font-['Satoshi'] text-gray-600">Member Since</span>
-                <span className="font-['Satoshi'] font-bold text-[#242424]">
+                <span className="font-['Satoshi'] text-sm md:text-base text-gray-600">Member Since</span>
+                <span className="font-['Satoshi'] text-sm md:text-base font-bold text-[#242424]">
                   {profileData?.createdAt
                     ? new Date(profileData.createdAt).toLocaleDateString()
                     : 'N/A'}

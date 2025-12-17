@@ -145,6 +145,7 @@ const ReportIssueForm = ({
           <option value="streetlight">Streetlight</option>
           <option value="pothole">Pothole</option>
           <option value="water">Water Leakage</option>
+          <option value="sewerage">Sewerage</option>
           <option value="garbage">Garbage</option>
           <option value="footpath">Footpath</option>
           <option value="safety">Safety</option>

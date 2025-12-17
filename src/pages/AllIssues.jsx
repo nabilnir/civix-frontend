@@ -131,6 +131,9 @@ const AllIssues = () => {
                     <h1 className="font-['Satoshi'] text-4xl md:text-5xl font-bold text-[#242424] mb-4 leading-tight">
                         All Citizen Reports
                     </h1>
+                    <p className="font-['Satoshi'] text-lg text-gray-600 max-w-2xl mx-auto">
+                        Browse and track all community-reported issues. Your voice matters in building a better city.
+                    </p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">

@@ -163,22 +163,22 @@ const AssignedIssues = () => {
             <table className="w-full">
               <thead className="bg-[#f4f6f8]">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase min-w-[300px]">
                     Issue
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase whitespace-nowrap">
                     Category
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase whitespace-nowrap min-w-[120px]">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase whitespace-nowrap min-w-[100px]">
                     Priority
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase min-w-[200px]">
                     Location
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase whitespace-nowrap">
                     Action
                   </th>
                 </tr>
@@ -208,16 +208,16 @@ const AssignedIssues = () => {
                           {issue.category}
                         </span>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-4 whitespace-nowrap">
                         <StatusBadge status={issue.status} />
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-4 whitespace-nowrap">
                         {(issue.priority === 'high' || issue.priority === 'High') ? (
-                          <span className="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-bold font-['Satoshi']">
+                          <span className="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-bold font-['Satoshi'] whitespace-nowrap">
                             High
                           </span>
                         ) : (
-                          <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-['Satoshi']">
+                          <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-['Satoshi'] whitespace-nowrap">
                             Normal
                           </span>
                         )}

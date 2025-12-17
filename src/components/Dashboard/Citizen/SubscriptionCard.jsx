@@ -41,31 +41,31 @@ const SubscriptionCard = ({
 
   if (isPremium) {
     return (
-      <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl p-6 shadow-lg">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-          <div className="bg-amber-500 rounded-full p-2 flex items-center justify-center">
-            <FaCrown className="text-white" size={22} />
+      <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl p-4 md:p-6 shadow-lg">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+          <div className="flex items-center gap-2 md:gap-3">
+          <div className="bg-amber-500 rounded-full p-1.5 md:p-2 flex items-center justify-center flex-shrink-0">
+            <FaCrown className="text-white" size={18} />
           </div>
-            <div>
-              <h3 className="text-xl font-bold text-amber-900 font-['Satoshi']">
+            <div className="min-w-0">
+              <h3 className="text-lg md:text-xl font-bold text-amber-900 font-['Satoshi'] truncate">
                 Premium Member
               </h3>
-              <p className="text-sm text-amber-700 font-['Satoshi']">
+              <p className="text-xs md:text-sm text-amber-700 font-['Satoshi']">
                 You have unlimited access
               </p>
             </div>
           </div>
-          <span className="px-3 py-1 bg-amber-500 text-white rounded-full text-xs font-bold font-['Satoshi']">
+          <span className="px-2 md:px-3 py-1 bg-amber-500 text-white rounded-full text-xs font-bold font-['Satoshi'] flex-shrink-0">
             ACTIVE
           </span>
         </div>
 
-        <div className="space-y-2 mb-6">
+        <div className="space-y-2 mb-4 md:mb-6">
           {premiumBenefits.map((benefit, index) => (
             <div key={index} className="flex items-center gap-2">
-              <FiCheckCircle className="text-amber-600 flex-shrink-0" size={18} />
-              <span className="text-amber-900 font-['Satoshi'] text-sm">{benefit}</span>
+              <FiCheckCircle className="text-amber-600 flex-shrink-0" size={16} />
+              <span className="text-amber-900 font-['Satoshi'] text-xs md:text-sm">{benefit}</span>
             </div>
           ))}
         </div>
@@ -81,18 +81,18 @@ const SubscriptionCard = ({
 
   // Free user - show upgrade option
   return (
-    <div className="bg-white border-2 border-gray-200 rounded-xl p-6 shadow-sm">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h3 className="text-xl font-bold text-[#242424] font-['Satoshi'] mb-1">
+    <div className="bg-white border-2 border-gray-200 rounded-xl p-4 md:p-6 shadow-sm">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+        <div className="min-w-0 flex-1">
+          <h3 className="text-lg md:text-xl font-bold text-[#242424] font-['Satoshi'] mb-1">
             Free Plan
           </h3>
-          <p className="text-sm text-gray-600 font-['Satoshi']">
+          <p className="text-xs md:text-sm text-gray-600 font-['Satoshi']">
             {issueCount} / 3 issues reported
           </p>
         </div>
-        <div className="text-right">
-          <p className="text-2xl font-bold text-[#238ae9] font-['Satoshi']">1000</p>
+        <div className="text-right flex-shrink-0">
+          <p className="text-xl md:text-2xl font-bold text-[#238ae9] font-['Satoshi']">1000</p>
           <p className="text-xs text-gray-500 font-['Satoshi']">BDT / one-time</p>
         </div>
       </div>
@@ -118,11 +118,11 @@ const SubscriptionCard = ({
       </div>
 
       {/* Benefits */}
-      <div className="space-y-2 mb-6">
+      <div className="space-y-2 mb-4 md:mb-6">
         {premiumBenefits.map((benefit, index) => (
           <div key={index} className="flex items-center gap-2">
-            <FiCheckCircle className="text-gray-400 flex-shrink-0" size={16} />
-            <span className="text-gray-600 font-['Satoshi'] text-sm">{benefit}</span>
+            <FiCheckCircle className="text-gray-400 flex-shrink-0" size={14} />
+            <span className="text-gray-600 font-['Satoshi'] text-xs md:text-sm">{benefit}</span>
           </div>
         ))}
       </div>
@@ -137,7 +137,7 @@ const SubscriptionCard = ({
           }
         }}
         disabled={isLoading}
-        className="w-full px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg font-['Satoshi'] font-bold hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 disabled:opacity-50"
+        className="w-full px-4 md:px-6 py-2.5 md:py-3 text-sm md:text-base bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg font-['Satoshi'] font-bold hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 disabled:opacity-50"
       >
             {isLoading ? (
           <>

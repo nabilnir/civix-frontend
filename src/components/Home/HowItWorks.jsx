@@ -107,7 +107,7 @@ const HowItWorks = () => {
                         >
                             {/* Content Block */}
                             <div 
-                                className={`w-5/12 p-4 ${index % 2 === 0 ? 'pr-12 text-right' : 'pl-12 text-left'}`}
+                                className={`w-5/12 p-4 ${index % 2 === 0 ? 'pr-4 text-right' : 'pl-4 text-left'}`}
                                 data-aos={index % 2 === 0 ? 'fade-right' : 'fade-left'} 
                                 data-aos-duration="800" 
                                 data-aos-delay={step.aosDelay}

@@ -30,7 +30,7 @@ const StatusBadge = ({ status }) => {
   }
 
   return (
-    <span className={`px-2 py-1 text-xs font-bold rounded-full font-['Satoshi'] capitalize ${badgeClass}`}>
+    <span className={`px-2 py-1 text-xs font-bold rounded-full font-['Satoshi'] capitalize whitespace-nowrap ${badgeClass}`}>
       {displayText}
     </span>
   );

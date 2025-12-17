@@ -59,7 +59,7 @@ const teamMembers = [
         bio: 'Manages CI/CD pipelines and cloud infrastructure. Ensures seamless deployments and optimal server performance.',
         linkedin: 'https://linkedin.com/in/imranchowdhury',
         github: 'https://github.com/imranops',
-        imgUrl: 'https://i.pinimg.com/736x/02/00/4e/02004ec122887b94030c45a5658a4a18.jpg'
+        imgUrl: 'https://i.pinimg.com/736x/c9/bb/95/c9bb9512b1ce4319510746e642657085.jpg'
     },
     {
         id: 7,
@@ -77,7 +77,7 @@ const teamMembers = [
         bio: 'Ensures every feature works flawlessly. Conducts rigorous testing and maintains high code quality standards.',
         linkedin: 'https://linkedin.com/in/karimmalik',
         github: 'https://github.com/karimqa',
-        imgUrl: 'https://i.pinimg.com/736x/dc/e1/a8/dce1a8c3ada0a91ff6ed24f06a6ce82a.jpg'
+        imgUrl: 'https://i.pinimg.com/736x/73/a7/20/73a7209f5e656ff1d6e0af662b6f8904.jpg'
     },
     {
         id: 9,
@@ -86,7 +86,7 @@ const teamMembers = [
         bio: 'Connects with citizens and stakeholders. Gathers feedback and ensures Civix truly serves the community\'s needs.',
         linkedin: 'https://linkedin.com/in/ayeshabegum',
         github: 'https://github.com/ayeshacommunity',
-        imgUrl: 'https://i.pinimg.com/736x/73/a7/20/73a7209f5e656ff1d6e0af662b6f8904.jpg'
+        imgUrl: 'https://i.pinimg.com/736x/d7/5d/d6/d75dd6d7f814468920f1cd1f7cc8d557.jpg'
     }
 ];
 const Contact = () => {
@@ -147,6 +147,7 @@ const Contact = () => {
                                         src={member.imgUrl} 
                                         alt={member.name} 
                                         className="w-48 h-48 rounded-full object-cover transition-transform duration-500 group-hover:scale-105 ring-4 ring-[#238ae9]/15"
+                                        style={{ objectPosition: 'center top' }}
                                         onError={(e) => { 
                                             e.currentTarget.style.display = 'none'; 
                                             const fallback = e.currentTarget.closest('.avatar-shell')?.querySelector('.avatar-fallback');

@@ -4,7 +4,7 @@ import {
   FiHome, FiFileText, FiPlusCircle, FiUser, FiCreditCard, 
   FiUsers, FiSettings, FiBriefcase, FiList
 } from 'react-icons/fi';
-import { FaHouseChimney } from "react-icons/fa6";
+import { ChartPie } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import useAuth from '../../../hooks/useAuth';
 import useRole from '../../../hooks/useRole';
@@ -58,7 +58,7 @@ export default function Sidebar() {
 
   // Citizen Menu Items
   const citizenMenu = [
-    { name: 'Overview', path: '/dashboard', icon: <FiHome />, exact: true },
+    { name: 'Overview', path: '/dashboard', icon: <ChartPie size={20} />, exact: true },
     { name: 'My Issues', path: '/dashboard/my-issues', icon: <FiFileText /> },
     { name: 'Report Issue', path: '/dashboard/report-issue', icon: <FiPlusCircle /> },
     { name: 'Payment History', path: '/dashboard/payment-history', icon: <FiCreditCard /> },
@@ -67,14 +67,14 @@ export default function Sidebar() {
 
   // Staff Menu Items
   const staffMenu = [
-    { name: 'Overview', path: '/staff-dashboard', icon: <FiHome />, exact: true },
+    { name: 'Overview', path: '/staff-dashboard', icon: <ChartPie size={20} />, exact: true },
     { name: 'Assigned Issues', path: '/staff-dashboard/assigned-issues', icon: <FiList /> },
     { name: 'Profile', path: '/staff-dashboard/profile', icon: <FiUser /> },
   ];
 
   // Admin Menu Items
   const adminMenu = [
-    { name: 'Overview', path: '/admin-dashboard', icon: <FiHome />, exact: true },
+    { name: 'Overview', path: '/admin-dashboard', icon: <ChartPie size={20} />, exact: true },
     { name: 'All Issues', path: '/admin-dashboard/all-issues', icon: <FiFileText /> },
     { name: 'Manage Users', path: '/admin-dashboard/manage-users', icon: <FiUsers /> },
     { name: 'Manage Staff', path: '/admin-dashboard/manage-staff', icon: <FiBriefcase /> },
@@ -207,7 +207,7 @@ export default function Sidebar() {
           title={isCollapsed ? "Back to Home" : undefined}
         >
           {!isCollapsed && <span>←</span>}
-          <span className={isCollapsed ? 'text-lg' : ''}>{isCollapsed ? <FaHouseChimney /> : 'Back to Home'}</span>
+          <span className={isCollapsed ? 'text-lg' : ''}>{isCollapsed ? <FiHome size={20} /> : 'Back to Home'}</span>
           {/* Tooltip for collapsed state */}
           {isCollapsed && (
             <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 pointer-events-none">
