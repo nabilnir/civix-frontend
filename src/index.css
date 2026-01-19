@@ -4,11 +4,13 @@
 }
 
 @import 'tailwindcss';
-@plugin "daisyui";
-
+@plugin "daisyui" {
+    themes: light, dark;
+}
 
 body {
     font-family: Satoshi, sans-serif;
+    @apply bg-base-100 text-base-content;
 }
 
 
@@ -19,16 +21,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  @apply bg-base-200;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2563eb;
+  @apply bg-primary;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #1e40af;
+  @apply bg-primary-content;
 }
 
 /* Custom Utilities */
@@ -91,16 +93,16 @@ button, a {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f4f6f8;
+  @apply bg-base-200;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #238ae9;
+  @apply bg-primary;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #1e7acc;
+   @apply bg-primary/80;
 }
 
 /* Smooth slide animation for hero/banner */

@@ -11,13 +11,13 @@ import { validatePassword } from '../../Utils/passwordValidation';
 import Logo from '../../components/Shared/Logo';
 
 const Register = () => {
-  const { 
+  const {
     createUser,
     updateUserProfile,
     signInWithGoogle,
     loading,
     setLoading,
-    saveUserToDatabase 
+    saveUserToDatabase
   } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -140,22 +140,22 @@ const Register = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-[#f4f6f8]">
+      <div className="flex justify-center items-center min-h-screen bg-base-200">
         <div className="flex flex-col items-center gap-4">
           <div className="relative">
-            <div className="w-20 h-20 bg-gradient-to-br from-[#238ae9] to-[#1e7acc] rounded-2xl flex items-center justify-center shadow-lg animate-pulse">
-              <span className="text-white text-3xl font-bold font-['Satoshi']">C</span>
+            <div className="w-20 h-20 bg-gradient-to-br from-primary to-primary/80 rounded-2xl flex items-center justify-center shadow-lg animate-pulse">
+              <span className="text-primary-content text-3xl font-bold font-['Satoshi']">C</span>
             </div>
-            <div className="absolute -inset-1 border-4 border-[#238ae9] border-t-transparent rounded-2xl animate-spin"></div>
+            <div className="absolute -inset-1 border-4 border-primary border-t-transparent rounded-2xl animate-spin"></div>
           </div>
-          <p className="font-['Satoshi'] text-[#242424] font-medium">Loading...</p>
+          <p className="font-['Satoshi'] text-base-content font-medium">Loading...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f4f6f8] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-base-200 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full">
 
         {/* Logo & Header */}
@@ -163,22 +163,22 @@ const Register = () => {
           <div className="flex justify-center mb-6">
             <Logo size="lg" showText={true} />
           </div>
-          <h2 className="font-['Satoshi'] text-3xl font-bold text-[#242424] mb-2">
+          <h2 className="font-['Satoshi'] text-3xl font-bold text-base-content mb-2">
             Create Account
           </h2>
-          <p className="font-['Satoshi'] text-sm text-gray-600">
+          <p className="font-['Satoshi'] text-sm text-base-content/70">
             Join us in building better communities
           </p>
         </div>
 
         {/* Register Card */}
-        <div className="bg-white rounded-2xl shadow-lg p-8" data-aos="fade-up">
+        <div className="bg-base-100 rounded-2xl shadow-lg p-8" data-aos="fade-up">
 
           {/* Google Sign Up Button */}
           <button
             onClick={handleGoogleSignIn}
             disabled={loading}
-            className="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-200 hover:border-[#238ae9] hover:bg-[#f4f6f8] rounded-xl px-4 py-3 font-['Satoshi'] font-medium text-[#242424] transition-all mb-6"
+            className="w-full flex items-center justify-center gap-3 bg-base-100 border-2 border-base-300 hover:border-primary hover:bg-base-200 rounded-xl px-4 py-3 font-['Satoshi'] font-medium text-base-content transition-all mb-6"
           >
             <FcGoogle size={24} />
             <span>Continue with Google</span>
@@ -186,9 +186,9 @@ const Register = () => {
 
           {/* Divider */}
           <div className="flex items-center gap-4 mb-6">
-            <div className="flex-1 h-px bg-gray-200"></div>
-            <span className="font-['Satoshi'] text-sm text-gray-500">or sign up with email</span>
-            <div className="flex-1 h-px bg-gray-200"></div>
+            <div className="flex-1 h-px bg-base-300"></div>
+            <span className="font-['Satoshi'] text-sm text-base-content/50">or sign up with email</span>
+            <div className="flex-1 h-px bg-base-300"></div>
           </div>
 
           {/* Register Form */}
@@ -196,25 +196,25 @@ const Register = () => {
 
             {/* Name Field */}
             <div>
-              <label htmlFor="name" className="block font-['Satoshi'] font-semibold text-sm text-[#242424] mb-2">
+              <label htmlFor="name" className="block font-['Satoshi'] font-semibold text-sm text-base-content mb-2">
                 Full Name
               </label>
               <div className="relative">
-                <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40" size={20} />
                 <input
                   type="text"
                   name="name"
                   id="name"
                   required
                   placeholder="John Doe"
-                  className="w-full pl-11 pr-4 py-3 bg-[#f4f6f8] border-2 border-transparent rounded-xl font-['Satoshi'] text-[#242424] placeholder-gray-400 focus:outline-none focus:border-[#238ae9] focus:bg-white transition-all"
+                  className="w-full pl-11 pr-4 py-3 bg-base-200 border-2 border-transparent rounded-xl font-['Satoshi'] text-base-content placeholder-base-content/40 focus:outline-none focus:border-primary focus:bg-base-100 transition-all"
                 />
               </div>
             </div>
 
             {/* Profile Image Upload */}
             <div>
-              <label htmlFor="image" className="block font-['Satoshi'] font-semibold text-sm text-[#242424] mb-2">
+              <label htmlFor="image" className="block font-['Satoshi'] font-semibold text-sm text-base-content mb-2">
                 Profile Photo (Optional)
               </label>
               <div className="flex items-center gap-4">
@@ -222,15 +222,15 @@ const Register = () => {
                   <img
                     src={imagePreview}
                     alt="Preview"
-                    className="w-16 h-16 rounded-xl object-cover border-2 border-[#238ae9]"
+                    className="w-16 h-16 rounded-xl object-cover border-2 border-primary"
                   />
                 )}
                 <label
                   htmlFor="image"
-                  className="flex-1 flex items-center justify-center gap-2 bg-[#f4f6f8] border-2 border-dashed border-gray-300 hover:border-[#238ae9] rounded-xl px-4 py-3 cursor-pointer transition-all group"
+                  className="flex-1 flex items-center justify-center gap-2 bg-base-200 border-2 border-dashed border-base-300 hover:border-primary rounded-xl px-4 py-3 cursor-pointer transition-all group"
                 >
-                  <FiImage className="text-gray-400 group-hover:text-[#238ae9] transition-colors" size={20} />
-                  <span className="font-['Satoshi'] text-sm text-gray-600 group-hover:text-[#238ae9] transition-colors">
+                  <FiImage className="text-base-content/40 group-hover:text-primary transition-colors" size={20} />
+                  <span className="font-['Satoshi'] text-sm text-base-content/70 group-hover:text-primary transition-colors">
                     Choose Image
                   </span>
                   <input
@@ -243,36 +243,36 @@ const Register = () => {
                   />
                 </label>
               </div>
-              <p className="font-['Satoshi'] text-xs text-gray-500 mt-1">
+              <p className="font-['Satoshi'] text-xs text-base-content/50 mt-1">
                 PNG, JPG or JPEG (max 2MB)
               </p>
             </div>
 
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block font-['Satoshi'] font-semibold text-sm text-[#242424] mb-2">
+              <label htmlFor="email" className="block font-['Satoshi'] font-semibold text-sm text-base-content mb-2">
                 Email Address
               </label>
               <div className="relative">
-                <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40" size={20} />
                 <input
                   type="email"
                   name="email"
                   id="email"
                   required
                   placeholder="you@example.com"
-                  className="w-full pl-11 pr-4 py-3 bg-[#f4f6f8] border-2 border-transparent rounded-xl font-['Satoshi'] text-[#242424] placeholder-gray-400 focus:outline-none focus:border-[#238ae9] focus:bg-white transition-all"
+                  className="w-full pl-11 pr-4 py-3 bg-base-200 border-2 border-transparent rounded-xl font-['Satoshi'] text-base-content placeholder-base-content/40 focus:outline-none focus:border-primary focus:bg-base-100 transition-all"
                 />
               </div>
             </div>
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block font-['Satoshi'] font-semibold text-sm text-[#242424] mb-2">
+              <label htmlFor="password" className="block font-['Satoshi'] font-semibold text-sm text-base-content mb-2">
                 Password
               </label>
               <div className="relative">
-                <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40" size={20} />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
@@ -280,17 +280,17 @@ const Register = () => {
                   required
                   placeholder="Enter a strong password"
                   minLength={8}
-                  className="w-full pl-11 pr-12 py-3 bg-[#f4f6f8] border-2 border-transparent rounded-xl font-['Satoshi'] text-[#242424] placeholder-gray-400 focus:outline-none focus:border-[#238ae9] focus:bg-white transition-all"
+                  className="w-full pl-11 pr-12 py-3 bg-base-200 border-2 border-transparent rounded-xl font-['Satoshi'] text-base-content placeholder-base-content/40 focus:outline-none focus:border-primary focus:bg-base-100 transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#238ae9] transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/40 hover:text-primary transition-colors"
                 >
                   {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
                 </button>
               </div>
-              <p className="font-['Satoshi'] text-xs text-gray-500 mt-1">
+              <p className="font-['Satoshi'] text-xs text-base-content/50 mt-1">
                 Must be 8+ characters with uppercase, lowercase, number, and special character
               </p>
             </div>
@@ -299,7 +299,7 @@ const Register = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-gradient-to-r from-[#238ae9] to-[#1e7acc] hover:from-[#1e7acc] hover:to-[#238ae9] text-white font-['Satoshi'] font-bold py-3 rounded-xl shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/80 hover:to-primary text-primary-content font-['Satoshi'] font-bold py-3 rounded-xl shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isSubmitting ? (
                 <>
@@ -313,12 +313,12 @@ const Register = () => {
           </form>
 
           {/* Login Link */}
-          <p className="text-center mt-6 font-['Satoshi'] text-sm text-gray-600">
+          <p className="text-center mt-6 font-['Satoshi'] text-sm text-base-content/70">
             Already have an account?{' '}
             <Link
               to="/login"
               state={{ from: location.state?.from }}
-              className="text-[#238ae9] hover:text-[#1e7acc] font-semibold transition-colors"
+              className="text-primary hover:text-primary/80 font-semibold transition-colors"
             >
               Sign in
             </Link>
@@ -329,7 +329,7 @@ const Register = () => {
         <div className="text-center mt-6">
           <Link
             to="/"
-            className="font-['Satoshi'] text-sm text-gray-600 hover:text-[#238ae9] transition-colors inline-flex items-center gap-2"
+            className="font-['Satoshi'] text-sm text-base-content/70 hover:text-primary transition-colors inline-flex items-center gap-2"
           >
             ← Back to home
           </Link>

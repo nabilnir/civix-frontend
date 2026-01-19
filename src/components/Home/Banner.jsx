@@ -75,31 +75,30 @@ export default function Banner() {
     if (slides.length <= 1) return;
     const timer = setInterval(() => {
       nextSlide();
-    }, 5000); 
+    }, 5000);
 
     return () => clearInterval(timer);
   }, [nextSlide, slides.length]);
 
   return (
-    <section className="relative h-screen min-h-[600px] overflow-hidden bg-[#f4f6f8]">
+    <section className="relative h-screen min-h-[600px] overflow-hidden bg-base-200">
       {/* Slides Container */}
       <div className="relative h-full w-full">
         {slides.map((slide, index) => (
           <div
             key={slide.id}
-            className={`absolute inset-0 w-full h-full bg-cover bg-center ${
-              index === currentSlide 
-                ? 'opacity-100 scale-100 z-10' 
+            className={`absolute inset-0 w-full h-full bg-cover bg-center ${index === currentSlide
+                ? 'opacity-100 scale-100 z-10'
                 : 'opacity-0 scale-105 z-0 pointer-events-none'
-            }`}
-            style={{ 
+              }`}
+            style={{
               backgroundImage: `url(${slide.image})`,
               willChange: 'transform, opacity',
               transition: 'opacity 1000ms cubic-bezier(0.4, 0, 0.2, 1), transform 1000ms cubic-bezier(0.4, 0, 0.2, 1)'
             }}
           >
             {/* Gradient Overlay */}
-            <div 
+            <div
               className={`absolute inset-0 bg-gradient-to-r ${slide.gradient} opacity-90 transition-opacity duration-1000`}
               style={{
                 opacity: index === currentSlide ? 0.9 : 0
@@ -109,7 +108,7 @@ export default function Banner() {
             {/* Content */}
             <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex flex-col justify-center h-full text-white">
-                <div 
+                <div
                   className="max-w-2xl"
                   style={{
                     opacity: index === currentSlide ? 1 : 0,
@@ -118,9 +117,9 @@ export default function Banner() {
                     willChange: 'transform, opacity'
                   }}
                 >
-                  
+
                   {/* Subtitle */}
-                  <div 
+                  <div
                     className="mb-4"
                     style={{
                       opacity: index === currentSlide ? 1 : 0,
@@ -134,7 +133,7 @@ export default function Banner() {
                   </div>
 
                   {/* Main Title */}
-                  <h1 
+                  <h1
                     className="font-['Satoshi'] w-full text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight drop-shadow-lg"
                     style={{
                       opacity: index === currentSlide ? 1 : 0,
@@ -146,7 +145,7 @@ export default function Banner() {
                   </h1>
 
                   {/* Description */}
-                  <p 
+                  <p
                     className="font-['Satoshi'] text-lg md:text-xl text-white/90 mb-8 leading-relaxed drop-shadow-md"
                     style={{
                       opacity: index === currentSlide ? 1 : 0,
@@ -158,7 +157,7 @@ export default function Banner() {
                   </p>
 
                   {/* CTA Buttons  */}
-                  <div 
+                  <div
                     className="flex flex-wrap gap-4 mb-12"
                     style={{
                       opacity: index === currentSlide ? 1 : 0,
@@ -168,7 +167,7 @@ export default function Banner() {
                   >
                     <Link
                       to="/allissues"
-                      className="bg-white text-[#238ae9] px-8 py-4 rounded-xl font-['Satoshi'] font-bold text-base hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2 group"
+                      className="bg-base-100 text-primary px-8 py-4 rounded-xl font-['Satoshi'] font-bold text-base hover:bg-base-200 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2 group"
                     >
                       Report an Issue
                       <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
@@ -238,11 +237,10 @@ export default function Banner() {
               key={index}
               onClick={() => goToSlide(index)}
               disabled={isAnimating}
-              className={`transition-all duration-300 ease-out rounded-full ${
-                index === currentSlide
+              className={`transition-all duration-300 ease-out rounded-full ${index === currentSlide
                   ? 'w-12 h-3 bg-white'
                   : 'w-3 h-3 bg-white/50 hover:bg-white/75'
-              } disabled:cursor-not-allowed`}
+                } disabled:cursor-not-allowed`}
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}
