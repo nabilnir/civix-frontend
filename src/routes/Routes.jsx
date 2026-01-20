@@ -10,7 +10,13 @@ import { createBrowserRouter } from 'react-router'
 import Register from '../pages/SignUp/Register'
 import About from '../pages/About'
 import Contact from '../pages/Contact'
-import AllIssues from '../pages/AllIssues' 
+import AllIssues from '../pages/AllIssues'
+import Announcements from '../pages/Announcements'
+import HelpCenter from '../pages/HelpCenter'
+import TermsOfService from '../pages/TermsOfService'
+import AppPrivacy from '../pages/AppPrivacy'
+import CommunityGuidelines from '../pages/CommunityGuidelines'
+import FAQPage from '../pages/FAQPage'
 
 // Citizen Dashboard Components
 import CitizenOverview from '../components/Dashboard/Citizen/CitizenOverview'
@@ -47,22 +53,30 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path:'/aboutUs',
-        element: <About /> 
+        path: '/aboutUs',
+        element: <About />
       },
       {
-        path:'/contact',
-        element: <Contact /> 
+        path: '/contact',
+        element: <Contact />
       },
 
-      { 
+      {
         path: '/allissues',
         element: <AllIssues />
       },
-      
-     
       {
-        path: '/issue/:id', 
+        path: '/announcements',
+        element: (
+          <PrivateRoute>
+            <Announcements />
+          </PrivateRoute>
+        )
+      },
+
+
+      {
+        path: '/issue/:id',
         element: (
           <PrivateRoute>
             <IssueDetails />
@@ -81,7 +95,27 @@ export const router = createBrowserRouter([
         path: '/payment/cancel',
         element: <PaymentCancelPage />,
       },
-      
+      {
+        path: '/help',
+        element: <HelpCenter />,
+      },
+      {
+        path: '/terms',
+        element: <TermsOfService />,
+      },
+      {
+        path: '/privacy',
+        element: <AppPrivacy />,
+      },
+      {
+        path: '/community-guidelines',
+        element: <CommunityGuidelines />,
+      },
+      {
+        path: '/faq',
+        element: <FAQPage />,
+      },
+
     ],
   },
   { path: '/login', element: <Login /> },

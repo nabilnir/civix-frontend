@@ -29,7 +29,7 @@ const ReportIssueForm = ({
         });
         return;
       }
-      
+
       // Validate file type
       if (!file.type.startsWith('image/')) {
         Swal.fire({
@@ -63,12 +63,12 @@ const ReportIssueForm = ({
     <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
       {/* Blocked User Warning */}
       {isBlocked && (
-        <div className="bg-red-50 p-4 rounded-lg">
+        <div className="bg-error/10 p-4 rounded-lg">
           <div className="flex items-center gap-2">
-            <FiAlertCircle className="text-red-600" size={20} />
+            <FiAlertCircle className="text-error" size={20} />
             <div>
-              <h4 className="font-['Satoshi'] font-bold text-red-800">Account Blocked</h4>
-              <p className="font-['Satoshi'] text-sm text-red-700">
+              <h4 className="font-['Satoshi'] font-bold text-error">Account Blocked</h4>
+              <p className="font-['Satoshi'] text-sm text-error/80">
                 Your account has been blocked. You cannot report issues. Please contact the authorities.
               </p>
             </div>
@@ -78,13 +78,13 @@ const ReportIssueForm = ({
 
       {/* Issue Limit Warning */}
       {!isPremium && issueCount >= 3 && (
-        <div className="bg-amber-50 p-4 rounded-lg">
+        <div className="bg-warning/10 p-4 rounded-lg">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <FiAlertCircle className="text-amber-600" size={20} />
+              <FiAlertCircle className="text-warning" size={20} />
               <div>
-                <h4 className="font-['Satoshi'] font-bold text-amber-800">Issue Limit Reached</h4>
-                <p className="font-['Satoshi'] text-sm text-amber-700">
+                <h4 className="font-['Satoshi'] font-bold text-warning-content">Issue Limit Reached</h4>
+                <p className="font-['Satoshi'] text-sm text-warning-content/80">
                   Free users can only report 3 issues. Upgrade to premium for unlimited reports.
                 </p>
               </div>
@@ -93,7 +93,7 @@ const ReportIssueForm = ({
               <button
                 type="button"
                 onClick={onUpgradeClick}
-                className="px-4 py-2 bg-amber-600 text-white rounded-lg font-['Satoshi'] font-semibold hover:bg-amber-700 transition-colors"
+                className="px-4 py-2 bg-warning text-warning-content rounded-lg font-['Satoshi'] font-semibold hover:bg-warning/80 transition-colors"
               >
                 Upgrade Now
               </button>
@@ -104,17 +104,17 @@ const ReportIssueForm = ({
 
       {/* Title */}
       <div>
-        <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+        <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2">
           Issue Title *
         </label>
         <input
-          {...register('title', { 
+          {...register('title', {
             required: 'Title is required',
             minLength: { value: 5, message: 'Title must be at least 5 characters' }
           })}
           type="text"
           disabled={!canReport || isBlocked}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9] disabled:bg-gray-100 disabled:cursor-not-allowed"
+          className="w-full px-4 py-3 border border-base-300 bg-base-100 text-base-content rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-base-200 disabled:cursor-not-allowed"
           placeholder="e.g., Large pothole on Main Street"
         />
         {errors.title && (
@@ -124,33 +124,33 @@ const ReportIssueForm = ({
 
       {/* Description */}
       <div>
-        <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+        <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2">
           Description *
         </label>
         <textarea
-          {...register('description', { 
+          {...register('description', {
             required: 'Description is required',
             minLength: { value: 20, message: 'Description must be at least 20 characters' }
           })}
           rows="5"
           disabled={!canReport || isBlocked}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9] disabled:bg-gray-100 disabled:cursor-not-allowed"
+          className="w-full px-4 py-3 border border-base-300 bg-base-100 text-base-content rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-base-200 disabled:cursor-not-allowed"
           placeholder="Describe the issue in detail. Include location, severity, and any relevant information..."
         />
         {errors.description && (
-          <p className="text-red-500 text-sm mt-1 font-['Satoshi']">{errors.description.message}</p>
+          <p className="text-error text-sm mt-1 font-['Satoshi']">{errors.description.message}</p>
         )}
       </div>
 
       {/* Category */}
       <div>
-        <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+        <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2">
           Category *
         </label>
         <select
           {...register('category', { required: 'Category is required' })}
           disabled={!canReport || isBlocked}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9] disabled:bg-gray-100 disabled:cursor-not-allowed"
+          className="w-full px-4 py-3 border border-base-300 bg-base-100 text-base-content rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-base-200 disabled:cursor-not-allowed"
         >
           <option value="">Select a category</option>
           <option value="streetlight">Streetlight</option>
@@ -169,7 +169,7 @@ const ReportIssueForm = ({
 
       {/* Location */}
       <div>
-        <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+        <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2">
           Location *
         </label>
         <input
@@ -177,7 +177,7 @@ const ReportIssueForm = ({
           type="text"
           autoComplete="off"
           disabled={!canReport || isBlocked}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9] disabled:bg-gray-100 disabled:cursor-not-allowed"
+          className="w-full px-4 py-3 border border-base-300 bg-base-100 text-base-content rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-base-200 disabled:cursor-not-allowed"
           placeholder="e.g., Main Street, Sector 5, Block A"
         />
         {errors.location && (
@@ -187,7 +187,7 @@ const ReportIssueForm = ({
 
       {/* Image Upload */}
       <div>
-        <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+        <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2">
           Issue Image
         </label>
         {imagePreview ? (
@@ -195,24 +195,24 @@ const ReportIssueForm = ({
             <img
               src={imagePreview}
               alt="Preview"
-              className="w-full h-64 object-cover rounded-lg border border-gray-300"
+              className="w-full h-64 object-cover rounded-lg border border-base-300"
             />
             <button
               type="button"
               onClick={removeImage}
-              className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+              className="absolute top-2 right-2 p-2 bg-error text-white rounded-full hover:bg-error/80 transition-colors"
             >
               <FiX size={20} />
             </button>
           </div>
         ) : (
-          <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-base-300 border-dashed rounded-lg cursor-pointer hover:bg-base-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
-              <FiUpload className="text-gray-400 mb-2" size={32} />
-              <p className="mb-2 text-sm text-gray-500 font-['Satoshi']">
+              <FiUpload className="text-base-content/40 mb-2" size={32} />
+              <p className="mb-2 text-sm text-base-content/60 font-['Satoshi']">
                 <span className="font-semibold">Click to upload</span> or drag and drop
               </p>
-              <p className="text-xs text-gray-500 font-['Satoshi']">
+              <p className="text-xs text-base-content/40 font-['Satoshi']">
                 PNG, JPG, GIF up to 5MB
               </p>
             </div>
@@ -232,7 +232,7 @@ const ReportIssueForm = ({
         <button
           type="submit"
           disabled={!canReport || isBlocked || isLoading}
-          className="w-full px-6 py-3 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] font-semibold hover:bg-[#1e7acc] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full px-6 py-3 bg-primary text-primary-content rounded-lg font-['Satoshi'] font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {isLoading ? (
             <>

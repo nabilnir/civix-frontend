@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
-import { FiMail, FiPhone, FiMapPin, FiFacebook, FiTwitter, FiLinkedin, FiGithub } from 'react-icons/fi';
+import { FiMail, FiPhone, FiMapPin, FiFacebook, FiLinkedin, FiGithub } from 'react-icons/fi';
+import { FaXTwitter } from "react-icons/fa6";
 import Logo from './Logo';
 
 export default function Footer() {
@@ -35,7 +36,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="w-9 h-9 rounded-lg bg-base-200 hover:bg-primary flex items-center justify-center transition-colors group"
               >
-                <FiTwitter className="text-base-content group-hover:text-primary-content transition-colors" />
+                <FaXTwitter className="text-base-content group-hover:text-primary-content transition-colors" />
               </a>
               <a
                 href="https://linkedin.com"
@@ -72,7 +73,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  to="/all-issues"
+                  to="/allissues"
                   className="font-['Satoshi'] text-sm text-base-content/70 hover:text-primary transition-colors"
                 >
                   All Issues
@@ -80,7 +81,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  to="/about"
+                  to="/aboutUs"
                   className="font-['Satoshi'] text-sm text-base-content/70 hover:text-primary transition-colors"
                 >
                   About Us
@@ -145,7 +146,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  to="/guidelines"
+                  to="/community-guidelines"
                   className="font-['Satoshi'] text-sm text-base-content/70 hover:text-primary transition-colors"
                 >
                   Community Guidelines

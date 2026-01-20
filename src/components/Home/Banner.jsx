@@ -81,15 +81,15 @@ export default function Banner() {
   }, [nextSlide, slides.length]);
 
   return (
-    <section className="relative h-screen min-h-[600px] overflow-hidden bg-base-200">
+    <section className="relative h-[70vh] min-h-[500px] overflow-hidden bg-base-200">
       {/* Slides Container */}
       <div className="relative h-full w-full">
         {slides.map((slide, index) => (
           <div
             key={slide.id}
             className={`absolute inset-0 w-full h-full bg-cover bg-center ${index === currentSlide
-                ? 'opacity-100 scale-100 z-10'
-                : 'opacity-0 scale-105 z-0 pointer-events-none'
+              ? 'opacity-100 scale-100 z-10'
+              : 'opacity-0 scale-105 z-0 pointer-events-none'
               }`}
             style={{
               backgroundImage: `url(${slide.image})`,
@@ -134,7 +134,7 @@ export default function Banner() {
 
                   {/* Main Title */}
                   <h1
-                    className="font-['Satoshi'] w-full text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight drop-shadow-lg"
+                    className="font-['Satoshi'] w-full text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight drop-shadow-lg"
                     style={{
                       opacity: index === currentSlide ? 1 : 0,
                       transform: index === currentSlide ? 'translateY(0)' : 'translateY(20px)',
@@ -146,7 +146,7 @@ export default function Banner() {
 
                   {/* Description */}
                   <p
-                    className="font-['Satoshi'] text-lg md:text-xl text-white/90 mb-8 leading-relaxed drop-shadow-md"
+                    className="font-['Satoshi'] text-base md:text-lg text-white/90 mb-6 leading-relaxed drop-shadow-md"
                     style={{
                       opacity: index === currentSlide ? 1 : 0,
                       transform: index === currentSlide ? 'translateY(0)' : 'translateY(20px)',
@@ -158,7 +158,7 @@ export default function Banner() {
 
                   {/* CTA Buttons  */}
                   <div
-                    className="flex flex-wrap gap-4 mb-12"
+                    className="flex flex-wrap gap-4 mb-8"
                     style={{
                       opacity: index === currentSlide ? 1 : 0,
                       transform: index === currentSlide ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.95)',
@@ -167,14 +167,14 @@ export default function Banner() {
                   >
                     <Link
                       to="/allissues"
-                      className="bg-base-100 text-primary px-8 py-4 rounded-xl font-['Satoshi'] font-bold text-base hover:bg-base-200 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2 group"
+                      className="bg-base-100 text-primary px-6 py-3 rounded-xl font-['Satoshi'] font-bold text-sm md:text-base hover:bg-base-200 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2 group"
                     >
                       Report an Issue
                       <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
                     </Link>
                     <Link
                       to="/aboutUs"
-                      className="bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-['Satoshi'] font-bold text-base hover:bg-white/30 transition-all duration-300 border-2 border-white/50"
+                      className="bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-['Satoshi'] font-bold text-sm md:text-base hover:bg-white/30 transition-all duration-300 border-2 border-white/50"
                     >
                       Learn More
                     </Link>
@@ -238,8 +238,8 @@ export default function Banner() {
               onClick={() => goToSlide(index)}
               disabled={isAnimating}
               className={`transition-all duration-300 ease-out rounded-full ${index === currentSlide
-                  ? 'w-12 h-3 bg-white'
-                  : 'w-3 h-3 bg-white/50 hover:bg-white/75'
+                ? 'w-12 h-3 bg-white'
+                : 'w-3 h-3 bg-white/50 hover:bg-white/75'
                 } disabled:cursor-not-allowed`}
               aria-label={`Go to slide ${index + 1}`}
             />

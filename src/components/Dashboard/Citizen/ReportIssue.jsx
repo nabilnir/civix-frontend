@@ -20,14 +20,14 @@ const ReportIssue = () => {
   // Upload image to imgbb (returns empty string on error to allow issue creation without image)
   const uploadImage = async (file) => {
     if (!file) return '';
-    
+
     // Validate image before upload
     const validation = validateImage(file);
     if (!validation.valid) {
       console.warn('Image validation failed:', validation.error);
       return ''; // Continue without image
     }
-    
+
     try {
       return await uploadImageUtil(file);
     } catch (error) {
@@ -41,13 +41,13 @@ const ReportIssue = () => {
   const createMutation = useMutation({
     mutationFn: async ({ formData, imageFile }) => {
       let imageUrl = '';
-      
+
       if (imageFile) {
         const loadingToast = toast.loading('Uploading image...');
         try {
           imageUrl = await uploadImage(imageFile);
           toast.dismiss(loadingToast);
-          
+
           if (imageUrl) {
             toast.success('Image uploaded successfully');
           } else {
@@ -61,18 +61,18 @@ const ReportIssue = () => {
           toast.error('Image upload failed. Continuing without image...', { duration: 3000 });
         }
       }
-      
+
       // Prepare issue data - backend will add userEmail, userName, userPhoto from token
       const issueData = {
         title: formData.title?.trim(),
         description: formData.description?.trim(),
         category: formData.category,
-        location: (formData.location || formData.Location)?.trim(), 
+        location: (formData.location || formData.Location)?.trim(),
         ...(imageUrl && { image: imageUrl }), // Only include image if URL exists
       };
-      
+
       console.log('Submitting issue:', issueData);
-      
+
       try {
         const res = await axiosSecure.post('/api/issues', issueData);
         return res.data;
@@ -81,7 +81,7 @@ const ReportIssue = () => {
         console.error('API Error:', apiError);
         console.error('API Error Response:', apiError.response?.data);
         console.error('API Error Status:', apiError.response?.status);
-        
+
         throw apiError;
       }
     },
@@ -96,7 +96,7 @@ const ReportIssue = () => {
       console.error('Issue creation error:', error);
       console.error('Error response:', error.response?.data);
       console.error('Error status:', error.response?.status);
-      
+
       // Handle CORS errors
       if (!error.response && error.message?.includes('CORS') || error.code === 'ERR_NETWORK') {
         toast.error(
@@ -105,7 +105,7 @@ const ReportIssue = () => {
         );
         return;
       }
-      
+
       if (error.response?.status === 401 || error.response?.status === 403) {
         toast.error('Authentication failed. Please log in again.');
         navigate('/login');
@@ -128,13 +128,13 @@ const ReportIssue = () => {
       toast.error('Your account is blocked. Please contact authorities.');
       return;
     }
-    
+
     if (!canReport) {
       toast.error('You have reached the limit. Please upgrade to premium.');
       navigate('/dashboard/profile');
       return;
     }
-    
+
     createMutation.mutate({ formData, imageFile: formData.imageFile });
   };
 
@@ -142,16 +142,16 @@ const ReportIssue = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-[#242424] font-['Satoshi'] mb-2">
+        <h1 className="text-3xl font-bold text-base-content font-['Satoshi'] mb-2">
           Report New Issue
         </h1>
-        <p className="text-gray-600 font-['Satoshi']">
+        <p className="text-base-content/70 font-['Satoshi']">
           Help improve your community by reporting infrastructure issues
         </p>
       </div>
 
       {/* Form */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+      <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300">
         <ReportIssueForm
           onSubmit={handleFormSubmit}
           isLoading={createMutation.isPending}

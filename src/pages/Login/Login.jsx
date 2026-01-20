@@ -13,20 +13,61 @@ const Login = () => {
   const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
 
   const from = location.state?.from?.pathname || '/';
 
   // If user already logged in, redirect
   if (user) return <Navigate to={from} replace={true} />;
 
+  // Password validation function
+  const validatePassword = (password) => {
+    if (password.length < 8) {
+      return 'Password must be at least 8 characters long';
+    }
+    if (!/[A-Z]/.test(password)) {
+      return 'Password must contain at least one uppercase letter';
+    }
+    if (!/[a-z]/.test(password)) {
+      return 'Password must contain at least one lowercase letter';
+    }
+    if (!/[0-9]/.test(password)) {
+      return 'Password must contain at least one number';
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      return 'Password must contain at least one special character';
+    }
+    return '';
+  };
+
+  // Demo login handlers - only fills credentials
+  const handleDemoLogin = (email, password) => {
+    setPasswordError('');
+
+    // Auto-fill form fields
+    document.getElementById('email').value = email;
+    document.getElementById('password').value = password;
+
+    toast.success('Demo credentials filled. Click Sign In to continue.');
+  };
+
   // Email/Password Login
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsSubmitting(true);
+    setPasswordError('');
 
     const form = event.target;
     const email = form.email.value;
     const password = form.password.value;
+
+    // Validate password
+    const validationError = validatePassword(password);
+    if (validationError) {
+      setPasswordError(validationError);
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       await signIn(email, password);
@@ -212,6 +253,14 @@ const Login = () => {
                   {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
                 </button>
               </div>
+              {passwordError && (
+                <p className="mt-2 text-sm text-error font-['Satoshi']">
+                  {passwordError}
+                </p>
+              )}
+              <p className="mt-2 text-xs text-base-content/50 font-['Satoshi']">
+                Must be 8+ characters with uppercase, lowercase, number, and symbol
+              </p>
             </div>
 
             {/* Remember Me & Forgot Password */}
@@ -251,6 +300,29 @@ const Login = () => {
               )}
             </button>
           </form>
+
+          {/* Demo Login Buttons */}
+          <div className="mt-6 pt-6 border-t border-base-200">
+            <p className="text-center font-['Satoshi'] text-sm text-base-content/70 mb-4">
+              Quick Demo Access
+            </p>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={() => handleDemoLogin('user@civix.com', 'User@123')}
+                disabled={isSubmitting || loading}
+                className="px-4 py-2.5 bg-info/10 text-info border-2 border-info/30 hover:bg-info/20 rounded-lg font-['Satoshi'] font-semibold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Demo User
+              </button>
+              <button
+                onClick={() => handleDemoLogin('admin@civix.com', 'Uptod0Wn@')}
+                disabled={isSubmitting || loading}
+                className="px-4 py-2.5 bg-secondary/10 text-secondary border-2 border-secondary/30 hover:bg-secondary/20 rounded-lg font-['Satoshi'] font-semibold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Demo Admin
+              </button>
+            </div>
+          </div>
 
           {/* Sign Up Link */}
           <div className="mt-6 pt-6 border-t border-base-200">

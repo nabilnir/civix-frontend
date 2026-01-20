@@ -14,7 +14,7 @@ const teamMembers = [
         bio: 'Visionary architect behind Civix. Specializing in scalable cloud infrastructure and user-centric design.',
         linkedin: 'https://linkedin.com/in/ayresakhan',
         github: 'https://github.com/ayresadev',
-        imgUrl: 'https://i.pinimg.com/1200x/69/a7/85/69a7854930d077d3358b57414bf7391c.jpg' 
+        imgUrl: 'https://i.pinimg.com/1200x/69/a7/85/69a7854930d077d3358b57414bf7391c.jpg'
     },
     {
         id: 2,
@@ -23,7 +23,7 @@ const teamMembers = [
         bio: 'Passionate about React and modern UI/UX principles. Ensures the platform is fast, accessible, and enjoyable.',
         linkedin: 'https://linkedin.com/in/jamaluddin',
         github: 'https://github.com/jamaldev',
-        imgUrl: 'https://i.pinimg.com/736x/e1/4a/83/e14a8371f954ca9c153ba39cb4af9b87.jpg' 
+        imgUrl: 'https://i.pinimg.com/736x/e1/4a/83/e14a8371f954ca9c153ba39cb4af9b87.jpg'
     },
     {
         id: 3,
@@ -32,7 +32,7 @@ const teamMembers = [
         bio: 'Dedicated to data integrity and user privacy. Manages the API endpoints and ensures secure communication.',
         linkedin: 'https://linkedin.com/in/saraahmed',
         github: 'https://github.com/saracodes',
-        imgUrl: 'https://i.pinimg.com/1200x/1c/85/2e/1c852ea928150dfcf54c5457dbca0a35.jpg' 
+        imgUrl: 'https://i.pinimg.com/1200x/1c/85/2e/1c852ea928150dfcf54c5457dbca0a35.jpg'
     },
     {
         id: 4,
@@ -102,7 +102,7 @@ const Contact = () => {
                 .slice(0, 2)
                 .toUpperCase(),
         }))
-    , []);
+        , []);
 
     const handleCardClick = (memberId) => {
         setActiveCard(activeCard === memberId ? null : memberId);
@@ -115,23 +115,23 @@ const Contact = () => {
     };
 
     return (
-        <section className="bg-[#f4f6f8] py-20 md:py-32">
+        <section className="bg-base-200 py-20 md:py-32">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
+
                 {/* -------------------- 1. Team Section (Hover Effect) -------------------- */}
                 <div className="text-center mb-20">
-                    <span className="inline-block px-4 py-1 bg-white text-[#238ae9] rounded-full font-['Satoshi'] text-sm font-medium mb-3"
-                    data-aos="fade-up" data-aos-duration="600">
+                    <span className="inline-block px-4 py-1 bg-base-100 text-primary rounded-full font-['Satoshi'] text-sm font-medium mb-3"
+                        data-aos="fade-up" data-aos-duration="600">
                         Our Squad
                     </span>
-                    <h1 
-                        className="font-['Satoshi'] text-4xl md:text-5xl font-bold text-[#242424] mb-4 leading-tight"
+                    <h1
+                        className="font-['Satoshi'] text-4xl md:text-5xl font-bold text-base-content mb-4 leading-tight"
                         data-aos="fade-up" data-aos-duration="600" data-aos-delay="200"
                     >
                         Meet the Innovators
                     </h1>
-                    <p 
-                        className="font-['Satoshi'] text-lg text-gray-600 max-w-3xl mx-auto"
+                    <p
+                        className="font-['Satoshi'] text-lg text-base-content/70 max-w-3xl mx-auto"
                         data-aos="fade-up" data-aos-duration="600" data-aos-delay="400"
                     >
                         We are a passionate, agile team committed to enhancing citizen engagement through technology.
@@ -142,155 +142,153 @@ const Contact = () => {
                     {safeTeamMembers.map((member, index) => {
                         const isActive = activeCard === member.id;
                         return (
-                        <div 
-                            key={member.id} 
-                            className="team-card relative group shadow-xl hover:shadow-2xl transition-all duration-500 rounded-2xl overflow-hidden cursor-pointer"
-                            data-aos="fade-up" 
-                            data-aos-delay={index * 150}
-                            onClick={() => handleCardClick(member.id)}
-                        >
-                            {/* Profile Image Container */}
-                            <div className="w-full h-80 bg-white border border-gray-100 rounded-2xl flex items-center justify-center p-4 avatar-shell relative">
-                                {member.imgUrl ? (
-                                    <img 
-                                        src={member.imgUrl} 
-                                        alt={member.name} 
-                                        className="w-48 h-48 rounded-full object-cover transition-transform duration-500 group-hover:scale-105 ring-4 ring-[#238ae9]/15"
-                                        style={{ objectPosition: 'center top' }}
-                                        onError={(e) => { 
-                                            e.currentTarget.style.display = 'none'; 
-                                            const fallback = e.currentTarget.closest('.avatar-shell')?.querySelector('.avatar-fallback');
-                                            if (fallback) fallback.style.display = 'flex';
-                                        }}
-                                    />
-                                ) : (
-                                    <div className="w-48 h-48 rounded-full bg-gradient-to-br from-[#238ae9] to-[#1e7acc] flex items-center justify-center text-white text-3xl font-bold ring-4 ring-[#238ae9]/15 avatar-fallback">
+                            <div
+                                key={member.id}
+                                className="team-card relative group shadow-xl hover:shadow-2xl transition-all duration-500 rounded-2xl overflow-hidden cursor-pointer"
+                                data-aos="fade-up"
+                                data-aos-delay={index * 150}
+                                onClick={() => handleCardClick(member.id)}
+                            >
+                                {/* Profile Image Container */}
+                                <div className="w-full h-80 bg-base-100 border border-base-300 rounded-2xl flex items-center justify-center p-4 avatar-shell relative">
+                                    {member.imgUrl ? (
+                                        <img
+                                            src={member.imgUrl}
+                                            alt={member.name}
+                                            className="w-48 h-48 rounded-full object-cover transition-transform duration-500 group-hover:scale-105 ring-4 ring-primary/15"
+                                            style={{ objectPosition: 'center top' }}
+                                            onError={(e) => {
+                                                e.currentTarget.style.display = 'none';
+                                                const fallback = e.currentTarget.closest('.avatar-shell')?.querySelector('.avatar-fallback');
+                                                if (fallback) fallback.style.display = 'flex';
+                                            }}
+                                        />
+                                    ) : (
+                                        <div className="w-48 h-48 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-content text-3xl font-bold ring-4 ring-primary/15 avatar-fallback">
+                                            {member.fallbackInitials}
+                                        </div>
+                                    )}
+                                    <div className="w-48 h-48 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-content text-3xl font-bold ring-4 ring-primary/15 avatar-fallback hidden absolute">
                                         {member.fallbackInitials}
                                     </div>
-                                )}
-                                <div className="w-48 h-48 rounded-full bg-gradient-to-br from-[#238ae9] to-[#1e7acc] flex items-center justify-center text-white text-3xl font-bold ring-4 ring-[#238ae9]/15 avatar-fallback hidden absolute">
-                                    {member.fallbackInitials}
+                                </div>
+
+
+                                <div className={`absolute inset-0 bg-gradient-to-t from-primary/95 to-primary/80 flex flex-col justify-end p-6 md:p-8 transform transition-transform duration-500 ease-in-out ${isActive ? 'translate-y-0' : 'translate-y-full md:group-hover:translate-y-0'
+                                    }`}>
+                                    {/* Close button for mobile */}
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setActiveCard(null);
+                                        }}
+                                        className="md:hidden absolute top-4 right-4 text-primary-content hover:text-primary-content/80 transition-colors p-2"
+                                        aria-label="Close details"
+                                    >
+                                        <FiX size={20} />
+                                    </button>
+
+                                    <h3 className="font-['Satoshi'] text-2xl font-bold text-white mb-1">
+                                        {member.name}
+                                    </h3>
+
+                                    <p className="font-['Satoshi'] text-base font-medium text-white/90 mb-3">
+                                        {member.role}
+                                    </p>
+
+                                    <p className="font-['Satoshi'] text-sm text-white/80 mb-6 italic">
+                                        "{member.bio}"
+                                    </p>
+
+                                    {/* Social Links */}
+                                    <div className="flex gap-4">
+                                        <a
+                                            href={member.linkedin}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={(e) => e.stopPropagation()}
+                                            className="text-white hover:text-gray-200 transition-colors"
+                                            aria-label={`LinkedIn profile for ${member.name}`}
+                                        >
+                                            <FiLinkedin size={20} />
+                                        </a>
+                                        <a
+                                            href={member.github}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={(e) => e.stopPropagation()}
+                                            className="text-white hover:text-gray-200 transition-colors"
+                                            aria-label={`GitHub profile for ${member.name}`}
+                                        >
+                                            <FiGithub size={20} />
+                                        </a>
+                                    </div>
+                                </div>
+
+                                {/* Base Text  */}
+                                <div className={`absolute bottom-0 left-0 right-0 p-4 bg-base-100/95 backdrop-blur-sm transition-opacity duration-300 ${isActive ? 'opacity-0' : 'md:group-hover:opacity-0'
+                                    }`}>
+                                    <h3 className="font-['Satoshi'] text-lg font-bold text-base-content">{member.name}</h3>
+                                    <p className="font-['Satoshi'] text-sm text-base-content/70">{member.role}</p>
                                 </div>
                             </div>
-
-                            
-                            <div className={`absolute inset-0 bg-gradient-to-t from-[#238ae9]/95 to-[#238ae9]/80 flex flex-col justify-end p-6 md:p-8 transform transition-transform duration-500 ease-in-out ${
-                                isActive ? 'translate-y-0' : 'translate-y-full md:group-hover:translate-y-0'
-                            }`}>
-                                {/* Close button for mobile */}
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setActiveCard(null);
-                                    }}
-                                    className="md:hidden absolute top-4 right-4 text-white hover:text-gray-200 transition-colors p-2"
-                                    aria-label="Close details"
-                                >
-                                    <FiX size={20} />
-                                </button>
-                                
-                                <h3 className="font-['Satoshi'] text-2xl font-bold text-white mb-1">
-                                    {member.name}
-                                </h3>
-                                
-                                <p className="font-['Satoshi'] text-base font-medium text-white/90 mb-3">
-                                    {member.role}
-                                </p>
-                                
-                                <p className="font-['Satoshi'] text-sm text-white/80 mb-6 italic">
-                                    "{member.bio}"
-                                </p>
-                                
-                                {/* Social Links */}
-                                <div className="flex gap-4">
-                                    <a 
-                                        href={member.linkedin} 
-                                        target="_blank" 
-                                        rel="noopener noreferrer" 
-                                        onClick={(e) => e.stopPropagation()}
-                                        className="text-white hover:text-gray-200 transition-colors"
-                                        aria-label={`LinkedIn profile for ${member.name}`}
-                                    >
-                                        <FiLinkedin size={20} />
-                                    </a>
-                                    <a 
-                                        href={member.github} 
-                                        target="_blank" 
-                                        rel="noopener noreferrer" 
-                                        onClick={(e) => e.stopPropagation()}
-                                        className="text-white hover:text-gray-200 transition-colors"
-                                        aria-label={`GitHub profile for ${member.name}`}
-                                    >
-                                        <FiGithub size={20} />
-                                    </a>
-                                </div>
-                            </div>
-
-                            {/* Base Text  */}
-                            <div className={`absolute bottom-0 left-0 right-0 p-4 bg-white/95 backdrop-blur-sm transition-opacity duration-300 ${
-                                isActive ? 'opacity-0' : 'md:group-hover:opacity-0'
-                            }`}>
-                                <h3 className="font-['Satoshi'] text-lg font-bold text-[#242424]">{member.name}</h3>
-                                <p className="font-['Satoshi'] text-sm text-gray-600">{member.role}</p>
-                            </div>
-                        </div>
                         );
                     })}
                 </div>
 
                 {/* -------------------- 2. Contact Form & Info -------------------- */}
-                <div className="bg-white p-8 md:p-16 rounded-3xl shadow-2xl">
+                <div className="bg-base-100 p-8 md:p-16 rounded-3xl shadow-2xl">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                        
+
                         {/* Contact Info (Left Column) */}
                         <div data-aos="fade-right" data-aos-duration="1000">
-                            <span className="inline-block px-4 py-1 bg-[#f4f6f8] text-[#238ae9] rounded-full font-['Satoshi'] text-sm font-medium mb-3">
+                            <span className="inline-block px-4 py-1 bg-base-200 text-primary rounded-full font-['Satoshi'] text-sm font-medium mb-3">
                                 Get In Touch
                             </span>
-                            <h2 className="font-['Satoshi'] text-3xl md:text-4xl font-bold text-[#242424] mb-6">
+                            <h2 className="font-['Satoshi'] text-3xl md:text-4xl font-bold text-base-content mb-6">
                                 Have a Question or Suggestion?
                             </h2>
-                            <p className="font-['Satoshi'] text-base text-gray-600 mb-8">
+                            <p className="font-['Satoshi'] text-base text-base-content/70 mb-8">
                                 We collaborate with citizens, city staff, and partners to scale Civix. Reach out for support, partnerships, or press.
                             </p>
 
                             <div className="grid grid-cols-1 gap-4 mb-6">
-                                <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#f4f6f8] text-[#242424]">
-                                    <FiClock className="text-[#238ae9]" />
+                                <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-base-200 text-base-content">
+                                    <FiClock className="text-primary" />
                                     <div className="text-sm">
                                         <p className="font-semibold">Response time</p>
-                                        <p className="text-gray-600">Typically replies within 24 hours</p>
+                                        <p className="text-base-content/70">Typically replies within 24 hours</p>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#f4f6f8] text-[#242424]">
-                                    <FiShield className="text-[#238ae9]" />
+                                <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-base-200 text-base-content">
+                                    <FiShield className="text-primary" />
                                     <div className="text-sm">
                                         <p className="font-semibold">Priority support</p>
-                                        <p className="text-gray-600">Available for city staff & premium citizens</p>
+                                        <p className="text-base-content/70">Available for city staff & premium citizens</p>
                                     </div>
                                 </div>
                             </div>
 
                             <ul className="space-y-4">
                                 <li className="flex items-start gap-3">
-                                    <FiMail className="text-[#238ae9] text-xl mt-1 flex-shrink-0" />
+                                    <FiMail className="text-primary text-xl mt-1 flex-shrink-0" />
                                     <div>
-                                        <p className="font-['Satoshi'] text-sm text-gray-500">Email Us</p>
-                                        <a href="mailto:support@civix.com" className="font-['Satoshi'] text-base font-semibold text-[#242424] hover:text-[#238ae9] transition-colors">support@civix.com</a>
+                                        <p className="font-['Satoshi'] text-sm text-base-content/60">Email Us</p>
+                                        <a href="mailto:support@civix.com" className="font-['Satoshi'] text-base font-semibold text-base-content hover:text-primary transition-colors">support@civix.com</a>
                                     </div>
                                 </li>
                                 <li className="flex items-start gap-3">
-                                    <FiPhone className="text-[#238ae9] text-xl mt-1 flex-shrink-0" />
+                                    <FiPhone className="text-primary text-xl mt-1 flex-shrink-0" />
                                     <div>
-                                        <p className="font-['Satoshi'] text-sm text-gray-500">Call Us</p>
-                                        <a href="tel:+1234567890" className="font-['Satoshi'] text-base font-semibold text-[#242424] hover:text-[#238ae9] transition-colors">+1 (234) 567-890</a>
+                                        <p className="font-['Satoshi'] text-sm text-base-content/60">Call Us</p>
+                                        <a href="tel:+1234567890" className="font-['Satoshi'] text-base font-semibold text-base-content hover:text-primary transition-colors">+1 (234) 567-890</a>
                                     </div>
                                 </li>
                                 <li className="flex items-start gap-3">
-                                    <FiMapPin className="text-[#238ae9] text-xl mt-1 flex-shrink-0" />
+                                    <FiMapPin className="text-primary text-xl mt-1 flex-shrink-0" />
                                     <div>
-                                        <p className="font-['Satoshi'] text-sm text-gray-500">Our Base of Operations</p>
-                                        <p className="font-['Satoshi'] text-base font-semibold text-[#242424]">Dhaka, Dhaka Division, Bangladesh</p>
+                                        <p className="font-['Satoshi'] text-sm text-base-content/60">Our Base of Operations</p>
+                                        <p className="font-['Satoshi'] text-base font-semibold text-base-content">Dhaka, Dhaka Division, Bangladesh</p>
                                     </div>
                                 </li>
                             </ul>
@@ -299,46 +297,46 @@ const Contact = () => {
                         {/* Contact Form (Right Columns) */}
                         <div className="lg:col-span-2" data-aos="fade-left" data-aos-duration="1000">
                             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                
+
                                 {/* Name */}
                                 <div className="md:col-span-1">
-                                    <label htmlFor="name" className="block font-['Satoshi'] text-sm font-medium text-gray-700 mb-2">
+                                    <label htmlFor="name" className="block font-['Satoshi'] text-sm font-medium text-base-content mb-2">
                                         Full Name
                                     </label>
                                     <div className="relative">
-                                        <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                                        <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/40" />
                                         <input
                                             type="text"
                                             id="name"
                                             name="name"
                                             placeholder="Your name"
                                             required
-                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-[#238ae9] focus:border-[#238ae9] transition-colors"
+                                            className="w-full pl-10 pr-4 py-3 border border-base-300 bg-base-100 text-base-content rounded-xl focus:ring-primary focus:border-primary transition-colors placeholder:text-base-content/40"
                                         />
                                     </div>
                                 </div>
-                                
+
                                 {/* Email */}
                                 <div className="md:col-span-1">
-                                    <label htmlFor="email" className="block font-['Satoshi'] text-sm font-medium text-gray-700 mb-2">
+                                    <label htmlFor="email" className="block font-['Satoshi'] text-sm font-medium text-base-content mb-2">
                                         Email Address
                                     </label>
                                     <div className="relative">
-                                        <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                                        <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/40" />
                                         <input
                                             type="email"
                                             id="email"
                                             name="email"
                                             placeholder="you@example.com"
                                             required
-                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-[#238ae9] focus:border-[#238ae9] transition-colors"
+                                            className="w-full pl-10 pr-4 py-3 border border-base-300 bg-base-100 text-base-content rounded-xl focus:ring-primary focus:border-primary transition-colors placeholder:text-base-content/40"
                                         />
                                     </div>
                                 </div>
 
                                 {/* Subject */}
                                 <div className="md:col-span-2">
-                                    <label htmlFor="subject" className="block font-['Satoshi'] text-sm font-medium text-gray-700 mb-2">
+                                    <label htmlFor="subject" className="block font-['Satoshi'] text-sm font-medium text-base-content mb-2">
                                         Subject
                                     </label>
                                     <input
@@ -347,13 +345,13 @@ const Contact = () => {
                                         name="subject"
                                         placeholder="I have a question about..."
                                         required
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#238ae9] focus:border-[#238ae9] transition-colors"
+                                        className="w-full px-4 py-3 border border-base-300 bg-base-100 text-base-content rounded-xl focus:ring-primary focus:border-primary transition-colors placeholder:text-base-content/40"
                                     />
                                 </div>
 
                                 {/* Message */}
                                 <div className="md:col-span-2">
-                                    <label htmlFor="message" className="block font-['Satoshi'] text-sm font-medium text-gray-700 mb-2">
+                                    <label htmlFor="message" className="block font-['Satoshi'] text-sm font-medium text-base-content mb-2">
                                         Your Message
                                     </label>
                                     <textarea
@@ -362,7 +360,7 @@ const Contact = () => {
                                         rows="5"
                                         placeholder="Type your detailed message or suggestion here..."
                                         required
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#238ae9] focus:border-[#238ae9] transition-colors"
+                                        className="w-full px-4 py-3 border border-base-300 bg-base-100 text-base-content rounded-xl focus:ring-primary focus:border-primary transition-colors placeholder:text-base-content/40"
                                     ></textarea>
                                 </div>
 
@@ -370,7 +368,7 @@ const Contact = () => {
                                 <div className="md:col-span-2">
                                     <button
                                         type="submit"
-                                        className="inline-flex items-center justify-center w-full bg-gradient-to-br from-[#238ae9] to-[#1e7acc] text-white px-8 py-4 rounded-xl font-['Satoshi'] font-bold text-base hover:shadow-xl transition-all shadow-lg group"
+                                        className="inline-flex items-center justify-center w-full bg-gradient-to-br from-primary to-primary/80 text-primary-content px-8 py-4 rounded-xl font-['Satoshi'] font-bold text-base hover:shadow-xl transition-all shadow-lg group"
                                     >
                                         Send Message
                                         <FiArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />

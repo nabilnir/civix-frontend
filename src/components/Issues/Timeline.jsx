@@ -4,12 +4,12 @@ import TimelineItem from './TImelineItem';
 const Timeline = ({ timeline = [], issueStatus }) => {
   if (!timeline || timeline.length === 0) {
     return (
-      <div className="bg-white rounded-xl shadow-sm p-6 md:p-8">
-        <h3 className="text-xl font-bold text-[#242424] mb-6 font-['Satoshi']">
+      <div className="bg-base-100 rounded-xl shadow-sm p-6 md:p-8 border border-base-300">
+        <h3 className="text-xl font-bold text-base-content mb-6 font-['Satoshi']">
           Issue Lifecycle
         </h3>
         <div className="text-center py-8">
-          <p className="text-gray-500 font-['Satoshi'] italic">
+          <p className="text-base-content/60 font-['Satoshi'] italic">
             No timeline entries yet. Updates will appear here as the issue progresses.
           </p>
         </div>
@@ -37,12 +37,12 @@ const Timeline = ({ timeline = [], issueStatus }) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-6 md:p-8">
-      <h3 className="text-xl font-bold text-[#242424] mb-6 font-['Satoshi']">
+    <div className="bg-base-100 rounded-xl shadow-sm p-6 md:p-8 border border-base-300">
+      <h3 className="text-xl font-bold text-base-content mb-6 font-['Satoshi']">
         Issue Lifecycle & Timeline
       </h3>
 
-      <div className="relative border-l-2 border-gray-200 ml-3 pl-8 space-y-8">
+      <div className="relative border-l-2 border-base-300 ml-3 pl-8 space-y-8">
         {sortedTimeline.map((entry, idx) => (
           <TimelineItem key={idx} entry={entry} />
         ))}
@@ -50,9 +50,9 @@ const Timeline = ({ timeline = [], issueStatus }) => {
 
       {/* Current Status Badge */}
       {issueStatus && (
-        <div className="mt-6 pt-6 border-t border-gray-200">
+        <div className="mt-6 pt-6 border-t border-base-300">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold text-gray-600 font-['Satoshi']">
+            <span className="text-sm font-semibold text-base-content/70 font-['Satoshi']">
               Current Status:
             </span>
             <span

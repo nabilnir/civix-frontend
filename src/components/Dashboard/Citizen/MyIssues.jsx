@@ -184,10 +184,10 @@ const MyIssues = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-[#242424] font-['Satoshi'] mb-2">
+          <h1 className="text-3xl font-bold text-base-content font-['Satoshi'] mb-2">
             My Issues
           </h1>
-          <p className="text-gray-600 font-['Satoshi']">
+          <p className="text-base-content/70 font-['Satoshi']">
             Manage and track all your reported issues
           </p>
         </div>
@@ -195,17 +195,16 @@ const MyIssues = () => {
         <div className="flex flex-wrap gap-3">
           <button
             onClick={handleAddNew}
-            className="flex items-center gap-2 px-4 py-2 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] font-medium hover:bg-[#1e7acc] transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-content rounded-lg font-['Satoshi'] font-medium hover:bg-primary/90 transition-colors"
           >
             <FiPlus /> Add New
           </button>
           <button
             onClick={toggleSelectMode}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-['Satoshi'] font-medium transition-colors ${
-              isSelectMode
-                ? 'bg-red-100 text-red-700 hover:bg-red-200'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-['Satoshi'] font-medium transition-colors ${isSelectMode
+                ? 'bg-error/10 text-error hover:bg-error/20'
+                : 'bg-base-200 text-base-content hover:bg-base-300'
+              }`}
           >
             <FiCheckSquare /> {isSelectMode ? 'Cancel Selection' : 'Select Issues'}
           </button>
@@ -213,56 +212,56 @@ const MyIssues = () => {
       </div>
 
       {/* Filters & bulk actions */}
-      <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+      <div className="bg-base-100 rounded-xl p-4 shadow-sm border border-base-300">
         <div className="flex flex-wrap gap-4 items-center justify-between">
           <div className="flex flex-wrap gap-4 items-center">
-          <div className="flex items-center gap-2">
-            <FiFilter className="text-[#238ae9]" />
-            <span className="font-['Satoshi'] font-semibold text-sm">Filters:</span>
-          </div>
-          
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg font-['Satoshi'] text-sm focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
-          >
-            <option value="">All Status</option>
-            <option value="pending">Pending</option>
-            <option value="in-progress">In Progress</option>
-            <option value="working">Working</option>
-            <option value="resolved">Resolved</option>
-            <option value="closed">Closed</option>
-            <option value="boosted">Boosted</option>
-          </select>
+            <div className="flex items-center gap-2">
+              <FiFilter className="text-primary" />
+              <span className="font-['Satoshi'] font-semibold text-sm text-base-content">Filters:</span>
+            </div>
 
-          <select
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg font-['Satoshi'] text-sm focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
-          >
-            <option value="">All Categories</option>
-            <option value="streetlight">Streetlight</option>
-            <option value="pothole">Pothole</option>
-            <option value="water">Water Leakage</option>
-            <option value="sewerage">Sewerage</option>
-            <option value="garbage">Garbage</option>
-            <option value="footpath">Footpath</option>
-            <option value="other">Other</option>
-          </select>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="px-4 py-2 border border-base-300 bg-base-100 text-base-content rounded-lg font-['Satoshi'] text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option value="">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="in-progress">In Progress</option>
+              <option value="working">Working</option>
+              <option value="resolved">Resolved</option>
+              <option value="closed">Closed</option>
+              <option value="boosted">Boosted</option>
+            </select>
+
+            <select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              className="px-4 py-2 border border-base-300 bg-base-100 text-base-content rounded-lg font-['Satoshi'] text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option value="">All Categories</option>
+              <option value="streetlight">Streetlight</option>
+              <option value="pothole">Pothole</option>
+              <option value="water">Water Leakage</option>
+              <option value="sewerage">Sewerage</option>
+              <option value="garbage">Garbage</option>
+              <option value="footpath">Footpath</option>
+              <option value="other">Other</option>
+            </select>
           </div>
 
           {isSelectMode && filteredIssues.length > 0 && (
             <div className="flex items-center gap-3">
               <button
                 onClick={handleSelectAll}
-                className="px-3 py-2 text-sm rounded-lg border border-gray-300 font-['Satoshi'] hover:bg-gray-50"
+                className="px-3 py-2 text-sm rounded-lg border border-base-300 text-base-content font-['Satoshi'] hover:bg-base-200"
               >
                 {selectedIssueIds.length === filteredIssues.length ? 'Clear All' : 'Select All'}
               </button>
               <button
                 onClick={handleBulkDelete}
                 disabled={selectedIssueIds.length === 0}
-                className="px-4 py-2 text-sm rounded-lg bg-red-100 text-red-700 font-['Satoshi'] font-medium hover:bg-red-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 text-sm rounded-lg bg-error/10 text-error font-['Satoshi'] font-medium hover:bg-error/20 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Delete Selected ({selectedIssueIds.length})
               </button>
@@ -277,96 +276,97 @@ const MyIssues = () => {
           {filteredIssues.map((issue) => {
             const isChecked = selectedIssueIds.includes(issue._id);
             return (
-            <div
-              key={issue._id}
-              className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
-            >
-              <div className="flex flex-col md:flex-row md:items-center gap-4">
-                {isSelectMode && (
-                  <div className="self-start md:self-center">
-                    <input
-                      type="checkbox"
-                      className="w-5 h-5 text-[#238ae9] border-gray-300 rounded focus:ring-[#238ae9]"
-                      checked={isChecked}
-                      onChange={() => toggleIssueSelection(issue._id)}
-                    />
-                  </div>
-                )}
-                {/* Issue Image */}
-                <img
-                  src={issue.image}
-                  alt={issue.title}
-                  className="w-full md:w-32 h-32 object-cover rounded-lg"
-                />
+              <div
+                key={issue._id}
+                className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300 hover:shadow-md transition-shadow"
+              >
+                <div className="flex flex-col md:flex-row md:items-center gap-4">
+                  {isSelectMode && (
+                    <div className="self-start md:self-center">
+                      <input
+                        type="checkbox"
+                        className="w-5 h-5 text-primary border-base-300 rounded focus:ring-primary"
+                        checked={isChecked}
+                        onChange={() => toggleIssueSelection(issue._id)}
+                      />
+                    </div>
+                  )}
+                  {/* Issue Image */}
+                  <img
+                    src={issue.image}
+                    alt={issue.title}
+                    className="w-full md:w-32 h-32 object-cover rounded-lg border border-base-300"
+                  />
 
-                {/* Issue Info */}
-                <div className="flex-1">
-                  <div className="flex flex-wrap items-start gap-2 mb-2">
-                    <h3 className="text-lg font-bold text-[#242424] font-['Satoshi']">
-                      {issue.title}
-                    </h3>
-                    <StatusBadge status={issue.status} />
-                    {(issue.priority === 'high' || issue.priority === 'High') && (
-                      <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-bold">
-                        High Priority
-                      </span>
+                  {/* Issue Info */}
+                  <div className="flex-1">
+                    <div className="flex flex-wrap items-start gap-2 mb-2">
+                      <h3 className="text-lg font-bold text-base-content font-['Satoshi']">
+                        {issue.title}
+                      </h3>
+                      <StatusBadge status={issue.status} />
+                      {(issue.priority === 'high' || issue.priority === 'High') && (
+                        <span className="px-2 py-1 bg-error/10 text-error rounded-full text-xs font-bold">
+                          High Priority
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-base-content/70 text-sm font-['Satoshi'] mb-2 line-clamp-1 max-w-md">
+                      {issue.description}
+                    </p>
+                    <div className="flex flex-wrap gap-4 text-sm text-base-content/60">
+                      <span>Category: <strong>{issue.category}</strong></span>
+                      <span>Location: <strong>{issue.location}</strong></span>
+                      <span>Date: {new Date(issue.date || issue.createdAt).toLocaleDateString()}</span>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      onClick={() => handleViewDetails(issue._id)}
+                      className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-content rounded-lg font-['Satoshi'] font-medium hover:bg-primary/90 transition-colors"
+                    >
+                      <FiEye /> View Details
+                    </button>
+
+                    {issue.status === 'pending' && !isSelectMode && (
+                      <button
+                        onClick={() => handleEdit(issue)}
+                        className="flex items-center gap-2 px-4 py-2 bg-warning/10 text-warning-content rounded-lg font-['Satoshi'] font-medium hover:bg-warning/20 transition-colors"
+                      >
+                        <FiEdit2 /> Edit
+                      </button>
+                    )}
+
+                    {/* Boost Button - Only for Premium Users */}
+                    {isPremium && issue.priority !== 'high' && issue.priority !== 'High' && !isSelectMode && (
+                      <button
+                        onClick={() => handleBoost(issue)}
+                        disabled={createBoostCheckoutMutation.isPending}
+                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-warning to-orange-500 text-white rounded-lg font-['Satoshi'] font-medium hover:shadow-lg transition-all disabled:opacity-50"
+                      >
+                        <FiTrendingUp /> {createBoostCheckoutMutation.isPending ? 'Processing...' : 'Boost (100tk)'}
+                      </button>
+                    )}
+
+                    {!isSelectMode && (
+                      <button
+                        onClick={() => handleDelete(issue._id)}
+                        className="flex items-center gap-2 px-4 py-2 bg-error/10 text-error rounded-lg font-['Satoshi'] font-medium hover:bg-error/20 transition-colors"
+                      >
+                        <FiTrash2 /> Delete
+                      </button>
                     )}
                   </div>
-                  <p className="text-gray-600 text-sm font-['Satoshi'] mb-2 line-clamp-1 max-w-md">
-                    {issue.description}
-                  </p>
-                  <div className="flex flex-wrap gap-4 text-sm text-gray-500">
-                    <span>Category: <strong>{issue.category}</strong></span>
-                    <span>Location: <strong>{issue.location}</strong></span>
-                    <span>Date: {new Date(issue.date || issue.createdAt).toLocaleDateString()}</span>
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={() => handleViewDetails(issue._id)}
-                    className="flex items-center gap-2 px-4 py-2 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] font-medium hover:bg-[#1e7acc] transition-colors"
-                  >
-                    <FiEye /> View Details
-                  </button>
-                  
-                  {issue.status === 'pending' && !isSelectMode && (
-                    <button
-                      onClick={() => handleEdit(issue)}
-                      className="flex items-center gap-2 px-4 py-2 bg-amber-100 text-amber-700 rounded-lg font-['Satoshi'] font-medium hover:bg-amber-200 transition-colors"
-                    >
-                      <FiEdit2 /> Edit
-                    </button>
-                  )}
-
-                  {/* Boost Button - Only for Premium Users */}
-                  {isPremium && issue.priority !== 'high' && issue.priority !== 'High' && !isSelectMode && (
-                    <button
-                      onClick={() => handleBoost(issue)}
-                      disabled={createBoostCheckoutMutation.isPending}
-                      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-400 to-orange-500 text-white rounded-lg font-['Satoshi'] font-medium hover:shadow-lg transition-all disabled:opacity-50"
-                    >
-                      <FiTrendingUp /> {createBoostCheckoutMutation.isPending ? 'Processing...' : 'Boost (100tk)'}
-                    </button>
-                  )}
-                  
-                  {!isSelectMode && (
-                    <button
-                      onClick={() => handleDelete(issue._id)}
-                      className="flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-lg font-['Satoshi'] font-medium hover:bg-red-200 transition-colors"
-                    >
-                      <FiTrash2 /> Delete
-                    </button>
-                  )}
                 </div>
               </div>
-            </div>
-          )})}
+            )
+          })}
         </div>
       ) : (
-        <div className="bg-white rounded-xl p-12 text-center shadow-sm border border-gray-100">
-          <p className="text-gray-500 font-['Satoshi'] text-lg">
+        <div className="bg-base-100 rounded-xl p-12 text-center shadow-sm border border-base-300">
+          <p className="text-base-content/60 font-['Satoshi'] text-lg">
             {issues.length === 0
               ? "You haven't reported any issues yet. Start by reporting your first issue!"
               : 'No issues match your filters.'}

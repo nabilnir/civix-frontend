@@ -44,18 +44,18 @@ const Statistics = () => {
     ];
 
     const [isVisible, setIsVisible] = useState(false);
-    
+
     useEffect(() => {
-      
+
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
                     setIsVisible(true);
-                    observer.unobserve(entry.target); 
+                    observer.unobserve(entry.target);
                 }
             },
-            { threshold: 0.1 } 
-        ); 
+            { threshold: 0.1 }
+        );
 
         const target = document.querySelector('#statistics-section');
         if (target) {
@@ -70,23 +70,23 @@ const Statistics = () => {
 
     return (
 
-        <section id="statistics-section" className="py-20 md:py-32 bg-[#f4f6f8]">
+        <section id="statistics-section" className="py-20 md:py-32 bg-base-200">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 {/* Section Header */}
                 <div className="text-center max-w-3xl mx-auto mb-16">
-                    <span className="inline-block px-4 py-1 bg-white text-[#238ae9] rounded-full font-['Satoshi'] text-sm font-medium mb-3"
+                    <span className="inline-block px-4 py-1 bg-base-100 text-primary rounded-full font-['Satoshi'] text-sm font-medium mb-3"
                         data-aos="fade-up" data-aos-duration="600">
                         Our Impact
                     </span>
                     <h2
-                        className="font-['Satoshi'] text-3xl md:text-4xl lg:text-5xl font-bold text-[#242424] leading-tight"
+                        className="font-['Satoshi'] text-3xl md:text-4xl lg:text-5xl font-bold text-base-content leading-tight"
                         data-aos="fade-up" data-aos-duration="600" data-aos-delay="200"
                     >
                         Proof of Progress in Your City
                     </h2>
                     <p
-                        className="font-['Satoshi'] text-lg text-gray-600 mt-4"
+                        className="font-['Satoshi'] text-lg text-base-content/70 mt-4"
                         data-aos="fade-up"
                         data-aos-duration="600"
                         data-aos-delay="350"
@@ -101,16 +101,16 @@ const Statistics = () => {
                     {stats.map((stat, index) => (
                         <div
                             key={index}
-                            className="bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-xl text-center"
+                            className="bg-base-100 p-6 md:p-8 rounded-2xl border border-base-300 shadow-xl text-center"
                             data-aos="fade-up"
                             data-aos-duration="800"
                             data-aos-delay={stat.aosDelay}
                         >
-                            <div className="w-16 h-16 bg-gradient-to-br from-[#238ae9] to-[#1e7acc] rounded-full flex items-center justify-center mx-auto mb-4">
-                                <stat.icon className="text-white text-3xl" />
+                            <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <stat.icon className="text-primary-content text-3xl" />
                             </div>
 
-                            <h3 className="font-['Satoshi'] text-4xl font-extrabold text-[#242424] mb-1 leading-none">
+                            <h3 className="font-['Satoshi'] text-4xl font-extrabold text-base-content mb-1 leading-none">
                                 {isVisible ? (
 
                                     <CountUp
@@ -126,7 +126,7 @@ const Statistics = () => {
                                 )}
                             </h3>
 
-                            <p className="font-['Satoshi'] text-base text-gray-600 font-medium">
+                            <p className="font-['Satoshi'] text-base text-base-content/70 font-medium">
                                 {stat.label}
                             </p>
                         </div>

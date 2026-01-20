@@ -47,16 +47,16 @@ const Logo = ({
         />
       ) : (
         <div
-          className={`${sizeConfig.image} bg-gradient-to-br from-[#238ae9] to-[#1e7acc] rounded-xl flex items-center justify-center shadow-md`}
+          className={`${sizeConfig.image} bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-md`}
         >
-          <span className={`text-white font-bold font-['Satoshi'] ${sizeConfig.text}`}>
+          <span className={`text-primary-content font-bold font-['Satoshi'] ${sizeConfig.text}`}>
             {SITE_INFO.NAME.charAt(0)}
           </span>
         </div>
       )}
       {showText && (
         <span
-          className={`text-[#242424] font-['Satoshi'] font-bold tracking-tight ${sizeConfig.text}`}
+          className={`text-base-content font-['Satoshi'] font-bold tracking-tight ${sizeConfig.text} transition-colors`}
         >
           {SITE_INFO.NAME}
         </span>

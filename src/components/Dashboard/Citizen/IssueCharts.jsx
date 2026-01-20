@@ -98,7 +98,7 @@ const IssueCharts = ({ issues = [] }) => {
   if (issues.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500 font-['Satoshi']">
+        <p className="text-base-content/50 font-['Satoshi']">
           No data available for charts. Report your first issue to see analytics!
         </p>
       </div>
@@ -109,8 +109,8 @@ const IssueCharts = ({ issues = [] }) => {
     <div className="space-y-6">
       {/* Status Distribution Pie Chart */}
       {statusData.length > 0 && (
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <h3 className="text-lg font-bold text-[#242424] font-['Satoshi'] mb-4">
+        <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300">
+          <h3 className="text-lg font-bold text-base-content font-['Satoshi'] mb-4">
             Status Distribution
           </h3>
           <ResponsiveContainer width="100%" height={300}>
@@ -139,8 +139,8 @@ const IssueCharts = ({ issues = [] }) => {
 
       {/* Category Bar Chart */}
       {categoryData.length > 0 && (
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <h3 className="text-lg font-bold text-[#242424] font-['Satoshi'] mb-4">
+        <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300">
+          <h3 className="text-lg font-bold text-base-content font-['Satoshi'] mb-4">
             Issues by Category
           </h3>
           <ResponsiveContainer width="100%" height={300}>
@@ -157,8 +157,8 @@ const IssueCharts = ({ issues = [] }) => {
 
       {/* Monthly Trend Line Chart */}
       {trendData.some((d) => d.issues > 0) && (
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <h3 className="text-lg font-bold text-[#242424] font-['Satoshi'] mb-4">
+        <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300">
+          <h3 className="text-lg font-bold text-base-content font-['Satoshi'] mb-4">
             Monthly Trend (Last 6 Months)
           </h3>
           <ResponsiveContainer width="100%" height={300}>
@@ -182,8 +182,8 @@ const IssueCharts = ({ issues = [] }) => {
 
       {/* Priority Distribution */}
       {priorityData.length > 0 && (
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <h3 className="text-lg font-bold text-[#242424] font-['Satoshi'] mb-4">
+        <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300">
+          <h3 className="text-lg font-bold text-base-content font-['Satoshi'] mb-4">
             Priority Distribution
           </h3>
           <ResponsiveContainer width="100%" height={250}>

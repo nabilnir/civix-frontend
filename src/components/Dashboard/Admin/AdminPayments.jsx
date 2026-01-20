@@ -62,7 +62,7 @@ const AdminPayments = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#238ae9]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -71,10 +71,10 @@ const AdminPayments = () => {
     <div className="space-y-6">
       {/* header */}
       <div>
-        <h1 className="text-3xl font-bold text-[#242424] font-['Satoshi'] mb-2">
+        <h1 className="text-3xl font-bold text-base-content font-['Satoshi'] mb-2">
           Payments Management
         </h1>
-        <p className="text-gray-600 font-['Satoshi']">
+        <p className="text-base-content/70 font-['Satoshi']">
           View and manage all payment transactions
         </p>
       </div>
@@ -87,29 +87,29 @@ const AdminPayments = () => {
               <p className="font-['Satoshi'] text-sm opacity-90 mb-1">Total Revenue</p>
               <p className="font-['Satoshi'] text-3xl font-bold">{totalRevenue} tk</p>
             </div>
-            <div className="bg-white/20 rounded-full p-4">
+            <div className="bg-base-100/20 rounded-full p-4">
               <FiDollarSign className="text-3xl" />
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <p className="font-['Satoshi'] text-sm text-gray-600 mb-1">Total Payments</p>
-          <p className="font-['Satoshi'] text-3xl font-bold text-[#242424]">
+        <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300">
+          <p className="font-['Satoshi'] text-sm text-base-content/70 mb-1">Total Payments</p>
+          <p className="font-['Satoshi'] text-3xl font-bold text-base-content">
             {stats.totalPayments || 0}
           </p>
         </div>
 
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <p className="font-['Satoshi'] text-sm text-gray-600 mb-1">Boost Payments</p>
-          <p className="font-['Satoshi'] text-3xl font-bold text-[#242424]">
+        <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300">
+          <p className="font-['Satoshi'] text-sm text-base-content/70 mb-1">Boost Payments</p>
+          <p className="font-['Satoshi'] text-3xl font-bold text-base-content">
             {stats.boostPayments || 0}
           </p>
         </div>
 
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <p className="font-['Satoshi'] text-sm text-gray-600 mb-1">Subscriptions</p>
-          <p className="font-['Satoshi'] text-3xl font-bold text-[#242424]">
+        <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300">
+          <p className="font-['Satoshi'] text-sm text-base-content/70 mb-1">Subscriptions</p>
+          <p className="font-['Satoshi'] text-3xl font-bold text-base-content">
             {stats.subscriptionPayments || 0}
           </p>
         </div>
@@ -117,8 +117,8 @@ const AdminPayments = () => {
 
       {/* chart */}
       {chartData.length > 0 && (
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <h3 className="text-lg font-bold text-[#242424] font-['Satoshi'] mb-4">
+        <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300">
+          <h3 className="text-lg font-bold text-base-content font-['Satoshi'] mb-4">
             Revenue by Month
           </h3>
           <ResponsiveContainer width="100%" height={300}>
@@ -134,17 +134,17 @@ const AdminPayments = () => {
       )}
 
       {/* filters */}
-      <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+      <div className="bg-base-100 rounded-xl p-4 shadow-sm border border-base-300">
         <div className="flex flex-wrap gap-4 items-center">
           <div className="flex items-center gap-2">
-            <FiFilter className="text-[#238ae9]" />
+            <FiFilter className="text-primary" />
             <span className="font-['Satoshi'] font-semibold text-sm">Filters:</span>
           </div>
           
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg font-['Satoshi'] text-sm focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
+            className="px-4 py-2 border border-base-300 rounded-lg font-['Satoshi'] text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="">All Types</option>
             <option value="boost">Issue Boost</option>
@@ -154,7 +154,7 @@ const AdminPayments = () => {
           <select
             value={monthFilter}
             onChange={(e) => setMonthFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg font-['Satoshi'] text-sm focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
+            className="px-4 py-2 border border-base-300 rounded-lg font-['Satoshi'] text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="">All Months</option>
             <option value="1">January</option>
@@ -175,51 +175,51 @@ const AdminPayments = () => {
 
       {/* payments table */}
       {payments.length > 0 ? (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-base-100 rounded-xl shadow-sm border border-base-300 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#f4f6f8]">
+              <thead className="bg-base-200">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content/70 font-['Satoshi'] uppercase">
                     Date
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content/70 font-['Satoshi'] uppercase">
                     User
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content/70 font-['Satoshi'] uppercase">
                     Type
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content/70 font-['Satoshi'] uppercase">
                     Amount
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content/70 font-['Satoshi'] uppercase">
                     Transaction ID
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content/70 font-['Satoshi'] uppercase">
                     Invoice ID
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content/70 font-['Satoshi'] uppercase">
                     Action
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-base-300">
                 {payments.map((payment) => (
-                  <tr key={payment._id} className="hover:bg-gray-50">
+                  <tr key={payment._id} className="hover:bg-base-200">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <p className="font-['Satoshi'] text-sm text-[#242424]">
+                      <p className="font-['Satoshi'] text-sm text-base-content">
                         {new Date(payment.createdAt).toLocaleDateString()}
                       </p>
-                      <p className="font-['Satoshi'] text-xs text-gray-500">
+                      <p className="font-['Satoshi'] text-xs text-base-content/50">
                         {new Date(payment.createdAt).toLocaleTimeString()}
                       </p>
                     </td>
                     <td className="px-6 py-4">
                       <div>
-                        <p className="font-['Satoshi'] font-semibold text-sm text-[#242424]">
+                        <p className="font-['Satoshi'] font-semibold text-sm text-base-content">
                           {payment.userName}
                         </p>
-                        <p className="font-['Satoshi'] text-xs text-gray-500">
+                        <p className="font-['Satoshi'] text-xs text-base-content/50">
                           {payment.userEmail}
                         </p>
                       </div>
@@ -228,30 +228,30 @@ const AdminPayments = () => {
                       <span className={`px-3 py-1 rounded-full text-xs font-bold font-['Satoshi'] ${
                         payment.type === 'subscription'
                           ? 'bg-purple-100 text-purple-700'
-                          : 'bg-amber-100 text-amber-700'
+                          : 'bg-warning/10 text-warning'
                       }`}>
                         {payment.type === 'subscription' ? 'Premium' : 'Boost'}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <p className="font-['Satoshi'] font-semibold text-[#242424]">
+                      <p className="font-['Satoshi'] font-semibold text-base-content">
                         {payment.amount} tk
                       </p>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <p className="font-['Satoshi'] text-sm text-gray-600">
+                      <p className="font-['Satoshi'] text-sm text-base-content/70">
                         {payment.transactionId}
                       </p>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <p className="font-['Satoshi'] text-sm text-gray-600">
+                      <p className="font-['Satoshi'] text-sm text-base-content/70">
                         {payment.invoiceId || 'N/A'}
                       </p>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button
                         onClick={() => handleDownloadInvoice(payment)}
-                        className="flex items-center gap-2 px-4 py-2 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] text-sm font-medium hover:bg-[#1e7acc] transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-['Satoshi'] text-sm font-medium hover:bg-[#1e7acc] transition-colors"
                       >
                         <FiDownload /> Invoice
                       </button>
@@ -263,9 +263,9 @@ const AdminPayments = () => {
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-xl p-12 text-center shadow-sm border border-gray-100">
+        <div className="bg-base-100 rounded-xl p-12 text-center shadow-sm border border-base-300">
           <FiDollarSign className="text-6xl text-gray-300 mx-auto mb-4" />
-          <p className="text-gray-500 font-['Satoshi'] text-lg">
+          <p className="text-base-content/50 font-['Satoshi'] text-lg">
             No payment records found
           </p>
         </div>

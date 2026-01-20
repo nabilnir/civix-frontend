@@ -5,8 +5,6 @@ import useAuth from '../../hooks/useAuth';
 import useRole from '../../hooks/useRole';
 import toast from 'react-hot-toast';
 import Logo from './Logo';
-import NotificationDropdown from './NotificationDropdown';
-import MessageCenter from './MessageCenter';
 import ThemeToggle from './ThemeToggle';
 
 export default function Navbar() {
@@ -54,6 +52,7 @@ export default function Navbar() {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'All Issues', path: '/allissues' },
+    { name: 'Announcements', path: '/announcements' },
     { name: 'About', path: '/aboutUs' },
     { name: 'Contact', path: '/contact' },
   ];
@@ -89,15 +88,7 @@ export default function Navbar() {
             <ThemeToggle />
             {user ? (
               <>
-                {/* Notification Dropdown */}
-                <div className="hidden sm:block">
-                  <NotificationDropdown />
-                </div>
 
-                {/* Message Center */}
-                <div className="hidden sm:block">
-                  <MessageCenter />
-                </div>
 
                 {/* Profile Dropdown */}
                 <div className="relative" ref={dropdownRef}>

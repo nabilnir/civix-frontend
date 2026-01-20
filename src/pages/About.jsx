@@ -41,7 +41,7 @@ const About = () => {
     ];
 
     return (
-        <section className="bg-white py-20 md:py-32">
+        <section className="bg-base-100 py-20 md:py-32">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 {/* -------------------- 1. Hero / Mission Statement -------------------- */}
@@ -49,25 +49,25 @@ const About = () => {
 
                     {/* Text Content */}
                     <div data-aos="fade-right" data-aos-duration="1000">
-                        <span className="inline-block px-4 py-1 bg-[#f4f6f8] text-[#238ae9] rounded-full font-['Satoshi'] text-sm font-medium mb-4">
+                        <span className="inline-block px-4 py-1 bg-base-200 text-primary rounded-full font-['Satoshi'] text-sm font-medium mb-4">
                             Our Story
                         </span>
 
                         <h1 className="font-['Satoshi'] text-4xl md:text-5xl 
-                        lg:text-6xl font-bold text-[#242424] leading-tight mb-6">
-                            Building Better Cities, One 
-                             <span className="text-[#238ae9]"> Report </span>
+                        lg:text-6xl font-bold text-base-content leading-tight mb-6">
+                            Building Better Cities, One
+                            <span className="text-primary"> Report </span>
                             at a Time.
                         </h1>
 
-                        <p className="font-['Satoshi'] text-lg text-gray-700 mb-6">
+                        <p className="font-['Satoshi'] text-lg text-base-content/80 mb-6">
                             Civix was born from a simple belief: a well-maintained city
                             starts with empowered citizens. We bridge the communication
                             gap between the community and municipal services,
                             turning frustration into action.
                         </p>
 
-                        <p className="font-['Satoshi'] text-base text-gray-600 mb-8">
+                        <p className="font-['Satoshi'] text-base text-base-content/60 mb-8">
                             We provide the digital infrastructure needed to effortlessly
                             report issues be it a pothole, a broken streetlight, or a water leak and
                             track its resolution with unprecedented transparency.
@@ -75,8 +75,8 @@ const About = () => {
 
                         <Link
                             to="/allissues"
-                            className="inline-flex bg-gradient-to-br from-[#238ae9]
-                             to-[#1e7acc] text-white px-8 py-4 rounded-xl font-['Satoshi']
+                            className="inline-flex bg-gradient-to-br from-primary
+                             to-primary/80 text-primary-content px-8 py-4 rounded-xl font-['Satoshi']
                               font-bold text-base hover:shadow-xl hover:scale-[1.02]
                                transition-all shadow-lg items-center gap-2 group"
                         >
@@ -88,13 +88,13 @@ const About = () => {
 
                     <div
                         className="relative h-96 rounded-2xl overflow-hidden shadow-2xl
-                         bg-[#f4f6f8]"
+                         bg-base-200"
                         data-aos="fade-left"
                         data-aos-duration="1000"
                         data-aos-delay="300"
                     >
                         <img
-                            src="https://images.pexels.com/photos/7731331/pexels-photo-7731331.jpeg" 
+                            src="https://images.pexels.com/photos/7731331/pexels-photo-7731331.jpeg"
                             alt="Illustration of community impact and issue resolution"
                             className="w-full h-full object-cover "
                         />
@@ -102,14 +102,14 @@ const About = () => {
                 </div>
 
                 {/* -------------------- 2. Core Values / Pillars -------------------- */}
-                <div className="py-16 md:py-24 bg-[#f4f6f8] rounded-3xl shadow-inner">
+                <div className="py-16 md:py-24 bg-base-200 rounded-3xl shadow-inner">
                     <div className="text-center max-w-3xl mx-auto mb-16 px-4">
-                        <span className="inline-block px-4 py-1 bg-white text-[#238ae9] rounded-full font-['Satoshi'] text-sm font-medium mb-3"
+                        <span className="inline-block px-4 py-1 bg-base-100 text-primary rounded-full font-['Satoshi'] text-sm font-medium mb-3"
                             data-aos="fade-up" data-aos-duration="600">
                             Our Pillars
                         </span>
                         <h2
-                            className="font-['Satoshi'] text-3xl md:text-4xl font-bold text-[#242424] leading-tight"
+                            className="font-['Satoshi'] text-3xl md:text-4xl font-bold text-base-content leading-tight"
                             data-aos="fade-up" data-aos-duration="600" data-aos-delay="200"
                         >
                             Commitment to the Community
@@ -120,19 +120,19 @@ const About = () => {
                         {coreValues.map((value, index) => (
                             <div
                                 key={index}
-                                className="text-center p-6 bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300"
+                                className="text-center p-6 bg-base-100 rounded-2xl shadow-lg border border-base-300 hover:shadow-xl transition-shadow duration-300"
                                 data-aos="zoom-in"
                                 data-aos-duration="800"
                                 data-aos-delay={value.aosDelay}
                             >
-                                <div className="w-16 h-16 bg-gradient-to-br from-[#238ae9] to-[#1e7acc] rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+                                <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
                                     {/* Icon uses the project's primary blue gradient */}
-                                    {React.createElement(value.icon, { className: "text-white text-2xl" })}
+                                    {React.createElement(value.icon, { className: "text-primary-content text-2xl" })}
                                 </div>
-                                <h3 className="font-['Satoshi'] text-xl font-bold text-[#242424] mb-2">
+                                <h3 className="font-['Satoshi'] text-xl font-bold text-base-content mb-2">
                                     {value.title}
                                 </h3>
-                                <p className="font-['Satoshi'] text-sm text-gray-600">
+                                <p className="font-['Satoshi'] text-sm text-base-content/60">
                                     {value.description}
                                 </p>
                             </div>
@@ -143,14 +143,14 @@ const About = () => {
                 {/* -------------------- 3. Call to Action / Team Section -------------------- */}
                 <div className="mt-20 text-center">
                     <h2
-                        className="font-['Satoshi'] text-3xl font-bold text-[#242424] mb-4"
+                        className="font-['Satoshi'] text-3xl font-bold text-base-content mb-4"
                         data-aos="fade-up"
                         data-aos-duration="800"
                     >
                         Meet the Engineers Behind the Code
                     </h2>
                     <p
-                        className="font-['Satoshi'] text-lg text-gray-600 mb-10 max-w-2xl mx-auto"
+                        className="font-['Satoshi'] text-lg text-base-content/60 mb-10 max-w-2xl mx-auto"
                         data-aos="fade-up"
                         data-aos-duration="800"
                         data-aos-delay="200"
@@ -167,20 +167,20 @@ const About = () => {
                         data-aos-delay="400"
                     >
 
-                        <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-[#1e7acc] shadow-lg">
+                        <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-primary shadow-lg">
                             <img src={img1} alt="Team Member 1" className="w-full h-full object-cover" />
                         </div>
-                        <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-[#1e7acc] shadow-lg">
+                        <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-primary shadow-lg">
                             <img src={img2} alt="Team Member 2" className="w-full h-full object-cover" />
                         </div>
-                        <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-[#1e7acc] shadow-lg">
+                        <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-primary shadow-lg">
                             <img src={img3} alt="Team Member 3" className="w-full h-full object-cover" />
                         </div>
                     </div>
 
                     <Link
                         to="/contact"
-                        className="inline-flex mt-12 text-[#238ae9] hover:text-[#1e7acc] font-['Satoshi'] font-semibold transition-colors items-center gap-2 group"
+                        className="inline-flex mt-12 text-primary hover:text-primary/80 font-['Satoshi'] font-semibold transition-colors items-center gap-2 group"
                         data-aos="fade-up"
                         data-aos-duration="800"
                         data-aos-delay="600"

@@ -9,7 +9,7 @@ const TimelineItem = ({ entry }) => {
     const statusLower = status?.toLowerCase() || '';
     const iconSize = 20;
     const iconClass = 'text-white';
-    
+
     if (statusLower.includes('resolved')) {
       return <CheckCircle2 className={iconClass} size={iconSize} />;
     }
@@ -54,13 +54,13 @@ const TimelineItem = ({ entry }) => {
   const getRoleBadgeColor = (role) => {
     switch (role?.toLowerCase()) {
       case 'admin':
-        return 'bg-red-100 text-red-700';
+        return 'bg-error/10 text-error';
       case 'staff':
-        return 'bg-blue-100 text-blue-700';
+        return 'bg-info/10 text-info';
       case 'citizen':
-        return 'bg-green-100 text-green-700';
+        return 'bg-success/10 text-success';
       default:
-        return 'bg-gray-100 text-gray-700';
+        return 'bg-base-200 text-base-content/70';
     }
   };
 
@@ -81,7 +81,7 @@ const TimelineItem = ({ entry }) => {
       <div
         className={`absolute -left-[45px] top-0 h-10 w-10 rounded-full ${getStatusColor(
           entry.status
-        )} border-4 border-white shadow-lg flex items-center justify-center`}
+        )} border-4 border-base-100 shadow-lg flex items-center justify-center`}
       >
         {getStatusIcon(entry.status)}
       </div>
@@ -90,23 +90,23 @@ const TimelineItem = ({ entry }) => {
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
         <div className="flex-1">
           {/* Date */}
-          <span className="text-xs font-bold text-gray-400 uppercase tracking-wider font-['Satoshi']">
+          <span className="text-xs font-bold text-base-content/40 uppercase tracking-wider font-['Satoshi']">
             {formatDate(entry.date)}
           </span>
 
           {/* Status */}
-          <h4 className="text-base font-bold text-gray-800 mt-1 font-['Satoshi'] capitalize">
+          <h4 className="text-base font-bold text-base-content mt-1 font-['Satoshi'] capitalize">
             {entry.status?.replace('-', ' ') || 'Status Updated'}
           </h4>
 
           {/* Message/Note */}
           {entry.message && (
-            <p className="text-sm text-gray-600 mt-1 font-['Satoshi']">
+            <p className="text-sm text-base-content/70 mt-1 font-['Satoshi']">
               {entry.message}
             </p>
           )}
           {entry.note && !entry.message && (
-            <p className="text-sm text-gray-600 mt-1 font-['Satoshi']">
+            <p className="text-sm text-base-content/70 mt-1 font-['Satoshi']">
               {entry.note}
             </p>
           )}
@@ -123,7 +123,7 @@ const TimelineItem = ({ entry }) => {
             {entry.updatedByRole || 'User'}
           </span>
           {entry.updatedBy && (
-            <span className="text-xs text-gray-500 font-['Satoshi'] truncate max-w-[120px]">
+            <span className="text-xs text-base-content/50 font-['Satoshi'] truncate max-w-[120px]">
               {entry.updatedBy}
             </span>
           )}
@@ -134,4 +134,3 @@ const TimelineItem = ({ entry }) => {
 };
 
 export default TimelineItem;
-

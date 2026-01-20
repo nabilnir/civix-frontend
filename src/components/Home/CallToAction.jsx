@@ -13,7 +13,7 @@ const CallToAction = () => {
   ];
 
   return (
-    <section className="py-20 md:py-32 bg-gradient-to-br from-[#238ae9] to-[#1e7acc] relative overflow-hidden">
+    <section className="py-20 md:py-32 bg-gradient-to-br from-primary to-primary/80 relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0" style={{
@@ -25,7 +25,7 @@ const CallToAction = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
-          <div 
+          <div
             className="text-white"
             data-aos="fade-right"
             data-aos-duration="800"
@@ -33,13 +33,13 @@ const CallToAction = () => {
             <span className="inline-block px-4 py-1 bg-white/20 backdrop-blur-sm rounded-full font-['Satoshi'] text-sm font-medium mb-4">
               Premium Features
             </span>
-            
+
             <h2 className="font-['Satoshi'] text-4xl md:text-5xl font-bold mb-6 leading-tight">
               Upgrade to Premium
               <br />
               <span className="text-white/90">Unlock Unlimited Reports</span>
             </h2>
-            
+
             <p className="font-['Satoshi'] text-lg text-white/90 mb-8 leading-relaxed">
               Join thousands of premium citizens who are making a real difference in their communities. Get priority support and unlimited issue reporting.
             </p>
@@ -47,7 +47,7 @@ const CallToAction = () => {
             {/* Benefits List */}
             <ul className="space-y-3 mb-8">
               {benefits.map((benefit, index) => (
-                <li 
+                <li
                   key={index}
                   className="flex items-center gap-3 font-['Satoshi']"
                   data-aos="fade-right"
@@ -60,14 +60,14 @@ const CallToAction = () => {
             </ul>
 
             {/* CTA Buttons */}
-            <div 
+            <div
               className="flex flex-wrap gap-4"
               data-aos="fade-up"
               data-aos-delay="600"
             >
               <Link
                 to="/register"
-                className="inline-flex items-center bg-white text-[#238ae9] px-8 py-4 rounded-xl font-['Satoshi'] font-bold text-base hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:scale-105 group"
+                className="inline-flex items-center bg-white text-primary px-8 py-4 rounded-xl font-['Satoshi'] font-bold text-base hover:bg-base-100 transition-all shadow-lg hover:shadow-xl hover:scale-105 group"
               >
                 Get Started Free
                 <FiArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
@@ -82,7 +82,7 @@ const CallToAction = () => {
           </div>
 
           {/* Right Visual */}
-          <div 
+          <div
             className="relative"
             data-aos="fade-left"
             data-aos-duration="800"

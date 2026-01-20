@@ -4,7 +4,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 const HowItWorks = () => {
-    
+
     const steps = [
         {
             icon: FiMapPin,
@@ -39,23 +39,23 @@ const HowItWorks = () => {
     ];
 
     return (
-        <section className="py-20 md:py-32 bg-white">
+        <section className="py-20 md:py-32 bg-base-100">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
+
                 {/* Section Header */}
                 <div className="text-center max-w-3xl mx-auto mb-16">
-                    <span className="inline-block px-4 py-1 bg-[#f4f6f8] text-[#238ae9] rounded-full font-['Satoshi'] text-sm font-medium mb-3"
-                    data-aos="fade-up" data-aos-duration="600">
+                    <span className="inline-block px-4 py-1 bg-base-200 text-primary rounded-full font-['Satoshi'] text-sm font-medium mb-3"
+                        data-aos="fade-up" data-aos-duration="600">
                         Process Overview
                     </span>
-                    <h2 
-                        className="font-['Satoshi'] text-3xl md:text-4xl lg:text-5xl font-bold text-[#242424] leading-tight"
+                    <h2
+                        className="font-['Satoshi'] text-3xl md:text-4xl lg:text-5xl font-bold text-base-content leading-tight"
                         data-aos="fade-up" data-aos-duration="600" data-aos-delay="200"
                     >
                         How the System Works
                     </h2>
-                    <p 
-                        className="font-['Satoshi'] text-base md:text-lg text-gray-600 mt-4 px-4 md:px-0"
+                    <p
+                        className="font-['Satoshi'] text-base md:text-lg text-base-content/70 mt-4 px-4 md:px-0"
                         data-aos="fade-up" data-aos-duration="600" data-aos-delay="400"
                     >
                         A simple, transparent, and efficient way to connect citizens and municipal services.
@@ -67,28 +67,28 @@ const HowItWorks = () => {
                     {steps.map((step, index) => (
                         <div
                             key={index}
-                            className="bg-white p-6 rounded-2xl border border-gray-100 shadow-lg hover:shadow-xl transition-shadow duration-300 text-center"
+                            className="bg-base-100 p-6 rounded-2xl border border-base-300 shadow-lg hover:shadow-xl transition-shadow duration-300 text-center"
                             data-aos="fade-up"
                             data-aos-duration="800"
                             data-aos-delay={step.aosDelay}
                         >
                             {/* Icon */}
-                            <div className="w-16 h-16 bg-gradient-to-br from-[#238ae9] to-[#1e7acc] rounded-full flex items-center justify-center mx-auto mb-4">
-                                <step.icon className="text-white text-2xl" />
+                            <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <step.icon className="text-primary-content text-2xl" />
                             </div>
 
                             {/* Step Number */}
-                            <div className="inline-block px-3 py-1 bg-[#f4f6f8] text-[#238ae9] rounded-full font-['Satoshi'] text-xs font-semibold mb-3">
+                            <div className="inline-block px-3 py-1 bg-base-200 text-primary rounded-full font-['Satoshi'] text-xs font-semibold mb-3">
                                 Step {index + 1}
                             </div>
 
                             {/* Title */}
-                            <h3 className="font-['Satoshi'] text-xl font-bold text-[#242424] mb-3">
+                            <h3 className="font-['Satoshi'] text-xl font-bold text-base-content mb-3">
                                 {step.title}
                             </h3>
 
                             {/* Description */}
-                            <p className="font-['Satoshi'] text-sm text-gray-600 leading-relaxed">
+                            <p className="font-['Satoshi'] text-sm text-base-content/70 leading-relaxed">
                                 {step.description}
                             </p>
                         </div>
@@ -98,35 +98,35 @@ const HowItWorks = () => {
                 {/* Timeline Layout - Desktop/Tablet Only */}
                 <div className="hidden md:block relative">
                     {/* Vertical Line - Centered */}
-                    <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-gray-200 top-0 bottom-0"></div>
+                    <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-base-300 top-0 bottom-0"></div>
 
                     {steps.map((step, index) => (
-                        <div 
-                            key={index} 
+                        <div
+                            key={index}
                             className={`flex flex-row mb-12 relative ${index % 2 !== 0 ? 'flex-row-reverse' : ''}`}
                         >
                             {/* Content Block */}
-                            <div 
+                            <div
                                 className={`w-5/12 p-4 ${index % 2 === 0 ? 'pr-4 text-right' : 'pl-4 text-left'}`}
-                                data-aos={index % 2 === 0 ? 'fade-right' : 'fade-left'} 
-                                data-aos-duration="800" 
+                                data-aos={index % 2 === 0 ? 'fade-right' : 'fade-left'}
+                                data-aos-duration="800"
                                 data-aos-delay={step.aosDelay}
                             >
-                                <h3 className="font-['Satoshi'] text-xl font-bold text-[#242424] mb-2">
+                                <h3 className="font-['Satoshi'] text-xl font-bold text-base-content mb-2">
                                     {step.title}
                                 </h3>
-                                <p className="font-['Satoshi'] text-gray-600">
+                                <p className="font-['Satoshi'] text-base-content/70">
                                     {step.description}
                                 </p>
                             </div>
 
                             {/* Icon Circle - Centered on line */}
                             <div className="flex items-center justify-center w-2/12">
-                                <div className="z-10 w-14 h-14 rounded-full flex items-center justify-center bg-white border-4 border-[#238ae9] shadow-lg">
-                                    <step.icon className="text-[#238ae9] text-xl" />
+                                <div className="z-10 w-14 h-14 rounded-full flex items-center justify-center bg-base-100 border-4 border-primary shadow-lg">
+                                    <step.icon className="text-primary text-xl" />
                                 </div>
                             </div>
-                            
+
                             {/* Spacer */}
                             <div className="w-5/12"></div>
                         </div>

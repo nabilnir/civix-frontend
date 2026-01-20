@@ -136,7 +136,7 @@ const AdminAllIssues = () => {
   const handleRejectSubmit = (e) => {
     e.preventDefault();
     const reason = e.target.reason.value || 'No reason provided';
-    
+
     Swal.fire({
       title: 'Are you sure?',
       text: 'This will reject the issue permanently',
@@ -158,7 +158,7 @@ const AdminAllIssues = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#238ae9]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -167,56 +167,56 @@ const AdminAllIssues = () => {
     <div className="space-y-6">
       {/* header */}
       <div>
-        <h1 className="text-3xl font-bold text-[#242424] font-['Satoshi'] mb-2">
+        <h1 className="text-3xl font-bold text-base-content font-['Satoshi'] mb-2">
           All Issues
         </h1>
-        <p className="text-gray-600 font-['Satoshi']">
+        <p className="text-base-content/70 font-['Satoshi']">
           Manage and assign issues to staff members
         </p>
       </div>
 
       {/* issues table */}
       {issues.length > 0 ? (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-base-100 rounded-xl shadow-sm border border-base-300 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#f4f6f8]">
+              <thead className="bg-base-200">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase min-w-[300px]">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content/70 font-['Satoshi'] uppercase min-w-[300px]">
                     Issue
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase whitespace-nowrap">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content/70 font-['Satoshi'] uppercase whitespace-nowrap">
                     Category
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase whitespace-nowrap min-w-[120px]">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content/70 font-['Satoshi'] uppercase whitespace-nowrap min-w-[120px]">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase whitespace-nowrap min-w-[100px]">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content/70 font-['Satoshi'] uppercase whitespace-nowrap min-w-[100px]">
                     Priority
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase min-w-[180px]">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content/70 font-['Satoshi'] uppercase min-w-[180px]">
                     Assigned Staff
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase whitespace-nowrap">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content/70 font-['Satoshi'] uppercase whitespace-nowrap">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-base-300">
                 {issues.map((issue) => (
-                  <tr key={issue._id} className="hover:bg-gray-50">
+                  <tr key={issue._id} className="hover:bg-base-200">
                     <td className="px-6 py-4">
                       <div>
-                        <h4 className="font-['Satoshi'] font-semibold text-sm text-[#242424]">
+                        <h4 className="font-['Satoshi'] font-semibold text-sm text-base-content">
                           {issue.title}
                         </h4>
-                        <p className="font-['Satoshi'] text-xs text-gray-500 line-clamp-1">
+                        <p className="font-['Satoshi'] text-xs text-base-content/50 line-clamp-1">
                           {issue.location}
                         </p>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-['Satoshi']">
+                      <span className="px-2 py-1 bg-base-200 text-base-content rounded text-xs font-['Satoshi']">
                         {issue.category}
                       </span>
                     </td>
@@ -225,11 +225,11 @@ const AdminAllIssues = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {(issue.priority === 'high' || issue.priority === 'High') ? (
-                        <span className="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-bold font-['Satoshi'] whitespace-nowrap">
+                        <span className="px-2 py-1 bg-error/10 text-error rounded text-xs font-bold font-['Satoshi'] whitespace-nowrap">
                           High
                         </span>
                       ) : (
-                        <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-['Satoshi'] whitespace-nowrap">
+                        <span className="px-2 py-1 bg-base-200 text-base-content rounded text-xs font-['Satoshi'] whitespace-nowrap">
                           Normal
                         </span>
                       )}
@@ -242,45 +242,45 @@ const AdminAllIssues = () => {
                             alt={issue.assignedStaff.name}
                             className="w-8 h-8 rounded-full object-cover"
                           />
-                          <span className="font-['Satoshi'] text-sm text-[#242424]">
+                          <span className="font-['Satoshi'] text-sm text-base-content">
                             {issue.assignedStaff.name}
                           </span>
                         </div>
                       ) : (
-                        <span className="text-gray-400 text-sm font-['Satoshi']">Not assigned</span>
+                        <span className="text-base-content/40 text-sm font-['Satoshi']">Not assigned</span>
                       )}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => navigate(`/issue/${issue._id}`)}
-                          className="p-2 text-[#238ae9] hover:bg-blue-50 rounded-lg transition-colors"
+                          className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors"
                           title="View Details"
                         >
                           <FiEye />
                         </button>
-                        
+
                         {!issue.assignedStaff && (
                           <button
                             onClick={() => handleAssignClick(issue)}
-                            className="flex items-center gap-1 px-3 py-1.5 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] text-sm font-medium hover:bg-[#1e7acc] transition-colors"
+                            className="flex items-center gap-1 px-3 py-1.5 bg-primary text-primary-content rounded-lg font-['Satoshi'] text-sm font-medium hover:bg-primary/80 transition-colors"
                           >
                             <FiUserPlus /> Assign Staff
                           </button>
                         )}
-                        
+
                         {issue.status === 'pending' && (
                           <button
                             onClick={() => handleRejectClick(issue)}
-                            className="flex items-center gap-1 px-3 py-1.5 bg-red-100 text-red-700 rounded-lg font-['Satoshi'] text-sm font-medium hover:bg-red-200 transition-colors"
+                            className="flex items-center gap-1 px-3 py-1.5 bg-error/10 text-error rounded-lg font-['Satoshi'] text-sm font-medium hover:bg-error/20 transition-colors"
                           >
                             <FiX /> Reject
                           </button>
                         )}
-                        
+
                         <button
                           onClick={() => handleDeleteClick(issue)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          className="p-2 text-error hover:bg-error/10 rounded-lg transition-colors"
                           title="Remove Issue"
                           disabled={deleteIssueMutation.isPending}
                         >
@@ -295,32 +295,32 @@ const AdminAllIssues = () => {
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-xl p-12 text-center shadow-sm border border-gray-100">
-          <p className="text-gray-500 font-['Satoshi'] text-lg">No issues found</p>
+        <div className="bg-base-100 rounded-xl p-12 text-center shadow-sm border border-base-300">
+          <p className="text-base-content/50 font-['Satoshi'] text-lg">No issues found</p>
         </div>
       )}
 
       {/* Assign Staff Modal */}
       {showAssignModal && selectedIssue && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md m-4">
+          <div className="bg-base-100 rounded-2xl shadow-2xl w-full max-w-md m-4">
             <div className="p-6">
-              <h2 className="text-2xl font-bold text-[#242424] font-['Satoshi'] mb-4">
+              <h2 className="text-2xl font-bold text-base-content font-['Satoshi'] mb-4">
                 Assign Staff
               </h2>
-              <p className="text-gray-600 font-['Satoshi'] mb-4">
+              <p className="text-base-content/70 font-['Satoshi'] mb-4">
                 Assign staff member to: <strong>{selectedIssue.title}</strong>
               </p>
-              
+
               <form onSubmit={handleAssignSubmit}>
                 <div className="mb-4">
-                  <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+                  <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2">
                     Select Staff Member
                   </label>
                   <select
                     name="staffEmail"
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
+                    className="w-full px-4 py-3 border border-base-300 bg-base-100 text-base-content rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <option value="">Choose a staff member...</option>
                     {staffList.map((staff) => (
@@ -330,7 +330,7 @@ const AdminAllIssues = () => {
                     ))}
                   </select>
                 </div>
-                
+
                 <div className="flex gap-4">
                   <button
                     type="button"
@@ -338,14 +338,14 @@ const AdminAllIssues = () => {
                       setShowAssignModal(false);
                       setSelectedIssue(null);
                     }}
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg font-['Satoshi'] font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex-1 px-4 py-2 border border-base-300 rounded-lg font-['Satoshi'] font-semibold text-base-content hover:bg-base-200 transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={assignStaffMutation.isPending}
-                    className="flex-1 px-4 py-2 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] font-semibold hover:bg-[#1e7acc] transition-colors disabled:opacity-50"
+                    className="flex-1 px-4 py-2 bg-primary text-primary-content rounded-lg font-['Satoshi'] font-semibold hover:bg-primary/80 transition-colors disabled:opacity-50"
                   >
                     {assignStaffMutation.isPending ? 'Assigning...' : 'Assign'}
                   </button>
@@ -359,28 +359,28 @@ const AdminAllIssues = () => {
       {/* Reject Issue Modal */}
       {showRejectModal && selectedIssue && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md m-4">
+          <div className="bg-base-100 rounded-2xl shadow-2xl w-full max-w-md m-4">
             <div className="p-6">
-              <h2 className="text-2xl font-bold text-[#242424] font-['Satoshi'] mb-4">
+              <h2 className="text-2xl font-bold text-base-content font-['Satoshi'] mb-4">
                 Reject Issue
               </h2>
-              <p className="text-gray-600 font-['Satoshi'] mb-4">
+              <p className="text-base-content/70 font-['Satoshi'] mb-4">
                 Reject issue: <strong>{selectedIssue.title}</strong>
               </p>
-              
+
               <form onSubmit={handleRejectSubmit}>
                 <div className="mb-4">
-                  <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+                  <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2">
                     Reason (Optional)
                   </label>
                   <textarea
                     name="reason"
                     rows="3"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
+                    className="w-full px-4 py-3 border border-base-300 bg-base-100 text-base-content rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-primary"
                     placeholder="Enter rejection reason..."
                   />
                 </div>
-                
+
                 <div className="flex gap-4">
                   <button
                     type="button"
@@ -388,7 +388,7 @@ const AdminAllIssues = () => {
                       setShowRejectModal(false);
                       setSelectedIssue(null);
                     }}
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg font-['Satoshi'] font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex-1 px-4 py-2 border border-base-300 rounded-lg font-['Satoshi'] font-semibold text-base-content hover:bg-base-200 transition-colors"
                   >
                     Cancel
                   </button>

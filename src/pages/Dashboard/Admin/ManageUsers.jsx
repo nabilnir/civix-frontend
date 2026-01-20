@@ -20,13 +20,13 @@ const ManageUsers = () => {
         const params = {};
         if (searchTerm) params.search = searchTerm;
         if (statusFilter) params.status = statusFilter;
-        
+
         const res = await axiosSecure.get('/api/admin/users', { params });
-        
+
         if (!res.data.success) {
           throw new Error(res.data.message || 'Failed to fetch users');
         }
-        
+
         return res.data.data || [];
       } catch (err) {
         toast.error(err.response?.data?.message || 'Failed to fetch users');
@@ -49,8 +49,8 @@ const ManageUsers = () => {
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries(['allCitizens']);
       toast.success(
-        variables.isBlocked 
-          ? 'User unblocked successfully' 
+        variables.isBlocked
+          ? 'User unblocked successfully'
           : 'User blocked successfully'
       );
     },
@@ -114,7 +114,7 @@ const ManageUsers = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#238ae9]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -123,8 +123,8 @@ const ManageUsers = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <p className="text-red-600 font-['Satoshi'] mb-2">Error loading users</p>
-          <p className="text-gray-500 font-['Satoshi'] text-sm">
+          <p className="text-error font-['Satoshi'] mb-2">Error loading users</p>
+          <p className="text-base-content/50 font-['Satoshi'] text-sm">
             {error?.response?.data?.message || error?.message || 'Please try again'}
           </p>
         </div>
@@ -135,65 +135,65 @@ const ManageUsers = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-        <h1 className="text-2xl font-bold text-[#242424] font-['Satoshi'] mb-2">
+      <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300">
+        <h1 className="text-2xl font-bold text-base-content font-['Satoshi'] mb-2">
           Manage Citizens
         </h1>
-        <p className="text-gray-600 font-['Satoshi']">
+        <p className="text-base-content/70 font-['Satoshi']">
           View and manage all registered citizens. Block or unblock users as needed.
         </p>
       </div>
 
       {/* Stats Summary */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-          <p className="text-gray-600 font-['Satoshi'] text-sm mb-1">Total Users</p>
-          <p className="text-2xl font-bold text-[#242424] font-['Satoshi']">
+        <div className="bg-base-100 rounded-xl p-4 shadow-sm border border-base-300">
+          <p className="text-base-content/70 font-['Satoshi'] text-sm mb-1">Total Users</p>
+          <p className="text-2xl font-bold text-base-content font-['Satoshi']">
             {users.length}
           </p>
         </div>
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-          <p className="text-gray-600 font-['Satoshi'] text-sm mb-1">Premium Users</p>
-          <p className="text-2xl font-bold text-amber-600 font-['Satoshi']">
+        <div className="bg-base-100 rounded-xl p-4 shadow-sm border border-base-300">
+          <p className="text-base-content/70 font-['Satoshi'] text-sm mb-1">Premium Users</p>
+          <p className="text-2xl font-bold text-warning font-['Satoshi']">
             {users.filter(u => u.isPremium).length}
           </p>
         </div>
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-          <p className="text-gray-600 font-['Satoshi'] text-sm mb-1">Active Users</p>
-          <p className="text-2xl font-bold text-green-600 font-['Satoshi']">
+        <div className="bg-base-100 rounded-xl p-4 shadow-sm border border-base-300">
+          <p className="text-base-content/70 font-['Satoshi'] text-sm mb-1">Active Users</p>
+          <p className="text-2xl font-bold text-success font-['Satoshi']">
             {users.filter(u => !u.isBlocked).length}
           </p>
         </div>
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-          <p className="text-gray-600 font-['Satoshi'] text-sm mb-1">Blocked Users</p>
-          <p className="text-2xl font-bold text-red-600 font-['Satoshi']">
+        <div className="bg-base-100 rounded-xl p-4 shadow-sm border border-base-300">
+          <p className="text-base-content/70 font-['Satoshi'] text-sm mb-1">Blocked Users</p>
+          <p className="text-2xl font-bold text-error font-['Satoshi']">
             {users.filter(u => u.isBlocked).length}
           </p>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+      <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Search */}
           <div className="relative">
-            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/40" />
             <input
               type="text"
               placeholder="Search by name or email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
+              className="w-full pl-10 pr-4 py-2 border border-base-300 bg-base-100 text-base-content rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
 
           {/* Status Filter */}
           <div className="relative">
-            <FiFilter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <FiFilter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/40" />
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9] appearance-none bg-white"
+              className="w-full pl-10 pr-4 py-2 border border-base-300 bg-base-100 text-base-content rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-primary appearance-none"
             >
               <option value="">All Users</option>
               <option value="active">Active</option>
@@ -205,35 +205,35 @@ const ManageUsers = () => {
       </div>
 
       {/* Users Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-base-100 rounded-xl shadow-sm border border-base-300 overflow-hidden">
         {filteredUsers.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#f4f6f8]">
+              <thead className="bg-base-200">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider font-['Satoshi']">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-base-content/70 uppercase tracking-wider font-['Satoshi']">
                     User
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider font-['Satoshi']">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-base-content/70 uppercase tracking-wider font-['Satoshi']">
                     Email
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider font-['Satoshi']">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-base-content/70 uppercase tracking-wider font-['Satoshi']">
                     Subscription
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider font-['Satoshi']">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-base-content/70 uppercase tracking-wider font-['Satoshi']">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider font-['Satoshi']">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-base-content/70 uppercase tracking-wider font-['Satoshi']">
                     Issues
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider font-['Satoshi']">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-base-content/70 uppercase tracking-wider font-['Satoshi']">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-base-300">
                 {filteredUsers.map((user) => (
-                  <tr key={user._id || user.email} className="hover:bg-gray-50 transition-colors">
+                  <tr key={user._id || user.email} className="hover:bg-base-200 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
                         <img
@@ -242,45 +242,45 @@ const ManageUsers = () => {
                           className="w-10 h-10 rounded-full object-cover border border-gray-200"
                         />
                         <div>
-                          <p className="font-['Satoshi'] font-semibold text-sm text-[#242424] flex items-center gap-2">
+                          <p className="font-['Satoshi'] font-semibold text-sm text-base-content flex items-center gap-2">
                             {user.name}
                             {user.isPremium && (
-                              <FaCrown className="text-amber-500" title="Premium User" />
+                              <FaCrown className="text-warning" title="Premium User" />
                             )}
                           </p>
-                          <p className="font-['Satoshi'] text-xs text-gray-500">
+                          <p className="font-['Satoshi'] text-xs text-base-content/50">
                             Joined {new Date(user.createdAt || Date.now()).toLocaleDateString()}
                           </p>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <p className="font-['Satoshi'] text-sm text-gray-600">{user.email}</p>
+                      <p className="font-['Satoshi'] text-sm text-base-content/70">{user.email}</p>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {user.isPremium ? (
-                        <span className="inline-flex items-center gap-1 px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-bold font-['Satoshi']">
+                        <span className="inline-flex items-center gap-1 px-3 py-1 bg-warning/10 text-warning rounded-full text-xs font-bold font-['Satoshi']">
                           <FaCrown /> Premium
                         </span>
                       ) : (
-                        <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-semibold font-['Satoshi']">
+                        <span className="px-3 py-1 bg-base-200 text-base-content rounded-full text-xs font-semibold font-['Satoshi']">
                           Free
                         </span>
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {user.isBlocked ? (
-                        <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-bold font-['Satoshi']">
+                        <span className="px-3 py-1 bg-error/10 text-error rounded-full text-xs font-bold font-['Satoshi']">
                           Blocked
                         </span>
                       ) : (
-                        <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold font-['Satoshi']">
+                        <span className="px-3 py-1 bg-success/10 text-success rounded-full text-xs font-bold font-['Satoshi']">
                           Active
                         </span>
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <p className="font-['Satoshi'] text-sm text-gray-600">
+                      <p className="font-['Satoshi'] text-sm text-base-content/70">
                         {user.issuesCount || user.issueCount || 0} reported
                       </p>
                     </td>
@@ -288,11 +288,10 @@ const ManageUsers = () => {
                       <button
                         onClick={() => handleBlockToggle(user)}
                         disabled={toggleBlockMutation.isPending}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-['Satoshi'] text-sm font-semibold transition-colors disabled:opacity-50 ${
-                          user.isBlocked
-                            ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                            : 'bg-red-100 text-red-700 hover:bg-red-200'
-                        }`}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-['Satoshi'] text-sm font-semibold transition-colors disabled:opacity-50 ${user.isBlocked
+                            ? 'bg-success/10 text-success hover:bg-success/20'
+                            : 'bg-error/10 text-error hover:bg-error/20'
+                          }`}
                       >
                         {user.isBlocked ? (
                           <>
@@ -312,7 +311,7 @@ const ManageUsers = () => {
           </div>
         ) : (
           <div className="p-12 text-center">
-            <p className="text-gray-500 font-['Satoshi'] text-lg">
+            <p className="text-base-content/50 font-['Satoshi'] text-lg">
               {searchTerm || statusFilter
                 ? 'No users match your filters.'
                 : 'No citizens registered yet.'}

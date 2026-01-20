@@ -143,7 +143,7 @@ const ManageStaff = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#238ae9]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -153,16 +153,16 @@ const ManageStaff = () => {
       {/* header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-[#242424] font-['Satoshi'] mb-2">
+          <h1 className="text-3xl font-bold text-base-content font-['Satoshi'] mb-2">
             Manage Staff
           </h1>
-          <p className="text-gray-600 font-['Satoshi']">
+          <p className="text-base-content/70 font-['Satoshi']">
             Add, edit, or remove staff members
           </p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] font-semibold hover:bg-[#1e7acc] transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-['Satoshi'] font-semibold hover:bg-[#1e7acc] transition-colors"
         >
           <FiPlus /> Add Staff
         </button>
@@ -170,34 +170,34 @@ const ManageStaff = () => {
 
       {/* staff table */}
       {staffList.length > 0 ? (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-base-100 rounded-xl shadow-sm border border-base-300 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#f4f6f8]">
+              <thead className="bg-base-200">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content/70 font-['Satoshi'] uppercase">
                     Staff Member
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content/70 font-['Satoshi'] uppercase">
                     Email
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content/70 font-['Satoshi'] uppercase">
                     Phone
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content/70 font-['Satoshi'] uppercase">
                     Assigned Issues
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content/70 font-['Satoshi'] uppercase">
                     Resolved
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content/70 font-['Satoshi'] uppercase">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-base-300">
                 {staffList.map((staff) => (
-                  <tr key={staff._id} className="hover:bg-gray-50">
+                  <tr key={staff._id} className="hover:bg-base-200">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <img
@@ -205,28 +205,28 @@ const ManageStaff = () => {
                           alt={staff.name}
                           className="w-10 h-10 rounded-full object-cover"
                         />
-                        <span className="font-['Satoshi'] font-semibold text-[#242424]">
+                        <span className="font-['Satoshi'] font-semibold text-base-content">
                           {staff.name}
                         </span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="font-['Satoshi'] text-sm text-gray-600">
+                      <span className="font-['Satoshi'] text-sm text-base-content/70">
                         {staff.email}
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="font-['Satoshi'] text-sm text-gray-600">
+                      <span className="font-['Satoshi'] text-sm text-base-content/70">
                         {staff.phone || 'N/A'}
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="font-['Satoshi'] text-sm text-[#242424]">
+                      <span className="font-['Satoshi'] text-sm text-base-content">
                         {staff.assignedIssuesCount || 0}
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="font-['Satoshi'] text-sm text-[#242424]">
+                      <span className="font-['Satoshi'] text-sm text-base-content">
                         {staff.resolvedIssuesCount || 0}
                       </span>
                     </td>
@@ -234,14 +234,14 @@ const ManageStaff = () => {
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => handleEditClick(staff)}
-                          className="p-2 text-[#238ae9] hover:bg-blue-50 rounded-lg transition-colors"
+                          className="p-2 text-primary hover:bg-blue-50 rounded-lg transition-colors"
                           title="Edit"
                         >
                           <FiEdit2 />
                         </button>
                         <button
                           onClick={() => handleDelete(staff)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          className="p-2 text-error hover:bg-red-50 rounded-lg transition-colors"
                           title="Delete"
                         >
                           <FiTrash2 />
@@ -255,23 +255,23 @@ const ManageStaff = () => {
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-xl p-12 text-center shadow-sm border border-gray-100">
-          <p className="text-gray-500 font-['Satoshi'] text-lg">No staff members found</p>
+        <div className="bg-base-100 rounded-xl p-12 text-center shadow-sm border border-base-300">
+          <p className="text-base-content/50 font-['Satoshi'] text-lg">No staff members found</p>
         </div>
       )}
 
       {/* Add Staff Modal */}
       {showAddModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md m-4 max-h-[90vh] overflow-y-auto">
+          <div className="bg-base-100 rounded-2xl shadow-2xl w-full max-w-md m-4 max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-[#242424] font-['Satoshi']">
+                <h2 className="text-2xl font-bold text-base-content font-['Satoshi']">
                   Add Staff Member
                 </h2>
                 <button
                   onClick={() => setShowAddModal(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                  className="p-2 hover:bg-base-200 rounded-full transition-colors"
                 >
                   <FiX />
                 </button>
@@ -279,42 +279,42 @@ const ManageStaff = () => {
               
               <form onSubmit={handleAddSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+                  <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2">
                     Name *
                   </label>
                   <input
                     type="text"
                     name="name"
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
+                    className="w-full px-4 py-3 border border-base-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+                  <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2">
                     Email *
                   </label>
                   <input
                     type="email"
                     name="email"
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
+                    className="w-full px-4 py-3 border border-base-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+                  <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2">
                     Phone
                   </label>
                   <input
                     type="text"
                     name="phone"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
+                    className="w-full px-4 py-3 border border-base-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+                  <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2">
                     Password *
                   </label>
                   <input
@@ -323,21 +323,21 @@ const ManageStaff = () => {
                     required
                     minLength={8}
                     placeholder="Enter a strong password"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
+                    className="w-full px-4 py-3 border border-base-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-primary"
                   />
-                  <p className="text-xs text-gray-500 mt-1 font-['Satoshi']">
+                  <p className="text-xs text-base-content/50 mt-1 font-['Satoshi']">
                     Must be 8+ characters with uppercase, lowercase, number, and special character
                   </p>
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+                  <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2">
                     Photo URL
                   </label>
                   <input
                     type="url"
                     name="photoURL"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
+                    className="w-full px-4 py-3 border border-base-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-primary"
                     placeholder="https://..."
                   />
                 </div>
@@ -346,14 +346,14 @@ const ManageStaff = () => {
                   <button
                     type="button"
                     onClick={() => setShowAddModal(false)}
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg font-['Satoshi'] font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex-1 px-4 py-2 border border-base-300 rounded-lg font-['Satoshi'] font-semibold text-base-content hover:bg-base-200 transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={addStaffMutation.isPending}
-                    className="flex-1 px-4 py-2 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] font-semibold hover:bg-[#1e7acc] transition-colors disabled:opacity-50"
+                    className="flex-1 px-4 py-2 bg-primary text-white rounded-lg font-['Satoshi'] font-semibold hover:bg-[#1e7acc] transition-colors disabled:opacity-50"
                   >
                     {addStaffMutation.isPending ? 'Adding...' : 'Add Staff'}
                   </button>
@@ -367,10 +367,10 @@ const ManageStaff = () => {
       {/* Edit Staff Modal */}
       {showEditModal && selectedStaff && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md m-4">
+          <div className="bg-base-100 rounded-2xl shadow-2xl w-full max-w-md m-4">
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-[#242424] font-['Satoshi']">
+                <h2 className="text-2xl font-bold text-base-content font-['Satoshi']">
                   Edit Staff Member
                 </h2>
                 <button
@@ -378,7 +378,7 @@ const ManageStaff = () => {
                     setShowEditModal(false);
                     setSelectedStaff(null);
                   }}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                  className="p-2 hover:bg-base-200 rounded-full transition-colors"
                 >
                   <FiX />
                 </button>
@@ -386,7 +386,7 @@ const ManageStaff = () => {
               
               <form onSubmit={handleEditSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+                  <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2">
                     Name *
                   </label>
                   <input
@@ -394,44 +394,44 @@ const ManageStaff = () => {
                     name="name"
                     defaultValue={selectedStaff.name}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
+                    className="w-full px-4 py-3 border border-base-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+                  <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2">
                     Email
                   </label>
                   <input
                     type="email"
                     value={selectedStaff.email}
                     disabled
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg font-['Satoshi'] text-gray-500"
+                    className="w-full px-4 py-3 bg-gray-50 border border-base-300 rounded-lg font-['Satoshi'] text-base-content/50"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+                  <p className="text-xs text-base-content/50 mt-1">Email cannot be changed</p>
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+                  <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2">
                     Phone
                   </label>
                   <input
                     type="text"
                     name="phone"
                     defaultValue={selectedStaff.phone}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
+                    className="w-full px-4 py-3 border border-base-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+                  <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2">
                     Photo URL
                   </label>
                   <input
                     type="url"
                     name="photoURL"
                     defaultValue={selectedStaff.photoURL}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
+                    className="w-full px-4 py-3 border border-base-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
                 
@@ -442,14 +442,14 @@ const ManageStaff = () => {
                       setShowEditModal(false);
                       setSelectedStaff(null);
                     }}
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg font-['Satoshi'] font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex-1 px-4 py-2 border border-base-300 rounded-lg font-['Satoshi'] font-semibold text-base-content hover:bg-base-200 transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={updateStaffMutation.isPending}
-                    className="flex-1 px-4 py-2 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] font-semibold hover:bg-[#1e7acc] transition-colors disabled:opacity-50"
+                    className="flex-1 px-4 py-2 bg-primary text-white rounded-lg font-['Satoshi'] font-semibold hover:bg-[#1e7acc] transition-colors disabled:opacity-50"
                   >
                     {updateStaffMutation.isPending ? 'Updating...' : 'Update Staff'}
                   </button>
