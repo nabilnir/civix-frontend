@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { FiX } from 'react-icons/fi';
+import { FiX, FiMap, FiList } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -15,6 +15,7 @@ import useAxiosPublic from '../hooks/useAxiosPublic';
 import IssueCard from '../components/Issues/IssueCard';
 import FilterSidebar from '../components/Issues/FilterSidebar';
 import Pagination from '../components/Shared/Pagination';
+import IssuesMap from '../components/Issues/IssuesMap';
 
 // Initialize AOS
 AOS.init();
@@ -29,6 +30,7 @@ const AllIssues = () => {
 
     // --- State ---
     const [currentPage, setCurrentPage] = useState(1);
+    const [viewMode, setViewMode] = useState('list');
     const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
     const [filterState, setFilterState] = useState({
         search: '',
@@ -134,6 +136,24 @@ const AllIssues = () => {
                     <p className="font-['Satoshi'] text-lg text-base-content/70 max-w-2xl mx-auto">
                         Browse and track all community-reported issues. Your voice matters in building a better city.
                     </p>
+                    
+                    {/* View Toggle */}
+                    <div className="flex justify-center mt-6" data-aos="fade-up" data-aos-delay="100">
+                        <div className="bg-base-100 p-1 rounded-lg border border-base-300 inline-flex shadow-sm">
+                            <button 
+                                onClick={() => setViewMode('list')}
+                                className={`flex items-center gap-2 px-6 py-2 rounded-md font-semibold font-['Satoshi'] transition-colors ${viewMode === 'list' ? 'bg-primary text-primary-content shadow-sm' : 'text-base-content hover:bg-base-200'}`}
+                            >
+                                <FiList /> List View
+                            </button>
+                            <button 
+                                onClick={() => setViewMode('map')}
+                                className={`flex items-center gap-2 px-6 py-2 rounded-md font-semibold font-['Satoshi'] transition-colors ${viewMode === 'map' ? 'bg-primary text-primary-content shadow-sm' : 'text-base-content hover:bg-base-200'}`}
+                            >
+                                <FiMap /> Map View
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
@@ -162,19 +182,25 @@ const AllIssues = () => {
                             </div>
                         ) : issues.length > 0 ? (
                             <>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
-                                    {issues.map((issue, index) => (
-                                        <IssueCard
-                                            key={issue._id}
-                                            issue={issue}
-                                            index={index}
-                                            onUpvote={() => handleUpvote(issue)}
-                                        />
-                                    ))}
-                                </div>
+                                {viewMode === 'list' ? (
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                                        {issues.map((issue, index) => (
+                                            <IssueCard
+                                                key={issue._id}
+                                                issue={issue}
+                                                index={index}
+                                                onUpvote={() => handleUpvote(issue)}
+                                            />
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="mb-8" data-aos="fade-in">
+                                        <IssuesMap issues={issues} />
+                                    </div>
+                                )}
 
                                 {/* Pagination */}
-                                {totalPages > 1 && (
+                                {totalPages > 1 && viewMode === 'list' && (
                                     <Pagination
                                         currentPage={currentPage}
                                         totalPages={totalPages}

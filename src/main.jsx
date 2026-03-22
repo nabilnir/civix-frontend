@@ -20,6 +20,8 @@ import 'aos/dist/aos.css'
 // Initialize Query Client
 const queryClient = new QueryClient()
 
+// Leaflet CSS
+import 'leaflet/dist/leaflet.css'
 
 const Main = () => {
   useEffect(() => {

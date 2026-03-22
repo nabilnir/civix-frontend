@@ -1,5 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import L from 'leaflet';
+
+// Fix for default marker icon in leaflet
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+});
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { FiCalendar, FiMapPin, FiTag, FiUser, FiCheckCircle, FiAlertTriangle, FiTrash2, FiEdit2, FiTrendingUp, FiThumbsUp } from 'react-icons/fi';
 import toast from 'react-hot-toast';
@@ -20,6 +30,7 @@ const IssueDetails = () => {
     const axiosPublic = useAxiosPublic();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
+    const [showMap, setShowMap] = useState(false);
 
     // Fetch Issue Data
     const { data: issueData, isLoading, isError } = useQuery({
@@ -129,7 +140,7 @@ const IssueDetails = () => {
                     <div className="lg:col-span-2 space-y-6">
 
                         {/* Main Card */}
-                        <div className="bg-base-100 rounded-2xl shadow-sm overflow-hidden p-6 md:p-8 border border-base-300">
+                        <div className="bg-base-100 rounded-2xl shadow-sm p-6 md:p-8 border border-base-300">
 
                             {/* Header / Badges */}
                             <div className="flex flex-wrap gap-2 mb-4">
@@ -162,11 +173,46 @@ const IssueDetails = () => {
                                     <FiUser className="text-primary" />
                                     <span>Reported by: <span className="font-semibold text-base-content">{issue.userName || issue.reporterName || 'Unknown'}</span></span>
                                 </div>
-                                <div className="flex flex-col gap-2">
-                                    <div className="flex items-start gap-3">
-                                        <FiMapPin className="text-primary shrink-0 mt-0.5" size={16} />
-                                        <span className="flex-1">{issue.location}</span>
+                                <div 
+                                    className="flex flex-col gap-2 relative"
+                                    onMouseEnter={() => setShowMap(true)}
+                                    onMouseLeave={() => setShowMap(false)}
+                                >
+                                    <div className="flex items-start gap-3 cursor-pointer group">
+                                        <FiMapPin className="text-primary shrink-0 mt-0.5 group-hover:scale-110 transition-transform" size={16} />
+                                        <span className="flex-1 group-hover:text-primary transition-colors underline decoration-dashed decoration-primary/50 underline-offset-4">{issue.location}</span>
                                     </div>
+
+                                    {/* Hover Map Popover */}
+                                    {showMap && (
+                                        <div className="absolute top-8 left-0 z-50 w-80 h-48 bg-base-100 rounded-xl shadow-2xl border border-primary/20 overflow-hidden animate-fadeIn flex flex-col justify-center items-center text-center p-4">
+                                            {issue.lat && issue.lng ? (
+                                                <MapContainer 
+                                                center={[issue.lat, issue.lng]} 
+                                                zoom={15} 
+                                                zoomControl={false}
+                                                scrollWheelZoom={false}
+                                                dragging={false}
+                                                doubleClickZoom={false}
+                                                className="w-full h-full absolute inset-0"
+                                                >
+                                                    <TileLayer
+                                                    attribution='&copy; <a href="https://www.openstreetmap.org/">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>'
+                                                    url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+                                                    />
+                                                    <Marker position={[issue.lat, issue.lng]} />
+                                                </MapContainer>
+                                            ) : (
+                                                <>
+                                                    <FiMapPin className="text-base-content/30 mb-2 h-8 w-8" />
+                                                    <p className="text-sm text-base-content/60 font-medium font-['Satoshi']">
+                                                        No precise map coordinates were provided for this report.
+                                                    </p>
+                                                </>
+                                            )}
+                                        </div>
+                                    )}
+
                                     {(issue.upvotes > 0 || issue.upvotedBy?.length > 0) && (
                                         <div className="flex items-center gap-2 pl-7">
                                             <FiThumbsUp className="fill-primary text-primary shrink-0" size={14} />

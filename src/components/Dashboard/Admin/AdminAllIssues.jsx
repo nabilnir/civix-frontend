@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { FiUserPlus, FiX, FiEye, FiTrash2 } from 'react-icons/fi';
+import { FiUserPlus, FiX, FiEye, FiTrash2, FiMap, FiList } from 'react-icons/fi';
 import { useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import StatusBadge from '../../Issues/StatusBadge';
+import IssuesMap from '../../Issues/IssuesMap';
 import Swal from 'sweetalert2';
 
 const AdminAllIssues = () => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const [viewMode, setViewMode] = useState('list');
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
@@ -170,15 +172,34 @@ const AdminAllIssues = () => {
         <h1 className="text-3xl font-bold text-base-content font-['Satoshi'] mb-2">
           All Issues
         </h1>
-        <p className="text-base-content/70 font-['Satoshi']">
-          Manage and assign issues to staff members
-        </p>
+        <div className="flex flex-wrap justify-between items-center gap-4">
+          <p className="text-base-content/70 font-['Satoshi']">
+            Manage and assign issues to staff members
+          </p>
+
+          {/* View Toggle */}
+          <div className="bg-base-100 p-1 rounded-lg border border-base-300 inline-flex shadow-sm">
+            <button 
+                onClick={() => setViewMode('list')}
+                className={`flex items-center gap-2 px-4 py-1.5 text-sm rounded-md font-semibold transition-colors ${viewMode === 'list' ? 'bg-primary text-primary-content shadow-sm' : 'text-base-content hover:bg-base-200'}`}
+            >
+                <FiList /> List View
+            </button>
+            <button 
+                onClick={() => setViewMode('map')}
+                className={`flex items-center gap-2 px-4 py-1.5 text-sm rounded-md font-semibold transition-colors ${viewMode === 'map' ? 'bg-primary text-primary-content shadow-sm' : 'text-base-content hover:bg-base-200'}`}
+            >
+                <FiMap /> Map View
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* issues table */}
+      {/* issues table or map */}
       {issues.length > 0 ? (
-        <div className="bg-base-100 rounded-xl shadow-sm border border-base-300 overflow-hidden">
-          <div className="overflow-x-auto">
+        viewMode === 'list' ? (
+          <div className="bg-base-100 rounded-xl shadow-sm border border-base-300 overflow-hidden">
+            <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-base-200">
                 <tr>
@@ -294,6 +315,11 @@ const AdminAllIssues = () => {
             </table>
           </div>
         </div>
+        ) : (
+          <div className="mb-4">
+              <IssuesMap issues={issues} />
+          </div>
+        )
       ) : (
         <div className="bg-base-100 rounded-xl p-12 text-center shadow-sm border border-base-300">
           <p className="text-base-content/50 font-['Satoshi'] text-lg">No issues found</p>

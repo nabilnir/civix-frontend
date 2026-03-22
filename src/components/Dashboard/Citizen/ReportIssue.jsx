@@ -68,6 +68,8 @@ const ReportIssue = () => {
         description: formData.description?.trim(),
         category: formData.category,
         location: (formData.location || formData.Location)?.trim(),
+        lat: formData.lat || null,
+        lng: formData.lng || null,
         ...(imageUrl && { image: imageUrl }), // Only include image if URL exists
       };
 

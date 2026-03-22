@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
-import { FiFilter, FiChevronDown, FiEye } from 'react-icons/fi';
+import { FiFilter, FiChevronDown, FiEye, FiMap, FiList } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import useAuth from '../../../hooks/useAuth';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import StatusBadge from '../../Issues/StatusBadge';
+import IssuesMap from '../../Issues/IssuesMap';
 
 const AssignedIssues = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const [viewMode, setViewMode] = useState('list');
   const [statusFilter, setStatusFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
   const [selectedIssue, setSelectedIssue] = useState(null);
@@ -124,7 +126,7 @@ const AssignedIssues = () => {
       </div>
 
       {/* filters */}
-      <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+      <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex flex-col xl:flex-row justify-between xl:items-center gap-4">
         <div className="flex flex-wrap gap-4 items-center">
           <div className="flex items-center gap-2">
             <FiFilter className="text-[#238ae9]" />
@@ -154,12 +156,29 @@ const AssignedIssues = () => {
             <option value="high">High</option>
           </select>
         </div>
+
+        {/* View Toggle */}
+        <div className="bg-gray-100 p-1 rounded-lg border border-gray-200 inline-flex shadow-sm mt-4 lg:mt-0">
+          <button 
+              onClick={() => setViewMode('list')}
+              className={`flex items-center gap-2 px-4 py-1.5 text-sm rounded-md font-semibold transition-colors ${viewMode === 'list' ? 'bg-[#238ae9] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-200'}`}
+          >
+              <FiList /> List View
+          </button>
+          <button 
+              onClick={() => setViewMode('map')}
+              className={`flex items-center gap-2 px-4 py-1.5 text-sm rounded-md font-semibold transition-colors ${viewMode === 'map' ? 'bg-[#238ae9] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-200'}`}
+          >
+              <FiMap /> Map View
+          </button>
+        </div>
       </div>
 
-      {/* issues table */}
+      {/* issues table or map */}
       {filteredIssues.length > 0 ? (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="overflow-x-auto">
+        viewMode === 'list' ? (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-[#f4f6f8]">
                 <tr>
@@ -270,6 +289,11 @@ const AssignedIssues = () => {
             </table>
           </div>
         </div>
+        ) : (
+          <div className="mb-4 border border-gray-200 rounded-xl overflow-hidden">
+            <IssuesMap issues={filteredIssues} />
+          </div>
+        )
       ) : (
         <div className="bg-white rounded-xl p-12 text-center shadow-sm border border-gray-100">
           <p className="text-gray-500 font-['Satoshi'] text-lg">

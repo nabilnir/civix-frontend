@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FiUpload, FiX, FiAlertCircle } from 'react-icons/fi';
+import { FiUpload, FiX, FiAlertCircle, FiMapPin } from 'react-icons/fi';
 import Swal from 'sweetalert2';
+import { MapContainer, TileLayer } from 'react-leaflet';
+import LocationPickerMarker from '../../Shared/LocationPickerMarker';
 
 const ReportIssueForm = ({
   onSubmit,
@@ -14,6 +16,7 @@ const ReportIssueForm = ({
 }) => {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [position, setPosition] = useState(null);
   const { register, handleSubmit, formState: { errors }, reset, watch } = useForm();
 
   const handleImageChange = (e) => {
@@ -56,7 +59,12 @@ const ReportIssueForm = ({
   };
 
   const onFormSubmit = (data) => {
-    onSubmit({ ...data, imageFile });
+    onSubmit({ 
+      ...data, 
+      imageFile,
+      lat: position?.lat || null,
+      lng: position?.lng || null
+    });
   };
 
   return (
@@ -182,6 +190,31 @@ const ReportIssueForm = ({
         />
         {errors.location && (
           <p className="text-red-500 text-sm mt-1 font-['Satoshi']">{errors.location.message}</p>
+        )}
+      </div>
+
+      {/* Map Picker */}
+      <div>
+        <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2 flex items-center gap-2">
+          <FiMapPin className="text-primary" /> Pinpoint Location (Optional)
+        </label>
+        <p className="text-xs text-base-content/60 mb-2">Click on the map to accurately mark the issue location.</p>
+        <div className="w-full h-64 rounded-lg overflow-hidden border border-base-300 relative z-0">
+          <MapContainer 
+            center={[23.8103, 90.4125]} // Default center (Dhaka)
+            zoom={12} 
+            scrollWheelZoom={true} 
+            className="w-full h-full"
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+              url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+            />
+            <LocationPickerMarker position={position} setPosition={setPosition} />
+          </MapContainer>
+        </div>
+        {position && (
+          <p className="text-xs text-success mt-1 font-semibold">Location successfully pinned!</p>
         )}
       </div>
 
