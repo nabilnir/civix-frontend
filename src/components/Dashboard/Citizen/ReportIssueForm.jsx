@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { FiUpload, FiX, FiAlertCircle, FiMapPin } from 'react-icons/fi';
 import Swal from 'sweetalert2';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import LocationPickerMarker from '../../Shared/LocationPickerMarker';
+import { Link } from 'react-router';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const ReportIssueForm = ({
   onSubmit,
@@ -18,6 +20,28 @@ const ReportIssueForm = ({
   const [imagePreview, setImagePreview] = useState(null);
   const [position, setPosition] = useState(null);
   const { register, handleSubmit, formState: { errors }, reset, watch } = useForm();
+  
+  const axiosSecure = useAxiosSecure();
+  const [similarIssues, setSimilarIssues] = useState([]);
+  const titleValue = watch('title');
+
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      if (titleValue && titleValue.trim().length >= 5) {
+        try {
+          const res = await axiosSecure.get(`/api/issues/check-duplicate?title=${encodeURIComponent(titleValue.trim())}`);
+          if (res.data?.success) {
+            setSimilarIssues(res.data.data || []);
+          }
+        } catch (err) {
+          console.error('Error checking duplicates:', err);
+        }
+      } else {
+        setSimilarIssues([]);
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [titleValue, axiosSecure]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -106,6 +130,37 @@ const ReportIssueForm = ({
                 Upgrade Now
               </button>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Duplicate Warning */}
+      {similarIssues.length > 0 && (
+        <div className="bg-info/10 p-4 rounded-lg border border-info/20 mb-6">
+          <div className="flex items-start gap-3">
+            <FiAlertCircle className="text-info mt-0.5" size={20} />
+            <div className="w-full">
+              <h4 className="font-['Satoshi'] font-bold text-info-content">Similar Issues Found</h4>
+              <p className="font-['Satoshi'] text-sm text-info-content/80 mb-2">
+                We found existing reports that match your description. Consider upvoting them instead of creating a duplicate!
+              </p>
+              <div className="flex flex-col gap-2 mt-2 w-full">
+                {similarIssues.map(issue => (
+                  <Link 
+                    key={issue._id}
+                    to={`/issue/${issue._id}`}
+                    target="_blank"
+                    className="flex flex-col bg-base-100 p-3 rounded border border-base-300 hover:border-primary transition-colors hover:shadow-sm"
+                  >
+                    <span className="font-semibold text-sm text-base-content">{issue.title}</span>
+                    <span className="text-xs text-base-content/60 flex items-center justify-between mt-1">
+                       <span><FiMapPin className="inline mr-1 mb-0.5"/>{issue.location || 'Location not specified'}</span>
+                       <span>👍 {issue.upvotes || 0} Upvotes</span>
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       )}

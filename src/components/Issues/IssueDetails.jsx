@@ -84,6 +84,19 @@ const IssueDetails = () => {
         },
     });
 
+    // 3. Upvote Mutation
+    const upvoteMutation = useMutation({
+        mutationFn: async () => {
+            const res = await axiosSecure.post(`/api/issues/${id}/upvote`);
+            return res.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['issue', id]);
+            toast.success("Issue upvoted successfully!");
+        },
+        onError: (error) => toast.error(error.response?.data?.message || "Failed to upvote issue")
+    });
+
     // --- Handlers ---
     const handleDelete = () => {
         Swal.fire({
@@ -213,14 +226,26 @@ const IssueDetails = () => {
                                         </div>
                                     )}
 
-                                    {(issue.upvotes > 0 || issue.upvotedBy?.length > 0) && (
-                                        <div className="flex items-center gap-2 pl-7">
-                                            <FiThumbsUp className="fill-primary text-primary shrink-0" size={14} />
-                                            <span className="text-sm text-base-content/70 font-['Satoshi']">
-                                                Upvoted by {issue.upvotes || issue.upvotedBy?.length || 0} {issue.upvotes === 1 || issue.upvotedBy?.length === 1 ? 'person' : 'people'}
-                                            </span>
-                                        </div>
-                                    )}
+                                    <div className="flex items-center gap-4 pl-7 pt-1">
+                                        {(issue.upvotes > 0 || issue.upvotedBy?.length > 0) && (
+                                            <div className="flex items-center gap-2">
+                                                <FiThumbsUp className="fill-primary text-primary shrink-0" size={14} />
+                                                <span className="text-sm text-base-content/70 font-['Satoshi']">
+                                                    Upvoted by {issue.upvotes || issue.upvotedBy?.length || 0} {issue.upvotes === 1 || issue.upvotedBy?.length === 1 ? 'person' : 'people'}
+                                                </span>
+                                            </div>
+                                        )}
+                                        {user && !isOwner && !issue.upvotedBy?.includes(user.email) && (
+                                            <button
+                                                onClick={() => upvoteMutation.mutate()}
+                                                disabled={upvoteMutation.isPending}
+                                                className="btn btn-xs outline outline-1 outline-primary text-primary hover:bg-primary hover:text-white rounded-full gap-1 font-['Satoshi'] disabled:opacity-50"
+                                            >
+                                                <FiThumbsUp size={12} />
+                                                {upvoteMutation.isPending ? 'Upvoting...' : 'Upvote'}
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <FiCalendar className="text-primary" />
