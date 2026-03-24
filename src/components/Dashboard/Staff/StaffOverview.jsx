@@ -35,7 +35,7 @@ const StaffOverview = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#238ae9]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -62,10 +62,10 @@ const StaffOverview = () => {
     <div className="space-y-6">
       {/* header */}
       <div>
-        <h1 className="text-3xl font-bold text-[#242424] font-['Satoshi'] mb-2">
+        <h1 className="text-3xl font-bold text-base-content font-['Satoshi'] mb-2">
           Staff Dashboard
         </h1>
-        <p className="text-gray-600 font-['Satoshi']">
+        <p className="text-base-content/70 font-['Satoshi']">
           Overview of your assigned issues and work progress
         </p>
       </div>
@@ -100,8 +100,8 @@ const StaffOverview = () => {
 
       {/* chart section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <h3 className="text-lg font-bold text-[#242424] font-['Satoshi'] mb-4">
+        <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300">
+          <h3 className="text-lg font-bold text-base-content font-['Satoshi'] mb-4">
             Issues Status Distribution
           </h3>
           <ResponsiveContainer width="100%" height={300}>
@@ -116,35 +116,35 @@ const StaffOverview = () => {
         </div>
 
         {/* recent assigned issues */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <h3 className="text-lg font-bold text-[#242424] font-['Satoshi'] mb-4">
+        <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300">
+          <h3 className="text-lg font-bold text-base-content font-['Satoshi'] mb-4">
             Recent Assigned Issues
           </h3>
           {assignedIssues.length > 0 ? (
             <div className="space-y-3">
               {assignedIssues.slice(0, 5).map((issue) => (
-                <div key={issue._id} className="flex items-center justify-between p-3 bg-[#f4f6f8] rounded-lg hover:bg-gray-200 transition-colors cursor-pointer group" onClick={() => navigate(`/issue/${issue._id}`)}>
+                <div key={issue._id} className="flex items-center justify-between p-3 bg-base-200 rounded-lg hover:bg-base-300 transition-colors cursor-pointer group" onClick={() => navigate(`/issue/${issue._id}`)}>
                   <div className="flex-1">
-                    <h4 className="font-['Satoshi'] font-semibold text-sm text-[#242424] truncate group-hover:text-[#238ae9]">
+                    <h4 className="font-['Satoshi'] font-semibold text-sm text-base-content truncate group-hover:text-primary">
                       {issue.title}
                     </h4>
-                    <p className="font-['Satoshi'] text-xs text-gray-600">{issue.category}</p>
+                    <p className="font-['Satoshi'] text-xs text-base-content/70">{issue.category}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className={`px-2 py-1 rounded text-xs font-['Satoshi'] font-semibold ${
-                      issue.status === 'resolved' ? 'bg-green-100 text-green-700' :
-                      issue.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
-                      'bg-blue-100 text-blue-700'
+                    <span className={`px-2 py-1 rounded text-xs font-['Satoshi'] font-semibold badge ${
+                      issue.status === 'resolved' ? 'badge-success' :
+                      issue.status === 'pending' ? 'badge-warning' :
+                      'badge-info'
                     }`}>
                       {issue.status}
                     </span>
-                    <FiEye className="text-gray-400 group-hover:text-[#238ae9]" />
+                    <FiEye className="text-base-content/50 group-hover:text-primary" />
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-gray-500 text-center py-8 font-['Satoshi']">
+            <p className="text-base-content/60 text-center py-8 font-['Satoshi']">
               No assigned issues yet
             </p>
           )}

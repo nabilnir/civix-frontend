@@ -1,6 +1,7 @@
 import Home from '../pages/Home/Home'
 import ErrorPage from '../pages/ErrorPage'
 import Login from '../pages/Login/Login'
+import ForgotPassword from '../pages/Login/ForgotPassword'
 import PrivateRoute from './PrivateRoute'
 import AdminRoute from './AdminRoute'
 import StaffRoute from './StaffRoute'
@@ -24,6 +25,7 @@ import MyIssues from '../components/Dashboard/Citizen/MyIssues'
 import ReportIssue from '../components/Dashboard/Citizen/ReportIssue'
 import CitizenProfile from '../components/Dashboard/Citizen/CitizenProfile'
 import PaymentHistory from '../components/Dashboard/Citizen/PaymentHistory'
+import Leaderboard from '../components/Dashboard/Citizen/Leaderboard'
 
 // Admin Dashboard Components (to be created)
 import AdminOverview from '../components/Dashboard/Admin/AdminOverview'
@@ -119,6 +121,7 @@ export const router = createBrowserRouter([
     ],
   },
   { path: '/login', element: <Login /> },
+  { path: '/forgot-password', element: <ForgotPassword /> },
   { path: '/register', element: <Register /> },
   {
     path: '/dashboard',
@@ -139,6 +142,10 @@ export const router = createBrowserRouter([
       {
         path: '/dashboard/report-issue',
         element: <ReportIssue />
+      },
+      {
+        path: '/dashboard/leaderboard',
+        element: <Leaderboard />
       },
       {
         path: '/dashboard/payment-history',

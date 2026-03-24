@@ -91,9 +91,9 @@ const ChartWrapper = ({
   };
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+    <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300">
       {title && (
-        <h3 className="text-lg font-bold text-[#242424] mb-4 font-['Satoshi']">
+        <h3 className="text-lg font-bold text-base-content mb-4 font-['Satoshi']">
           {title}
         </h3>
       )}

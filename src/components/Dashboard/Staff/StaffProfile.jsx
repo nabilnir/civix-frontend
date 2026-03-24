@@ -128,7 +128,7 @@ const StaffProfile = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#238ae9]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -137,16 +137,16 @@ const StaffProfile = () => {
     <div className="space-y-6">
       {/* header */}
       <div>
-        <h1 className="text-3xl font-bold text-[#242424] font-['Satoshi'] mb-2">
+        <h1 className="text-3xl font-bold text-base-content font-['Satoshi'] mb-2">
           My Profile
         </h1>
-        <p className="text-gray-600 font-['Satoshi']">
+        <p className="text-base-content/70 font-['Satoshi']">
           Update your profile information
         </p>
       </div>
 
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-        <h2 className="text-xl font-bold text-[#242424] font-['Satoshi'] mb-6">
+      <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300">
+        <h2 className="text-xl font-bold text-base-content font-['Satoshi'] mb-6">
           Personal Information
         </h2>
 
@@ -157,9 +157,9 @@ const StaffProfile = () => {
               <img
                 src={imagePreview || profileData?.photoURL || user?.photoURL || 'https://i.ibb.co/2W8Py4W/default-avatar.png'}
                 alt="Profile"
-                className="w-24 h-24 rounded-full object-cover border-4 border-[#238ae9]"
+                className="w-24 h-24 rounded-full object-cover border-4 border-primary"
               />
-              <label className="absolute bottom-0 right-0 p-2 bg-[#238ae9] text-white rounded-full cursor-pointer hover:bg-[#1e7acc] transition-colors">
+              <label className="absolute bottom-0 right-0 p-2 bg-primary text-primary-content rounded-full cursor-pointer hover:bg-primary/90 transition-colors">
                 <FiCamera size={16} />
                 <input
                   type="file"
@@ -170,13 +170,13 @@ const StaffProfile = () => {
               </label>
             </div>
             <div>
-              <p className="font-['Satoshi'] font-semibold text-[#242424]">
+              <p className="font-['Satoshi'] font-semibold text-base-content">
                 {profileData?.name || user?.displayName || 'Staff Member'}
               </p>
-              <p className="font-['Satoshi'] text-sm text-gray-500">
+              <p className="font-['Satoshi'] text-sm text-base-content/60">
                 {user?.email}
               </p>
-              <span className="inline-block mt-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold font-['Satoshi']">
+              <span className="inline-block mt-2 px-3 py-1 badge badge-info text-xs font-bold font-['Satoshi']">
                 Staff
               </span>
             </div>
@@ -184,49 +184,49 @@ const StaffProfile = () => {
 
           {/* name */}
           <div>
-            <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+            <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2">
               Full Name *
             </label>
             <input
               {...register('name', { required: 'Name is required' })}
               type="text"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
+              className="w-full px-4 py-3 border border-base-300 rounded-lg font-['Satoshi'] bg-base-200 text-base-content focus:outline-none focus:ring-2 focus:ring-primary"
             />
             {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+              <p className="text-error text-sm mt-1">{errors.name.message}</p>
             )}
           </div>
 
           {/* phone */}
           <div>
-            <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+            <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2">
               Phone Number
             </label>
             <input
               {...register('phone')}
               type="text"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
+              className="w-full px-4 py-3 border border-base-300 rounded-lg font-['Satoshi'] bg-base-200 text-base-content focus:outline-none focus:ring-2 focus:ring-primary"
               placeholder="Enter phone number"
             />
           </div>
 
           {/* email read only */}
           <div>
-            <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+            <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2">
               Email
             </label>
-            <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg">
-              <FiMail className="text-gray-400" />
-              <span className="font-['Satoshi'] text-gray-700">{user?.email}</span>
+            <div className="flex items-center gap-2 px-4 py-3 bg-base-200 border border-base-300 rounded-lg">
+              <FiMail className="text-base-content/50" />
+              <span className="font-['Satoshi'] text-base-content">{user?.email}</span>
             </div>
-            <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+            <p className="text-xs text-base-content/60 mt-1">Email cannot be changed</p>
           </div>
 
           {/* submit button */}
           <button
             type="submit"
             disabled={updateMutation.isPending}
-            className="w-full px-6 py-3 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] font-semibold hover:bg-[#1e7acc] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-6 py-3 bg-primary text-primary-content rounded-lg font-['Satoshi'] font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {updateMutation.isPending ? 'Updating...' : 'Update Profile'}
           </button>
@@ -235,7 +235,7 @@ const StaffProfile = () => {
           <button
             type="button"
             onClick={handleLogout}
-            className="w-full px-6 py-3 mt-3 border border-red-200 text-red-600 rounded-lg font-['Satoshi'] font-semibold hover:bg-red-50 transition-colors"
+            className="w-full px-6 py-3 mt-3 border border-error text-error rounded-lg font-['Satoshi'] font-semibold hover:bg-error/5 transition-colors"
           >
             Log Out
           </button>

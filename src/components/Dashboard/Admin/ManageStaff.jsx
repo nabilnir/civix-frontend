@@ -4,8 +4,8 @@ import { FiPlus, FiEdit2, FiTrash2, FiX } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { getAuth } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
+import { initializeApp, deleteApp } from 'firebase/app';
 import app from '../../../firebase/firebase.config';
 import { validatePassword } from '../../../Utils/passwordValidation';
 
@@ -29,19 +29,32 @@ const ManageStaff = () => {
   // add staff mutation
   const addStaffMutation = useMutation({
     mutationFn: async (staffData) => {
-      // first create firebase account
-      const firebaseUser = await createUserWithEmailAndPassword(
-        auth,
-        staffData.email,
-        staffData.password
-      );
+      // Create a secondary Firebase app instance to avoid logging out the current Admin
+      const secondaryApp = initializeApp(app.options, 'SecondaryApp');
+      const secondaryAuth = getAuth(secondaryApp);
 
-      // then create in database
-      const res = await axiosSecure.post('/api/staff', {
-        ...staffData,
-        photoURL: staffData.photoURL || 'https://i.ibb.co/2W8Py4W/default-avatar.png',
-      });
-      return res.data;
+      try {
+        // first create firebase account on the secondary instance
+        const firebaseUser = await createUserWithEmailAndPassword(
+          secondaryAuth,
+          staffData.email,
+          staffData.password
+        );
+        
+        // Ensure the secondary session is cleared
+        await secondaryAuth.signOut();
+
+        // then create in database using the Admin's secure axios instance
+        const res = await axiosSecure.post('/api/staff', {
+          ...staffData,
+          photoURL: staffData.photoURL || 'https://i.ibb.co/2W8Py4W/default-avatar.png',
+        });
+        
+        return res.data;
+      } finally {
+        // Clean up the secondary app instance
+        await deleteApp(secondaryApp);
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['allStaff']);
@@ -49,7 +62,13 @@ const ManageStaff = () => {
       setShowAddModal(false);
     },
     onError: (error) => {
-      toast.error(error.response?.data?.message || 'Failed to add staff member');
+      // Ensure we format Firebase errors legibly for the user
+      const message = error.response?.data?.message || error.message || 'Failed to add staff member';
+      if (message.includes('auth/email-already-in-use')) {
+        toast.error('This email is already registered.');
+      } else {
+        toast.error(message);
+      }
     },
   });
 

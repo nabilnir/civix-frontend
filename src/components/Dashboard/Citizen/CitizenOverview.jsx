@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import useAuth from '../../../hooks/useAuth';
 import useRole from '../../../hooks/useRole';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
-import { FiFileText, FiClock, FiCheckCircle, FiTrendingUp, FiDollarSign } from 'react-icons/fi';
+import { FiFileText, FiClock, FiCheckCircle, FiTrendingUp, FiDollarSign, FiStar } from 'react-icons/fi';
 import StatCard from '../Shared/StatCard';
 import IssueCharts from './IssueCharts';
 
@@ -86,13 +86,26 @@ const CitizenOverview = () => {
   return (
     <div className="space-y-6">
       {/* Welcome Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-base-content font-['Satoshi'] mb-2">
-          Welcome back, {user?.displayName?.split(' ')[0]}! 👋
-        </h1>
-        <p className="text-base-content/70 font-['Satoshi']">
-          Here's what's happening with your reported issues today.
-        </p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-base-content font-['Satoshi'] mb-2">
+            Welcome back, {user?.displayName?.split(' ')[0]}! 👋
+          </h1>
+          <p className="text-base-content/70 font-['Satoshi']">
+            Here's what's happening with your reported issues today.
+          </p>
+        </div>
+        
+        {/* Gamification Badge */}
+        <div className="bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20 rounded-2xl p-4 flex items-center gap-4">
+          <div className="bg-primary/20 p-3 rounded-full">
+            <FiStar className="text-primary fill-primary/30" size={28} />
+          </div>
+          <div>
+            <p className="text-sm text-base-content/70 font-bold uppercase tracking-wider font-['Satoshi']">Civic Points</p>
+            <p className="text-2xl font-black text-primary font-['Satoshi']">{Stats.civicPoints || 0}</p>
+          </div>
+        </div>
       </div>
 
       {/* Stats Cards */}

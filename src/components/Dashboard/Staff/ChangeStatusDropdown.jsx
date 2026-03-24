@@ -79,9 +79,9 @@ const ChangeStatusDropdown = ({ issue, onStatusChange }) => {
           className={`
             flex items-center gap-2 px-4 py-2 rounded-lg border font-['Satoshi'] text-sm
             transition-colors
-            ${currentStatus?.color || 'text-gray-600'}
-            ${isOpen ? 'bg-gray-50' : 'bg-white hover:bg-gray-50'}
-            border-gray-300
+            ${currentStatus?.color || 'text-base-content/60'}
+            ${isOpen ? 'bg-base-200' : 'bg-base-100 hover:bg-base-200'}
+            border-base-300
           `}
         >
           {currentStatus?.icon}
@@ -98,7 +98,7 @@ const ChangeStatusDropdown = ({ issue, onStatusChange }) => {
               className="fixed inset-0 z-40"
               onClick={() => setIsOpen(false)}
             />
-            <div className="absolute z-50 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg">
+            <div className="absolute z-50 mt-2 w-48 bg-base-100 border border-base-300 rounded-lg shadow-lg">
               {statusOptions.map((option) => (
                 <button
                   key={option.value}
@@ -107,14 +107,14 @@ const ChangeStatusDropdown = ({ issue, onStatusChange }) => {
                   className={`
                     w-full flex items-center gap-2 px-4 py-2 text-left font-['Satoshi'] text-sm
                     transition-colors
-                    ${option.value === issue.status ? 'bg-gray-100 cursor-not-allowed' : 'hover:bg-gray-50'}
+                    ${option.value === issue.status ? 'bg-base-200 cursor-not-allowed' : 'hover:bg-base-200'}
                     ${option.color}
                   `}
                 >
                   {option.icon}
                   <span>{option.label}</span>
                   {option.value === issue.status && (
-                    <span className="ml-auto text-xs text-gray-500">(Current)</span>
+                    <span className="ml-auto text-xs text-base-content/50">(Current)</span>
                   )}
                 </button>
               ))}

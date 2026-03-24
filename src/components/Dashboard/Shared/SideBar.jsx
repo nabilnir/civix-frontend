@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router';
 import {
   FiHome, FiFileText, FiPlusCircle, FiUser, FiCreditCard,
-  FiUsers, FiSettings, FiBriefcase, FiList
+  FiUsers, FiSettings, FiBriefcase, FiList, FiStar
 } from 'react-icons/fi';
 import { ChartPie } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
@@ -68,6 +68,7 @@ export default function Sidebar() {
   // Citizen Menu Items
   const citizenMenu = [
     { name: 'Overview', path: '/dashboard', icon: <ChartPie size={20} />, exact: true },
+    { name: 'Leaderboard', path: '/dashboard/leaderboard', icon: <FiStar /> },
     { name: 'My Issues', path: '/dashboard/my-issues', icon: <FiFileText /> },
     { name: 'Report Issue', path: '/dashboard/report-issue', icon: <FiPlusCircle /> },
     { name: 'Payment History', path: '/dashboard/payment-history', icon: <FiCreditCard /> },

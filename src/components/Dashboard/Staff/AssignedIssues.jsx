@@ -108,7 +108,7 @@ const AssignedIssues = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#238ae9]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -117,26 +117,26 @@ const AssignedIssues = () => {
     <div className="space-y-6">
       {/* header */}
       <div>
-        <h1 className="text-3xl font-bold text-[#242424] font-['Satoshi'] mb-2">
+        <h1 className="text-3xl font-bold text-base-content font-['Satoshi'] mb-2">
           Assigned Issues
         </h1>
-        <p className="text-gray-600 font-['Satoshi']">
+        <p className="text-base-content/70 font-['Satoshi']">
           Manage and update status of issues assigned to you
         </p>
       </div>
 
       {/* filters */}
-      <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex flex-col xl:flex-row justify-between xl:items-center gap-4">
+      <div className="bg-base-100 rounded-xl p-4 shadow-sm border border-base-300 flex flex-col xl:flex-row justify-between xl:items-center gap-4">
         <div className="flex flex-wrap gap-4 items-center">
           <div className="flex items-center gap-2">
-            <FiFilter className="text-[#238ae9]" />
+            <FiFilter className="text-primary" />
             <span className="font-['Satoshi'] font-semibold text-sm">Filters:</span>
           </div>
           
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg font-['Satoshi'] text-sm focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
+            className="px-4 py-2 border border-base-300 rounded-lg font-['Satoshi'] text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-base-200 text-base-content"
           >
             <option value="">All Status</option>
             <option value="pending">Pending</option>
@@ -149,7 +149,7 @@ const AssignedIssues = () => {
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg font-['Satoshi'] text-sm focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
+            className="px-4 py-2 border border-base-300 rounded-lg font-['Satoshi'] text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-base-200 text-base-content"
           >
             <option value="">All Priority</option>
             <option value="normal">Normal</option>
@@ -158,16 +158,16 @@ const AssignedIssues = () => {
         </div>
 
         {/* View Toggle */}
-        <div className="bg-gray-100 p-1 rounded-lg border border-gray-200 inline-flex shadow-sm mt-4 lg:mt-0">
+        <div className="bg-base-200 p-1 rounded-lg border border-base-300 inline-flex shadow-sm mt-4 lg:mt-0">
           <button 
               onClick={() => setViewMode('list')}
-              className={`flex items-center gap-2 px-4 py-1.5 text-sm rounded-md font-semibold transition-colors ${viewMode === 'list' ? 'bg-[#238ae9] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-200'}`}
+              className={`flex items-center gap-2 px-4 py-1.5 text-sm rounded-md font-semibold transition-colors ${viewMode === 'list' ? 'bg-primary text-primary-content shadow-sm' : 'text-base-content/60 hover:bg-base-300'}`}
           >
               <FiList /> List View
           </button>
           <button 
               onClick={() => setViewMode('map')}
-              className={`flex items-center gap-2 px-4 py-1.5 text-sm rounded-md font-semibold transition-colors ${viewMode === 'map' ? 'bg-[#238ae9] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-200'}`}
+              className={`flex items-center gap-2 px-4 py-1.5 text-sm rounded-md font-semibold transition-colors ${viewMode === 'map' ? 'bg-primary text-primary-content shadow-sm' : 'text-base-content/60 hover:bg-base-300'}`}
           >
               <FiMap /> Map View
           </button>
@@ -177,32 +177,32 @@ const AssignedIssues = () => {
       {/* issues table or map */}
       {filteredIssues.length > 0 ? (
         viewMode === 'list' ? (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="bg-base-100 rounded-xl shadow-sm border border-base-300 overflow-hidden">
             <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#f4f6f8]">
+              <thead className="bg-base-200">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase min-w-[300px]">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content font-['Satoshi'] uppercase min-w-[300px]">
                     Issue
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase whitespace-nowrap">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content font-['Satoshi'] uppercase whitespace-nowrap">
                     Category
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase whitespace-nowrap min-w-[120px]">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content font-['Satoshi'] uppercase whitespace-nowrap min-w-[120px]">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase whitespace-nowrap min-w-[100px]">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content font-['Satoshi'] uppercase whitespace-nowrap min-w-[100px]">
                     Priority
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase min-w-[200px]">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content font-['Satoshi'] uppercase min-w-[200px]">
                     Location
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 font-['Satoshi'] uppercase whitespace-nowrap">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-base-content font-['Satoshi'] uppercase whitespace-nowrap">
                     Action
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-base-300">
               {filteredIssues.map((issue) => {
               const availableStatuses = getAvailableStatuses(issue.status);
               const fullDescription = issue.description || '';
@@ -211,19 +211,19 @@ const AssignedIssues = () => {
                   ? `${fullDescription.slice(0, 160)}...`
                   : fullDescription;
               return (
-                    <tr key={issue._id} className="hover:bg-gray-50">
+                    <tr key={issue._id} className="hover:bg-base-200">
                       <td className="px-6 py-4">
                         <div>
-                          <h4 className="font-['Satoshi'] font-semibold text-sm text-[#242424] mb-1">
+                          <h4 className="font-['Satoshi'] font-semibold text-sm text-base-content mb-1">
                             {issue.title}
                           </h4>
-                          <p className="font-['Satoshi'] text-xs text-gray-500">
+                          <p className="font-['Satoshi'] text-xs text-base-content/60">
                             {shortDescription}
                           </p>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-['Satoshi']">
+                        <span className="px-2 py-1 bg-base-200 text-base-content rounded text-xs font-['Satoshi']">
                           {issue.category}
                         </span>
                       </td>
@@ -232,17 +232,17 @@ const AssignedIssues = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {(issue.priority === 'high' || issue.priority === 'High') ? (
-                          <span className="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-bold font-['Satoshi'] whitespace-nowrap">
+                          <span className="px-2 py-1 badge badge-error text-xs font-bold font-['Satoshi'] whitespace-nowrap">
                             High
                           </span>
                         ) : (
-                          <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-['Satoshi'] whitespace-nowrap">
+                          <span className="px-2 py-1 badge badge-ghost text-xs font-['Satoshi'] whitespace-nowrap">
                             Normal
                           </span>
                         )}
                       </td>
                       <td className="px-6 py-4">
-                        <p className="font-['Satoshi'] text-sm text-gray-600">
+                        <p className="font-['Satoshi'] text-sm text-base-content/70">
                           {issue.location}
                         </p>
                       </td>
@@ -252,19 +252,19 @@ const AssignedIssues = () => {
                             <button
                               onClick={() => toggleDropdown(issue._id)}
                               disabled={availableStatuses.length === 0 || updateStatusMutation.isPending}
-                              className="flex items-center gap-1 px-4 py-2 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] text-sm font-medium hover:bg-[#1e7acc] transition-colors disabled:opacity-50"
+                              className="flex items-center gap-1 px-4 py-2 bg-primary text-primary-content rounded-lg font-['Satoshi'] text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50"
                             >
                               Change Status
                               <FiChevronDown />
                             </button>
                             
                             {showStatusDropdown[issue._id] && availableStatuses.length > 0 && (
-                              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
+                              <div className="absolute right-0 mt-2 w-48 bg-base-100 rounded-lg shadow-lg border border-base-300 z-10">
                                 {availableStatuses.map((status) => (
                                   <button
                                     key={status}
                                     onClick={() => handleStatusChange(issue._id, status)}
-                                    className="w-full text-left px-4 py-2 hover:bg-gray-100 font-['Satoshi'] text-sm text-[#242424] first:rounded-t-lg last:rounded-b-lg"
+                                    className="w-full text-left px-4 py-2 hover:bg-base-200 font-['Satoshi'] text-sm text-base-content first:rounded-t-lg last:rounded-b-lg"
                                   >
                                     {status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' ')}
                                   </button>
@@ -276,7 +276,7 @@ const AssignedIssues = () => {
                           {/* view details button */}
                           <button
                             onClick={() => navigate(`/issue/${issue._id}`)}
-                            className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg font-['Satoshi'] text-sm font-medium hover:bg-gray-200 transition-colors flex items-center gap-1"
+                            className="px-3 py-2 bg-base-200 text-base-content rounded-lg font-['Satoshi'] text-sm font-medium hover:bg-base-300 transition-colors flex items-center gap-1"
                           >
                             <FiEye /> View
                           </button>
@@ -290,13 +290,13 @@ const AssignedIssues = () => {
           </div>
         </div>
         ) : (
-          <div className="mb-4 border border-gray-200 rounded-xl overflow-hidden">
+          <div className="mb-4 border border-base-300 rounded-xl overflow-hidden">
             <IssuesMap issues={filteredIssues} />
           </div>
         )
       ) : (
-        <div className="bg-white rounded-xl p-12 text-center shadow-sm border border-gray-100">
-          <p className="text-gray-500 font-['Satoshi'] text-lg">
+        <div className="bg-base-100 rounded-xl p-12 text-center shadow-sm border border-base-300">
+          <p className="text-base-content/60 font-['Satoshi'] text-lg">
             {issues.length === 0
               ? "You don't have any assigned issues yet."
               : 'No issues match your filters.'}
@@ -307,32 +307,32 @@ const AssignedIssues = () => {
       {/* Status Update Modal with Message */}
       {showMessageModal && selectedIssue && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md m-4">
+          <div className="bg-base-100 rounded-2xl shadow-2xl w-full max-w-md m-4">
             <div className="p-6">
-              <h2 className="text-2xl font-bold text-[#242424] font-['Satoshi'] mb-4">
+              <h2 className="text-2xl font-bold text-base-content font-['Satoshi'] mb-4">
                 Update Status
               </h2>
-              <p className="text-gray-600 font-['Satoshi'] mb-4">
+              <p className="text-base-content/70 font-['Satoshi'] mb-4">
                 Updating status for: <strong>{selectedIssue.title}</strong>
               </p>
-              <p className="text-sm text-gray-500 mb-4 font-['Satoshi']">
-                New Status: <span className="font-bold text-[#238ae9] capitalize">
+              <p className="text-sm text-base-content/60 mb-4 font-['Satoshi']">
+                New Status: <span className="font-bold text-primary capitalize">
                   {selectedStatus.replace('-', ' ')}
                 </span>
               </p>
               
               <form onSubmit={handleStatusSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-[#242424] font-['Satoshi'] mb-2">
+                  <label className="block text-sm font-semibold text-base-content font-['Satoshi'] mb-2">
                     Progress Update / Message (Optional)
                   </label>
                   <textarea
                     name="message"
                     rows="4"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg font-['Satoshi'] focus:outline-none focus:ring-2 focus:ring-[#238ae9]"
+                    className="w-full px-4 py-3 border border-base-300 rounded-lg font-['Satoshi'] bg-base-200 text-base-content focus:outline-none focus:ring-2 focus:ring-primary"
                     placeholder="Add a note about the progress or status change..."
                   />
-                  <p className="text-xs text-gray-500 mt-1 font-['Satoshi']">
+                  <p className="text-xs text-base-content/60 mt-1 font-['Satoshi']">
                     This will be added to the issue timeline
                   </p>
                 </div>
@@ -345,14 +345,14 @@ const AssignedIssues = () => {
                       setSelectedIssue(null);
                       setSelectedStatus('');
                     }}
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg font-['Satoshi'] font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex-1 px-4 py-2 border border-base-300 rounded-lg font-['Satoshi'] font-semibold text-base-content hover:bg-base-200 transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={updateStatusMutation.isPending}
-                    className="flex-1 px-4 py-2 bg-[#238ae9] text-white rounded-lg font-['Satoshi'] font-semibold hover:bg-[#1e7acc] transition-colors disabled:opacity-50"
+                    className="flex-1 px-4 py-2 bg-primary text-primary-content rounded-lg font-['Satoshi'] font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50"
                   >
                     {updateStatusMutation.isPending ? 'Updating...' : 'Update Status'}
                   </button>
